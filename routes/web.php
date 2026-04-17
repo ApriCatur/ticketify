@@ -7,4 +7,6 @@ Route::get('/', function () {
 });
 
 Route::get('login', [login::class, 'index']);
-
+Route::get('/app', function () {
+    return view('app');
+});
