@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Pembeli;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class Event extends Controller
+class EventController extends Controller
 {
     //
 }

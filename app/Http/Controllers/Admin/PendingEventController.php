@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class pending_event extends Controller
+class PendingEventController extends Controller
 {
     //
 }

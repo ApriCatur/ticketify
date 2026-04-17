@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Pembeli;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class login extends Controller
+class LoginController extends Controller
 {
     public function index()
     {
-        return view('Pembeli/login');
+        return view('Pembeli.login');
     }
 }
