@@ -9,84 +9,46 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-<body class="bg-[#f4f7f5] text-gray-800">
+<body class="bg-slate-50 text-slate-800">
 
 <div class="flex min-h-screen">
 
-     <!-- Sidebar -->
-    <aside class="w-64 bg-white border-r border-gray-200 shadow-sm p-6">
-        <h1 class="text-2xl font-bold text-green-600 mb-10">
-            <i class="fa-solid fa-ticket mr-2"></i>Ticketify
-        </h1>
-
-        <nav class="space-y-3 text-sm">
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50">
-                <i class="fa-solid fa-chart-line text-green-600"></i>
-                Dashboard
-            </a>
-
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition">
-                <i class="fa-solid fa-calendar-check text-green-600"></i>
-                Published Events
-            </a>
-
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-green-500 text-white">
-                <i class="fa-solid fa-clock"></i>
-                Pending Events
-            </a>
-
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition">
-                <i class="fa-solid fa-users text-green-600"></i>
-                Manage Users
-            </a>
-
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition">
-                <i class="fa-solid fa-layer-group text-green-600"></i>
-                Event Categories
-            </a>
-
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition">
-                <i class="fa-solid fa-gear text-green-600"></i>
-                Settings
-            </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition">
-                <i class="fa-solid fa-right-from-bracket mr-2 text-green-600"></i>
-                Logout
-            </a>
-        </nav>
-    </aside>
-
+    <!-- Sidebar -->
+    <x-sidebar/>
 
     <!-- Main -->
     <main class="flex-1 p-8">
 
         <!-- Header -->
         <div class="flex justify-between items-center mb-8">
-            <h2 class="text-3xl font-bold">Pending Event</h2>
+            <div>
+                <h2 class="text-3xl font-bold text-slate-900">Pending Event</h2>
+                <p class="text-slate-500">Review and approve incoming event submissions</p>
+            </div>
 
             <div class="flex items-center gap-3">
-                <span class="font-medium">Admin</span>
-                <div class="w-10 h-10 rounded-full bg-green-500"></div>
+                <span class="font-medium text-slate-700">Admin</span>
+                <div class="w-10 h-10 rounded-full bg-slate-900"></div>
             </div>
         </div>
 
 
         <!-- Search Bar -->
-        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 mb-8">
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-4 mb-8">
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                <div class="md:col-span-2 flex items-center border rounded-xl px-4">
-                    <i class="fa-solid fa-magnifying-glass text-gray-400 mr-2"></i>
+                <div class="md:col-span-2 flex items-center border border-slate-200 rounded-2xl px-4">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 mr-2"></i>
                     <input type="text" placeholder="Search event or keyword"
-                        class="w-full py-3 outline-none">
+                        class="w-full py-3 outline-none bg-transparent">
                 </div>
 
-                <select class="border rounded-xl px-4 py-3">
+                <select class="border border-slate-200 rounded-2xl px-4 py-3 text-slate-600">
                     <option>Location</option>
                 </select>
 
-                <input type="date" class="border rounded-xl px-4 py-3">
+                <input type="date" class="border border-slate-200 rounded-2xl px-4 py-3">
 
-                <button class="bg-green-500 text-white rounded-xl px-6 py-3 hover:bg-green-600">
+                <button class="bg-slate-900 text-white rounded-2xl px-6 py-3 hover:bg-slate-800 transition">
                     Search
                 </button>
             </div>
@@ -98,35 +60,41 @@
             <!-- Event Cards -->
             <div class="xl:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
-                <!-- Event Card -->
                 @for ($i = 0; $i < 6; $i++)
-                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="h-36 bg-gray-200 relative">
-                        <div class="absolute bottom-3 right-3 bg-white text-xs px-2 py-1 rounded shadow">
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition group">
+                    <div class="h-36 bg-slate-100 relative flex items-center justify-center">
+                        <i class="fa-regular fa-image text-slate-300 text-4xl"></i>
+
+                        <div class="absolute bottom-3 right-3 bg-white text-xs px-3 py-1 rounded-xl border border-slate-200 shadow-sm">
                             Apr 25
                         </div>
                     </div>
 
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg">Event Seminar KMIPN</h3>
-                        <p class="text-sm text-gray-500 mb-3">
-                            <i class="fa-solid fa-location-dot text-green-500 mr-1"></i>
+                    <div class="p-5">
+                        <h3 class="font-bold text-lg text-slate-800 group-hover:text-slate-900">
+                            Event Seminar KMIPN
+                        </h3>
+
+                        <p class="text-sm text-slate-500 mb-3">
+                            <i class="fa-solid fa-location-dot text-slate-600 mr-1"></i>
                             Politeknik Negeri Batam
                         </p>
 
-                        <div class="text-sm text-gray-500 space-y-2 mb-4">
-                            <p><i class="fa-regular fa-clock text-green-500 mr-2"></i>15:00</p>
-                            <p><i class="fa-solid fa-ticket text-green-500 mr-2"></i>From IDR 40.000</p>
+                        <div class="text-sm text-slate-500 space-y-2 mb-5">
+                            <p><i class="fa-regular fa-clock text-slate-600 mr-2"></i>15:00</p>
+                            <p><i class="fa-solid fa-ticket text-slate-600 mr-2"></i>From IDR 40.000</p>
                         </div>
 
                         <div class="flex gap-2">
-                            <button class="flex-1 bg-green-500 text-white py-2 rounded-lg text-sm hover:bg-green-600">
+                            <button class="flex-1 bg-slate-900 text-white py-2 rounded-xl text-sm hover:bg-slate-800 transition">
                                 Approve
                             </button>
-                            <button class="flex-1 bg-red-500 text-white py-2 rounded-lg text-sm hover:bg-red-600">
+
+                            <button class="flex-1 bg-slate-200 text-slate-700 py-2 rounded-xl text-sm hover:bg-slate-300 transition">
                                 Reject
                             </button>
-                            <button class="px-4 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">
+
+                            <button class="px-4 border border-slate-200 rounded-xl text-sm hover:bg-slate-50 transition">
                                 Detail
                             </button>
                         </div>
@@ -138,27 +106,27 @@
 
 
             <!-- Calendar -->
-            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 h-fit">
-                <h3 class="text-xl font-bold mb-6 text-green-600">April 2026</h3>
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 h-fit">
+                <h3 class="text-xl font-bold mb-6 text-slate-900">April 2026</h3>
 
                 <div class="space-y-4 text-sm">
 
-                    <div class="border-l-4 border-green-500 pl-4">
+                    <div class="border-l-4 border-slate-900 pl-4">
                         <p class="font-semibold">Sat, 11</p>
-                        <p class="text-gray-600">Event Seminar KMIPN</p>
-                        <p class="text-gray-400">15:00</p>
+                        <p class="text-slate-600">Event Seminar KMIPN</p>
+                        <p class="text-slate-400">15:00</p>
                     </div>
 
-                    <div class="border-l-4 border-green-500 pl-4">
+                    <div class="border-l-4 border-slate-900 pl-4">
                         <p class="font-semibold">Sat, 25</p>
-                        <p class="text-gray-600">Politeknik Negeri Batam</p>
-                        <p class="text-gray-400">15:00</p>
+                        <p class="text-slate-600">Politeknik Negeri Batam</p>
+                        <p class="text-slate-400">15:00</p>
                     </div>
 
-                    <div class="border-l-4 border-green-500 pl-4">
+                    <div class="border-l-4 border-slate-900 pl-4">
                         <p class="font-semibold">Sun, 26</p>
-                        <p class="text-gray-600">Event Schedule</p>
-                        <p class="text-gray-400">15:00</p>
+                        <p class="text-slate-600">Event Schedule</p>
+                        <p class="text-slate-400">15:00</p>
                     </div>
 
                 </div>
