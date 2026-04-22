@@ -1,7 +1,11 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+<<<<<<< HEAD
 use App\Http\Controllers\App\Http\Controllers\Pembeli\EventController;
+=======
+
+>>>>>>> a4cb2aa71ae2e59b3750a808709278d0e7d37802
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,6 +43,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/settings', function () {
         return view('Admin.Settings');
     })->name('admin.settings');
+<<<<<<< HEAD
 });
 
 Route::get('/', function () {
@@ -67,3 +72,7 @@ Route::get('/settings', function () {
 Route::get('/about', function () {
     return view('Pembeli.About');
 })->name('about');
+=======
+
+});
+>>>>>>> a4cb2aa71ae2e59b3750a808709278d0e7d37802
