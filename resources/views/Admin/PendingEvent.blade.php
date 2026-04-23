@@ -17,8 +17,8 @@
         }
 
         .glass {
-            background: rgba(18,18,18,0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(18,18,18,0.8);
+            backdrop-filter: blur(10px);
         }
 
         .card-hover {
@@ -26,12 +26,12 @@
         }
 
         .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 30px rgba(59,130,246,0.12);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px rgba(59,130,246,.15);
         }
     </style>
 </head>
-<body class="bg-[#0f0f0f] text-white">
+<body class="bg-[#0f0f0f] text-white antialiased">
 
 <div class="flex min-h-screen max-w-[1600px] mx-auto border-x border-white/5 bg-[#121212]">
 
@@ -42,14 +42,14 @@
     <main class="flex-1">
 
         <!-- Header -->
-        <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-5 flex justify-between items-center">
+        <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
             <div>
                 <h2 class="text-2xl font-black tracking-tight">Pending Event</h2>
-                <p class="text-gray-500 text-sm">Review and approve incoming event submissions</p>
+                <p class="text-xs text-gray-500 mt-1">Review and approve incoming event submissions</p>
             </div>
 
             <div class="flex items-center gap-3">
-                <span class="text-sm font-semibold text-gray-300">Admin</span>
+                <span class="text-sm font-semibold text-gray-400">Admin</span>
                 <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold">
                     AD
                 </div>
@@ -58,31 +58,43 @@
 
         <!-- Search -->
         <div class="px-8 py-8">
-            <div class="bg-[#1e1e1e] border border-white/10 rounded-2xl p-4 shadow-xl">
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div class="bg-[#1e1e1e] border border-white/10 rounded-2xl p-4 shadow-xl flex flex-wrap lg:flex-nowrap items-end gap-4">
 
-                    <div class="md:col-span-2 flex items-center bg-white/5 rounded-xl px-4">
-                        <i class="fa-solid fa-magnifying-glass text-blue-500 mr-3"></i>
-                        <input type="text" placeholder="Search event or keyword"
-                            class="w-full py-3 bg-transparent outline-none text-sm text-white placeholder-gray-500">
+                <div class="flex-[2] min-w-[200px]">
+                    <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2 block">
+                        Search Event
+                    </label>
+                    <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3">
+                        <i class="fa-solid fa-magnifying-glass text-blue-500"></i>
+                        <input type="text" placeholder="Search event..."
+                            class="bg-transparent w-full outline-none text-sm">
                     </div>
-
-                    <select class="bg-white/5 rounded-xl px-4 py-3 text-sm text-gray-400 outline-none">
-                        <option>Location</option>
-                    </select>
-
-                    <input type="date"
-                        class="bg-white/5 rounded-xl px-4 py-3 text-sm text-gray-400 outline-none [color-scheme:dark]">
-
-                    <button class="bg-white text-black rounded-xl px-6 py-3 font-bold hover:bg-blue-500 hover:text-white transition">
-                        Search
-                    </button>
                 </div>
+
+                <div class="flex-1 min-w-[150px]">
+                    <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2 block">
+                        Location
+                    </label>
+                    <select class="w-full bg-white/5 rounded-xl py-3 px-4 text-sm outline-none">
+                        <option>All Location</option>
+                    </select>
+                </div>
+
+                <div class="flex-1 min-w-[150px]">
+                    <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2 block">
+                        Date
+                    </label>
+                    <input type="date"
+                        class="w-full bg-white/5 rounded-xl py-3 px-4 text-sm outline-none [color-scheme:dark]">
+                </div>
+
+                <button class="px-8 py-3 bg-white text-black rounded-xl font-bold hover:bg-blue-500 hover:text-white transition">
+                    Search
+                </button>
             </div>
         </div>
 
         <div class="grid grid-cols-1 xl:grid-cols-4 gap-8 px-8 pb-8">
-
             <!-- Event Cards -->
             <div class="xl:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
@@ -92,8 +104,10 @@
                     <div class="h-44 bg-[#18181b] relative flex items-center justify-center">
                         <i class="fa-regular fa-image text-gray-700 text-4xl"></i>
 
-                        <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-xs px-3 py-2 rounded-xl border border-white/10">
-                            Apr 25
+                        <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-2 rounded-xl border border-white/10 text-center">
+                            <span class="block text-[10px] font-bold text-blue-400 uppercase">APR</span>
+                            <span class="block text-lg font-black">25</span>
+                            <span class="text-[10px] text-gray-500">2026</span>
                         </div>
                     </div>
 
@@ -102,30 +116,37 @@
                             Pending
                         </span>
 
-                        <h3 class="font-bold text-lg mt-2 group-hover:text-blue-400 transition">
+                        <h3 class="font-bold text-lg mt-2 mb-3 group-hover:text-blue-400 transition">
                             Event Seminar KMIPN
                         </h3>
 
-                        <p class="text-sm text-gray-500 mb-3">
-                            <i class="fa-solid fa-location-dot mr-1"></i>
-                            Politeknik Negeri Batam
-                        </p>
+                        <div class="space-y-2 text-xs text-gray-400 mb-5">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot"></i>
+                                Politeknik Negeri Batam
+                            </div>
 
-                        <div class="text-sm text-gray-500 space-y-2 mb-5">
-                            <p><i class="fa-regular fa-clock mr-2"></i>15:00</p>
-                            <p><i class="fa-solid fa-ticket mr-2"></i>From IDR 40.000</p>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-regular fa-clock"></i>
+                                15:00 WIB
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-ticket"></i>
+                                From IDR 40.000
+                            </div>
                         </div>
 
-                        <div class="flex gap-2">
-                            <button class="flex-1 bg-blue-600 text-white py-2 rounded-xl text-sm font-semibold hover:bg-blue-500 transition">
+                        <div class="flex gap-2 pt-4 border-t border-white/5">
+                            <button class="flex-1 bg-blue-600 text-white py-2 rounded-xl text-xs font-semibold hover:bg-blue-500 transition">
                                 Approve
                             </button>
 
-                            <button class="flex-1 bg-red-500/10 text-red-400 py-2 rounded-xl text-sm hover:bg-red-500/20 transition">
+                            <button class="flex-1 bg-red-500/10 text-red-400 py-2 rounded-xl text-xs hover:bg-red-500/20 transition">
                                 Reject
                             </button>
 
-                            <button class="px-4 border border-white/10 rounded-xl text-sm hover:bg-white/5 transition">
+                            <button class="px-4 py-2 border border-white/10 rounded-xl text-xs hover:bg-white/5 transition">
                                 Detail
                             </button>
                         </div>
@@ -136,31 +157,41 @@
             </div>
 
             <!-- Right Panel -->
-            <div class="bg-[#1e1e1e] border border-white/5 rounded-2xl p-6 h-fit">
-                <h3 class="text-xl font-black mb-6">April 2026</h3>
+            <aside class="w-80 hidden xl:block">
+                <div class="space-y-6">
 
-                <div class="space-y-4 text-sm">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-black">Upcoming</h3>
+                            <i class="fa-solid fa-calendar-check text-blue-500"></i>
+                        </div>
 
-                    <div class="border-l-4 border-blue-500 pl-4">
-                        <p class="font-semibold">Sat, 11</p>
-                        <p class="text-gray-400">Event Seminar KMIPN</p>
-                        <p class="text-gray-600">15:00</p>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-[#1e1e1e] rounded-2xl border border-white/5">
+                                <p class="font-bold text-sm">Seminar KMIPN</p>
+                                <p class="text-xs text-gray-500 mt-1">25 Apr 2026 • 15:00</p>
+                            </div>
+
+                            <div class="p-4 bg-[#1e1e1e] rounded-2xl border border-white/5">
+                                <p class="font-bold text-sm">Workshop AI</p>
+                                <p class="text-xs text-gray-500 mt-1">26 Apr 2026 • 10:00</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="border-l-4 border-blue-500 pl-4">
-                        <p class="font-semibold">Sat, 25</p>
-                        <p class="text-gray-400">Politeknik Negeri Batam</p>
-                        <p class="text-gray-600">15:00</p>
-                    </div>
+                    <div class="p-6 bg-gradient-to-br from-blue-600 to-blue-900 rounded-2xl">
+                        <h4 class="font-black mb-2">Need Review?</h4>
+                        <p class="text-xs text-blue-100 mb-4">
+                            Check all submitted events before publishing.
+                        </p>
 
-                    <div class="border-l-4 border-blue-500 pl-4">
-                        <p class="font-semibold">Sun, 26</p>
-                        <p class="text-gray-400">Event Schedule</p>
-                        <p class="text-gray-600">15:00</p>
+                        <button class="w-full py-3 bg-white text-blue-600 rounded-xl text-sm font-bold hover:bg-blue-50 transition">
+                            View All
+                        </button>
                     </div>
 
                 </div>
-            </div>
+            </aside>
 
         </div>
 

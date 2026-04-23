@@ -47,7 +47,7 @@
                     </a>
 
                     <a href="{{ route('admin.ManageUser') }}"
-                       class="{{ $base }} {{ request()->routeIs('admin.ManageUser.*') ? $active : $inactive }}">
+                       class="{{ $base }} {{ request()->routeIs('admin.ManageUser') ? $active : $inactive }}">
                         <i class="fa-solid fa-users"></i>
                         Manage Users
                     </a>

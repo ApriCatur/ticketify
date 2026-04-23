@@ -32,7 +32,6 @@
     </style>
 </head>
 <body class="bg-[#0f0f0f] text-white">
-
 <div class="flex min-h-screen max-w-[1600px] mx-auto border-x border-white/5 bg-[#121212]">
 
     <!-- Sidebar -->
