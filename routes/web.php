@@ -18,29 +18,29 @@ Route::get('/app', function () {
 
 Route::prefix('admin')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('Admin.Dashboard');
+    Route::get('/Dashboard', function () {
+        return view('admin.dashboard');
     })->name('admin.dashboard');
 
-    Route::get('/published-events', function () {
-        return view('Admin.PublishedEvent');
-    })->name('admin.published');
+    Route::get('/PublishedEvents', function () {
+        return view('admin.PublishedEvent');
+    })->name('admin.PublishedEvent');
 
-    Route::get('/pending-events', function () {
-        return view('Admin.PendingEvent');
-    })->name('admin.pending');
+    Route::get('/PendingEvents', function () {
+        return view('admin.PendingEvent');
+    })->name('admin.PendingEvent');
 
-    Route::get('/manage-users', function () {
-        return view('Admin.ManageUser');
-    })->name('admin.users');
+    Route::get('/ManageUsers', function () {
+        return view('admin.ManageUser');
+    })->name('admin.ManageUser');
 
-    Route::get('/categories', function () {
-        return view('Admin.EventCategories');
-    })->name('admin.categories');
+    Route::get('/EventCategories', function () {
+        return view('admin.EventCategories');
+    })->name('admin.EventCategories');
 
-    Route::get('/settings', function () {
-        return view('Admin.Settings');
-    })->name('admin.settings');
+    Route::get('/Settings', function () {
+        return view('admin.Settings');
+    })->name('admin.Settings');
 
 });
 
