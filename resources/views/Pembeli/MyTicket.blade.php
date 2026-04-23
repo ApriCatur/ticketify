@@ -47,6 +47,17 @@
                     </nav>
                 </div>
             </div>
+
+              <div class="mt-auto pt-6 border-t border-white/5">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-bold text-xs">AM</div>
+            <div class="overflow-hidden">
+                <p class="text-xs font-bold text-white truncate">M Fauzi Azhari</p>
+                <p class="text-[10px] text-blue-500 font-bold uppercase tracking-wider">Customer</p>
+            </div>
+        </div>
+    </div>
+
         </aside>
 
         <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
@@ -106,7 +117,7 @@
                             <p class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-calendar mr-2"></i>25 April 2026</p>
                         </div>
                         <div class="flex-1">
-                            <span class="px-2 py-0.5 bg-[#Ffd700] * text-[9px] font-black rounded uppercase tracking-tighter">VIP</span>
+                            <span class="px-2 py-0.5 bg-yellow-500 text-[9px] font-black rounded uppercase tracking-tighter"><i class="fa-solid fa-crown mr-2"></i>VIP</span>
                             <h3 class="text-lg font-black italic tracking-tight mt-1 group-hover:text-blue-400 transition-colors">Ticket Type</h3>
                             <p class="text-xs text-gray-500 mt-1"><i class="fa-solid  mr-2"></i></p>
                         </div>
@@ -128,7 +139,7 @@
                             <p class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-calendar mr-2"></i>15 Desember 2025</p>
                         </div>
                         <div class="flex-1">
-                            <span class="px-2 py-0.5 bg-blue-500 text-[9px] font-black rounded uppercase tracking-tighter">Reguler</span>
+                            <span class="px-2 py-0.5 bg-blue-500 text-[9px] font-black rounded uppercase tracking-tighter"><i class="fa-solid fa-ticket mr-2"></i>Reguler</span>
                             <h3 class="text-lg font-black italic tracking-tight mt-1 group-hover:text-blue-400 transition-colors">Ticket Type</h3>
                             <p class="text-xs text-gray-500 mt-1"><i class="fa-solid  mr-2"></i></p>
                         </div>

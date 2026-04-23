@@ -50,6 +50,16 @@
                     </a>
             </nav>
                 </nav>
+
+                  <div class="mt-auto pt-6 border-t border-white/5">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-bold text-xs">AM</div>
+            <div class="overflow-hidden">
+                <p class="text-xs font-bold text-white truncate">M Fauzi Azhari</p>
+                <p class="text-[10px] text-blue-500 font-bold uppercase tracking-wider">Customer</p>
+            </div>
+        </div>
+    </div>
         </aside>
 
         <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
@@ -62,7 +72,7 @@
                 <section class="text-center max-w-3xl mx-auto mb-20">
                     <h1 class="text-4xl lg:text-6xl font-black italic tracking-tighter mb-6 uppercase">Behind the Code</h1>
                     <p class="text-gray-400 text-sm leading-relaxed">
-                        Ticketify is an event management and ticketing platform designed by Computer Science students at Batam State Polytechnic. This project is part of this semester's <span class="text-blue-500 font-bold">Project Based Learning (PBL)</span> semester ini, bertujuan untuk memberikan solusi digital yang efisien bagi organisasi kampus. program and aims to provide an efficient digital solution for campus organizations.
+                        Ticketify is an event management and ticketing platform designed by Computer Science students at Batam State Polytechnic. This project is part of this semester's <span class="text-blue-500 font-bold">Project Based Learning (PBL)</span>program and aims to provide an efficient digital solution for campus organizations.
                     </p>
                 </section>
 

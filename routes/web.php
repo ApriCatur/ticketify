@@ -1,11 +1,9 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
-<<<<<<< HEAD
-use App\Http\Controllers\App\Http\Controllers\Pembeli\EventController;
-=======
 
->>>>>>> a4cb2aa71ae2e59b3750a808709278d0e7d37802
+use App\Http\Controllers\App\Http\Controllers\Pembeli\EventController;
+use Termwind\Components\Raw;
 
 Route::get('/', function () {
     return view('welcome');
@@ -43,9 +41,10 @@ Route::prefix('admin')->group(function () {
     Route::get('/settings', function () {
         return view('Admin.Settings');
     })->name('admin.settings');
-<<<<<<< HEAD
+
 });
 
+// ini bagian pembeli, sesuaikan dengan nama folder dan file view yang sudah dibuat
 Route::get('/', function () {
     // Gunakan titik untuk menandakan folder.
     // view('NamaFolder.NamaSubFolder.NamaFile')
@@ -72,7 +71,36 @@ Route::get('/settings', function () {
 Route::get('/about', function () {
     return view('Pembeli.About');
 })->name('about');
-=======
 
-});
->>>>>>> a4cb2aa71ae2e59b3750a808709278d0e7d37802
+// Route untuk halaman detail event
+Route::get('/detail-event', function () {
+    return view('pembeli.detail');
+})->name('pembeli.detail');
+
+
+// ini bagian panitia, sesuaikan dengan nama folder dan file view yang sudah dibuat
+Route::get('/panitia/event', function () {
+    return view('Panitia.event');
+})->name('panitia.event');
+
+Route::get('/panitia/create', function () {
+    return view('Panitia.create');
+})->name('panitia.create');
+
+Route::get('/panitia/myevent', function () {
+    return view('Panitia.MyEvent');
+})->name('panitia.myevent');
+
+Route::get('/panitia/attendance', function () {
+    return view('Panitia.Attendance');
+})->name('panitia.attendance');
+
+Route::get('/panitia/statistic', function () {
+    return view('Panitia.Statistic');
+})->name('panitia.statistic');
+
+Route::get('/panitia/customerdata', function () {
+    return view('Panitia.CustomerData');
+})->name('panitia.customerdata');
+
+

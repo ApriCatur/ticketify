@@ -27,14 +27,14 @@
 
     <div class="flex max-w-[1600px] mx-auto min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
 
-        <aside class="w-64 hidden lg:flex flex-col sticky top-0 h-screen border-r border-white/5 p-6 space-y-8">
+        <aside class="w-64 hidden lg:flex flex-col sticky top-0 h-screen border-r border-white/5 p-6 space-y-8 bg-[#09090b]">
             <div class="flex items-center gap-2 mb-4">
                 <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center font-bold text-white">T</div>
                 <span class="font-extrabold text-xl tracking-tight uppercase">Ticketify</span>
             </div>
 
             <!-- ini bagian sidebar -->
-            <div class="space-y-6">
+             <div class="space-y-6">
                 <div>
                     <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Home</p>
                     <nav class="space-y-1">
@@ -61,6 +61,17 @@
                     </nav>
                 </div>
             </div>
+
+             <div class="mt-auto pt-6 border-t border-white/5">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center font-bold text-xs">AM</div>
+            <div class="overflow-hidden">
+                <p class="text-xs font-bold text-white truncate">M Fauzi Azhari</p>
+                <p class="text-[10px] text-blue-500 font-bold uppercase tracking-wider">Customer</p>
+            </div>
+        </div>
+    </div>
+
         </aside>
 
         <!-- ini bagian navbar -->
@@ -198,6 +209,7 @@
                 </div>
 
                 <!-- Event Cards 1 -->
+                 <a href="{{ route('pembeli.detail') }}" class="cursor-pointer">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
                     <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all duration-300 spotify-shadow">
                         <div class="relative h-44 overflow-hidden">
@@ -215,6 +227,7 @@
                             <div class="flex items-center justify-between pt-4 border-t border-white/5"><div class="text-sm font-black">IDR 45.000</div><button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">Beli Tiket</button></div>
                         </div>
                     </div>
+                    </a>
 
                     <!-- event 2 -->
                     <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all duration-300 spotify-shadow">
