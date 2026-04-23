@@ -106,7 +106,7 @@
 
                         <div class="relative h-44 overflow-hidden">
                             <div class="w-full h-full bg-[#18181b] flex items-center justify-center">
-                                <i class="fa-regular fa-image text-4xl text-gray-700"></i>
+                                   <i class="fa-regular fa-image text-4xl text-gray-700"></i>
                             </div>
 
                             <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-2 rounded-xl text-center border border-white/10">
