@@ -1,133 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings - Ticketify</title>
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <title>Ticketify - Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+<body class="bg-[#09090b] text-white flex" x-data="{ activeTab: 'profile' }">
 
-<body class="bg-slate-50 text-slate-800">
-<div class="flex min-h-screen">
-
-    <!-- Sidebar -->
     <x-sidebar/>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-8">
 
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
-            <div>
-                <h2 class="text-3xl font-bold text-slate-900">Settings</h2>
-                <p class="text-slate-500">Manage your profile and account</p>
+    <main class="flex-1 p-10">
+        <div class="max-w-4xl">
+            <header class="mb-8">
+                <h1 class="text-3xl font-black tracking-tight">Account Settings</h1>
+                <p class="text-gray-500 text-sm mt-2">Kelola informasi profil dan keamanan akun kamu.</p>
+            </header>
+
+            <div class="flex gap-6 mb-8 border-b border-white/5">
+                <button @click="activeTab = 'profile'"
+                        :class="activeTab === 'profile' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500 hover:text-white'"
+                        class="pb-4 px-2 text-sm font-bold transition-all">
+                    Profile Details
+                </button>
+                <button @click="activeTab = 'security'"
+                        :class="activeTab === 'security' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500 hover:text-white'"
+                        class="pb-4 px-2 text-sm font-bold transition-all">
+                    Security
+                </button>
             </div>
 
-            <div class="flex items-center gap-3">
-                <span class="font-medium text-slate-700">Admin</span>
-                <div class="w-10 h-10 rounded-full bg-slate-900"></div>
-            </div>
-        </div>
+            <div class="bg-[#121212] rounded-3xl p-8 border border-white/5 shadow-2xl">
 
-        <!-- Tabs -->
-        <div class="flex gap-3 mb-6">
-            <button class="px-5 py-2 rounded-xl bg-slate-900 text-white text-sm font-medium">
-                Edit Profile
-            </button>
-            <button class="px-5 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 text-sm hover:bg-slate-100">
-                Security
-            </button>
-        </div>
+                <div x-show="activeTab === 'profile'" x-transition>
+                    <form class="space-y-8">
+                        <div class="flex items-center gap-6 pb-8 border-b border-white/5">
+                            <div class="relative">
+                                <div class="w-24 h-24 bg-[#18181b] border border-white/10 rounded-full flex items-center justify-center overflow-hidden">
+                                    <i class="fa-solid fa-user text-3xl text-gray-700"></i>
+                                    </div>
+                                <label for="pic-upload" class="absolute bottom-0 right-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs cursor-pointer hover:bg-blue-700 transition-all border-4 border-[#121212]">
+                                    <i class="fa-solid fa-pen"></i>
+                                    <input type="file" id="pic-upload" class="hidden">
+                                </label>
+                            </div>
+                            <div>
+                                <h3 class="font-bold">Profile Picture</h3>
+                                <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG. Max 2MB.</p>
+                            </div>
+                        </div>
 
-        <!-- Content -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Full Name</label>
+                                <input type="text" placeholder="Enter your full name" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Email Address</label>
+                                <input type="email" placeholder="Enter your email address" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all">
+                            </div>
+                            <div class="space-y-2 md:col-span-2">
+                                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Phone Number</label>
+                                <input type="text" placeholder="0812345567" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all">
+                            </div>
+                        </div>
 
-            <!-- LEFT PROFILE -->
-            <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm text-center">
-
-                <div class="w-40 h-40 mx-auto rounded-full bg-slate-200 flex items-center justify-center mb-6">
-                    <i class="fa-solid fa-user text-5xl text-slate-500"></i>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl text-sm transition-all shadow-lg shadow-blue-600/20">
+                            Save Changes
+                        </button>
+                    </form>
                 </div>
 
-                <h3 class="text-2xl font-bold text-slate-900 mb-6">Your Name</h3>
-
-                <div class="text-left space-y-4">
-                    <div>
-                        <label class="text-sm text-slate-500">Email</label>
-                        <input type="text" class="w-full mt-1 px-4 py-2 rounded-xl border border-slate-200 bg-slate-50">
-                    </div>
-
-                    <div>
-                        <label class="text-sm text-slate-500">Phone Number</label>
-                        <input type="text" class="w-full mt-1 px-4 py-2 rounded-xl border border-slate-200 bg-slate-50">
-                    </div>
-
-                    <div>
-                        <label class="text-sm text-slate-500">Password</label>
-                        <input type="password" value="********" class="w-full mt-1 px-4 py-2 rounded-xl border border-slate-200 bg-slate-50">
-                    </div>
-                </div>
-            </div>
-
-            <!-- RIGHT FORM -->
-            <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
-
-                <form action="#" method="POST">
-                    @csrf
-
-                    <div class="space-y-5">
-
-                        <div>
-                            <label class="text-sm text-slate-500">Your Name</label>
-                            <div class="flex items-center gap-2">
-                                <input type="text" name="name" class="w-full mt-1 px-4 py-2 rounded-xl border border-slate-200">
-                                <i class="fa-solid fa-pen text-slate-400"></i>
-                            </div>
+                <div x-show="activeTab === 'security'" x-transition style="display: none;">
+                    <form class="space-y-6 max-w-lg">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Old Password</label>
+                            <input type="password" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">New Password</label>
+                            <input type="password" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Confirm New Password</label>
+                            <input type="password" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-all">
                         </div>
 
-                        <div>
-                            <label class="text-sm text-slate-500">Email</label>
-                            <div class="flex items-center gap-2">
-                                <input type="email" name="email" class="w-full mt-1 px-4 py-2 rounded-xl border border-slate-200">
-                                <i class="fa-solid fa-pen text-slate-400"></i>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="text-sm text-slate-500">Phone Number</label>
-                            <div class="flex items-center gap-2">
-                                <input type="text" name="phone" class="w-full mt-1 px-4 py-2 rounded-xl border border-slate-200">
-                                <i class="fa-solid fa-pen text-slate-400"></i>
-                            </div>
-                        </div>
-
-                        <!-- Upload -->
-                        <div class="flex items-center gap-4 mt-4">
-                            <div class="w-14 h-14 rounded-full bg-slate-200 flex items-center justify-center">
-                                <i class="fa-solid fa-user text-slate-500"></i>
-                            </div>
-
-                            <input type="file" name="photo" class="text-sm">
-                        </div>
-
-                        <!-- Save -->
-                        <div class="flex justify-end pt-6">
-                            <button type="submit" class="px-6 py-2 rounded-xl bg-slate-900 text-white hover:bg-slate-800">
-                                Save
+                        <div class="pt-4">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl text-sm transition-all shadow-lg shadow-blue-600/20">
+                                Update Password
                             </button>
                         </div>
-
-                    </div>
-                </form>
+                    </form>
+                </div>
 
             </div>
-
         </div>
-
     </main>
-</div>
+
 </body>
 </html>

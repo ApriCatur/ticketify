@@ -10,7 +10,6 @@
 </head>
 <body class="bg-[#09090b] text-white flex" x-data="{ isScanning: true, showResult: false }">
 
-
     <aside class="w-64 hidden lg:flex flex-col sticky top-0 h-screen border-r border-white/5 p-6 space-y-8 bg-[#09090b]">
         <div class="flex items-center gap-2 mb-4">
             <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]">T</div>
