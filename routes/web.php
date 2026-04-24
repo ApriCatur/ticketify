@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProdukController;
 
 use App\Http\Controllers\App\Http\Controllers\Pembeli\EventController;
 use Termwind\Components\Raw;
@@ -104,3 +104,9 @@ Route::get('/panitia/customerdata', function () {
 })->name('panitia.customerdata');
 
 
+Route::prefix('pages')->group(function () {
+    // Route untuk halaman list produk
+    Route::get('/product', [ProdukController::class, 'index']);
+
+    // Kamu bisa menambah route lain di sini nanti (home, about, dll) [cite: 64]
+});

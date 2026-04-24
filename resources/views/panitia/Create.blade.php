@@ -90,7 +90,7 @@
                 <div class="grid md:grid-cols-2 gap-8">
                     <div class="space-y-4">
                         <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Poster Event</label>
-                        <div class="border-2 border-dashed border-white/10 rounded-3xl p-10 text-center hover:border-blue-500/50 transition-colors bg-[#121212] group relative overflow-hidden">
+                        <div class="border-2 border-dashed border-white/10 rounded-3xl p-[110px] text-center hover:border-blue-500/50 transition-colors bg-[#121212] group relative overflow-hidden">
                             <i class="fa-solid fa-image text-4xl text-gray-700 group-hover:text-blue-500 transition-colors mb-4 block"></i>
                             <p class="text-[11px] text-gray-500 font-medium">Klik atau seret file poster di sini</p>
                             <input type="file" class="hidden" id="poster" accept="image/*">
@@ -103,19 +103,30 @@
                             <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Nama Event</label>
                             <input type="text" placeholder="Masukkan nama event" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all">
                         </div>
+
+                        <div class="space-y-2">
+                             <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Event Location</label>
+                             <input type="text" placeholder="Masukkan lokasi event (contoh: Batam, Kepulauan Riau)" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all">
+                        </div>
+
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Social Media Link</label>
                             <input type="url" placeholder="https://instagram.com/..." class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all">
                         </div>
+
+
                         <div class="grid grid-cols-2 gap-4">
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal</label>
                                 <input type="date" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all">
                             </div>
-                            <div class="space-y-2">
+
+                        <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Waktu</label>
                                 <input type="time" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all">
                             </div>
+
+
                         </div>
                     </div>
                 </div>
