@@ -37,3 +37,12 @@ window.openReject = function () {
 window.closeReject = function () {
     document.getElementById('rejectModal').classList.add('hidden');
 }
+
+window.openUnpublish = function () {
+    document.getElementById('unpublishModal').classList.remove('hidden');
+    document.getElementById('unpublishModal').classList.add('flex');
+}
+
+window.closeUnpublish = function () {
+    document.getElementById('unpublishModal').classList.add('hidden');
+}

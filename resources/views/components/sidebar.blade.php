@@ -20,7 +20,7 @@
         <!-- MENU -->
         <div class="space-y-6">
 
-            <!-- MAIN -->
+            <!-- MAIN MENU -->
             <div>
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">
                     Main Menu
@@ -57,27 +57,56 @@
                         <i class="fa-solid fa-layer-group"></i>
                         Event Categories
                     </a>
+                </nav>
+            </div>
 
+            <!-- OTHER -->
+            <div>
+                <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">
+                    Other
+                </p>
+
+                <nav class="space-y-1">
                     <a href="{{ route('admin.Settings') }}"
                        class="{{ $base }} {{ request()->routeIs('admin.Settings') ? $active : $inactive }}">
                         <i class="fa-solid fa-gear"></i>
                         Settings
                     </a>
-
                 </nav>
             </div>
 
         </div>
     </div>
 
-    <!-- LOGOUT -->
-    <form>
-        @csrf
-        <button type="submit"
-            class="w-full flex items-center gap-3 p-3 rounded-xl text-sm text-red-400 hover:bg-red-500/10 transition">
-            <i class="fa-solid fa-power-off"></i>
-            Logout
-        </button>
-    </form>
+    <!-- BOTTOM AREA -->
+    <div class="space-y-6">
+
+        <!-- PROFILE -->
+        <div class="pt-6 border-t border-white/5">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold text-xs text-white">
+                    AD
+                </div>
+
+                <div class="overflow-hidden">
+                    <p class="text-sm font-bold text-white truncate">Admin User</p>
+                    <p class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">
+                        Administrator
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOGOUT -->
+        <form>
+            @csrf
+            <button type="submit"
+                class="w-full flex items-center gap-3 p-3 rounded-xl text-sm text-red-400 hover:bg-red-500/10 transition">
+                <i class="fa-solid fa-power-off"></i>
+                Logout
+            </button>
+        </form>
+
+    </div>
 
 </aside>
