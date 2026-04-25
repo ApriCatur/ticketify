@@ -35,14 +35,7 @@
                 <div class="hidden lg:block">
                     <span class="text-sm text-gray-400 font-medium italic"> Welcome To Ticketify! Discover something new today.</span>
                 </div>
-                <div class="flex gap-4">
-                    <a href="{{ route('login') }}">
-                        <button class="px-5 py-2 text-sm font-semibold text-gray-400 hover:text-white transition">Sign In</button>
-                    </a>
-                    <a href="{{ route('register') }}">
-                    <button class="px-5 py-2 text-sm font-bold bg-white text-black rounded-full hover:scale-105 transition-transform">Register</button>
-                    </a>
-                </div>
+               
             </nav>
 
             <!-- ini bagian poster slider -->

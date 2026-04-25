@@ -9,13 +9,13 @@
                 <div>
                     <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Home</p>
                     <nav class="space-y-1">
-                        <a href="{{ route('event.index') }}" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm text-gray-400 hover:text-white transition truncate @if (Route::is('event.index')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
+                        <a href="{{ route('pembeli.event') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm text-gray-400 hover:text-white transition @if (Route::is('pembeli.event')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
                             <i class="fa-solid fa-home"></i> Event
                         </a>
-                        <a href="{{ route('about') }}" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm text-gray-400 hover:text-white transition truncate @if (Route::is('about')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
+                        <a href="{{ route('pembeli.about') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm text-gray-400 hover:text-white transition truncate @if (Route::is('pembeli.about')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
                             <i class="fa-solid fa-compass"></i> About Us
                         </a>
-                        <a href="{{ route('tickets.mine') }}" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm text-gray-400 hover:text-white transition truncate @if (Route::is('tickets.mine')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
+                        <a href="{{ route('pembeli.myticket') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm text-gray-400 hover:text-white transition truncate @if (Route::is('pembeli.myticket')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
                             <i class="fa-solid fa-ticket"></i> My Tickets
                         </a>
                     </nav>
@@ -23,10 +23,10 @@
                 <div>
                     <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Lainnya</p>
                     <nav class="space-y-1">
-                        <a href="{{ route('settings') }}" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm text-gray-400 hover:text-white transition truncate @if (Route::is('settings')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
+                        <a href="{{ route('pembeli.settings') }}" class="flex items-center gap-3 p-3  rounded-xl text-sm text-gray-400 hover:text-white transition @if (Route::is('pembeli.settings')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
                             <i class="fa-solid fa-gear"></i> Settings
                         </a>
-                        <a href="{{ route('login') }}" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm text-gray-400 hover:text-white transition truncate @if (Route::is('login')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
+                        <a href="{{ route('login') }}" class="flex items-center gap-3 p-3  rounded-xl text-sm text-red-400 hover:text-red-400 transition @if (Route::is('login')){{ 'bg-blue-500 text-red-500 font-bold hover:none ' }}@endif">
                             <i class="fa-solid fa-power-off"></i> Logout
                         </a>
                     </nav>

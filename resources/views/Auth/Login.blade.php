@@ -28,7 +28,7 @@
                     <span class="text-sm text-gray-400 font-medium italic">Welcome back! Please login to your account.</span>
                 </div>
                 <div class="flex gap-4">
-                    <a href="{{ route('event.index') }}" class="text-sm font-semibold text-gray-400 hover:text-white transition self-center">Back to Home</a>
+                    <a href="{{ route('registrasi.event') }}" class="text-sm font-semibold text-gray-400 hover:text-white transition self-center">Back to Home</a>
                 </div>
             </nav>
 

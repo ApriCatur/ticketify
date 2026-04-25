@@ -49,7 +49,7 @@ Route::get('/', function () {
     // Gunakan titik untuk menandakan folder.
     // view('NamaFolder.NamaSubFolder.NamaFile')
     return view('Pembeli.Event');
-})->name('event.index');
+})->name('pembeli.event');
 
 Route::get('/login', function () {
     // Sesuaikan juga untuk halaman Login jika berada di folder Auth
@@ -58,7 +58,7 @@ Route::get('/login', function () {
 
 Route::get('/my-tickets', function () {
     return view('Pembeli.MyTicket');
-})->name('tickets.mine');
+})->name('pembeli.myticket');
 
 Route::get('/register', function () {
     return view('Auth.Register');
@@ -66,11 +66,11 @@ Route::get('/register', function () {
 
 Route::get('/settings', function () {
     return view('Pembeli.Settings');
-})->name('settings');
+})->name('pembeli.settings');
 
 Route::get('/about', function () {
     return view('Pembeli.About');
-})->name('about');
+})->name('pembeli.about');
 
 // Route untuk halaman detail event
 Route::get('/detail-event', function () {
@@ -110,3 +110,23 @@ Route::prefix('pages')->group(function () {
 
     // Kamu bisa menambah route lain di sini nanti (home, about, dll) [cite: 64]
 });
+
+
+// ini untuk tampilan yang belum register atau belum login, sesuaikan dengan nama folder dan file view yang sudah dibuat
+Route::get('/registrasi/event', function () {
+    return view('Registrasi.Event');
+})->name('registrasi.event');
+
+Route::get('/registrasi/myticket', function () {
+    return view('Registrasi.MyTicket');
+})->name('registrasi.myticket');
+
+Route::get('/registrasi/about', function () {
+    return view('Registrasi.About');
+})->name('registrasi.about');
+
+Route::get('/registrasi/settings', function () {
+    return view('Registrasi.Settings');
+})->name('registrasi.settings');
+
+

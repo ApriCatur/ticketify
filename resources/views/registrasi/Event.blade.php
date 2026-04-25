@@ -27,13 +27,22 @@
 
     <div class="flex max-w-[1600px] mx-auto min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
 
-      @include('layouts.sidebar-panitia')
+    @include('layouts.sidebar-registrasi')
 
         <!-- ini bagian navbar -->
         <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
             <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
                 <div class="hidden lg:block">
                     <span class="text-sm text-gray-400 font-medium italic"> Welcome To Ticketify! Discover something new today.</span>
+                </div>
+                <div class="flex gap-4">
+                    <a href="{{ route('login') }}">
+                        <button class="px-5 py-2 text-sm font-semibold text-gray-400 hover:text-white transition">Sign In</button>
+                    </a>
+                    <a href="{{ route('register') }}">
+                    <button class="px-5 py-2 text-sm font-bold bg-white text-black rounded-full hover:scale-105 transition-transform">Register</button>
+                    </a>
+                </div>
             </nav>
 
             <!-- ini bagian poster slider -->
@@ -289,7 +298,12 @@
                             </div>
                         </div>
                     </div>
-                    
+                    <div class="mt-8 p-6 bg-gradient-to-br from-blue-600 to-blue-900 rounded-2xl shadow-xl relative overflow-hidden group">
+                        <i class="fa-solid fa-ticket absolute -right-4 -bottom-4 text-white/10 text-8xl -rotate-12 group-hover:rotate-0 transition-all duration-500"></i>
+                        <h4 class="font-black text-white mb-2 relative z-10">Buka Event?</h4>
+                        <p class="text-xs text-blue-100 mb-4 relative z-10">Kelola tiket organisasimu di sini.</p>
+                        <button class="w-full py-2 bg-white text-blue-600 text-[10px] font-black rounded-lg uppercase hover:bg-blue-50 relative z-10 transition-colors">Buat Sekarang</button>
+                    </div>
                 </div>
             </div>
         </aside>

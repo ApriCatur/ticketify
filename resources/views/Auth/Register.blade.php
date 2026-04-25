@@ -31,7 +31,7 @@
                 <div>
                     <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Navigasi</p>
                     <nav class="space-y-1">
-                        <a href="{{ route('event.index') }}" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm text-gray-400 hover:text-white transition">
+                        <a href="{{ route('registrasi.event') }}" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm text-gray-400 hover:text-white transition">
                             <i class="fa-solid fa-house"></i> Event
                         </a>
                         <a href="{{ route('login') }}" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm text-gray-400 hover:text-white transition">
@@ -45,7 +45,7 @@
         <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
             <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
                 <span class="text-sm text-gray-400 font-medium italic tracking-tight">Join our community today!</span>
-                <a href="{{ route('event.index') }}" class="text-[10px] font-black text-gray-500 hover:text-white uppercase tracking-widest transition">Cancel</a>
+                <a href="{{ route('registrasi.event') }}" class="text-[10px] font-black text-gray-500 hover:text-white uppercase tracking-widest transition">Cancel</a>
             </nav>
 
             <main class="flex-1 flex items-center justify-center p-8">
