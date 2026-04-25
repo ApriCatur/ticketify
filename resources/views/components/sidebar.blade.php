@@ -80,8 +80,17 @@
 
     <!-- BOTTOM AREA -->
     <div class="space-y-6">
+        <!-- LOGOUT -->
+        <form>
+            @csrf
+            <button type="submit"
+                class="w-full flex items-center gap-3 p-3 rounded-xl text-sm text-red-400 hover:bg-red-500/10 transition">
+                <i class="fa-solid fa-power-off"></i>
+                Logout
+            </button>
+        </form>
 
-        <!-- PROFILE -->
+         <!-- PROFILE -->
         <div class="pt-6 border-t border-white/5">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold text-xs text-white">
@@ -96,16 +105,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- LOGOUT -->
-        <form>
-            @csrf
-            <button type="submit"
-                class="w-full flex items-center gap-3 p-3 rounded-xl text-sm text-red-400 hover:bg-red-500/10 transition">
-                <i class="fa-solid fa-power-off"></i>
-                Logout
-            </button>
-        </form>
 
     </div>
 
