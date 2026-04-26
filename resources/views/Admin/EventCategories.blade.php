@@ -48,7 +48,7 @@
             <div class="flex items-center bg-white/5 rounded-xl px-4 w-full md:w-80">
                 <i class="fa-solid fa-magnifying-glass text-blue-500 mr-3"></i>
                 <input type="text" placeholder="Search category..."
-                    class="w-full py-3 bg-transparent outline-none text-sm text-white placeholder-gray-500">
+                    class="w-full py-3 bg-transparent outline-none text-sm text-white placeholder-gray-500 border-none ring-0 focus:ring-0">
             </div>
 
             <button class="bg-white text-black px-6 py-3 rounded-xl font-bold hover:bg-blue-500 hover:text-white transition">

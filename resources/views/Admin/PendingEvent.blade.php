@@ -10,7 +10,7 @@
 </nav>
 
 {{-- 🔥 HERO CAROUSEL --}}
-<header class="px-8 pt-6">
+<header class="px-8 pt-6 pb-12">
     <div class="swiper myHeroSwiper rounded-3xl overflow-hidden shadow-2xl h-[420px] relative">
 
         <div class="swiper-wrapper h-full">
