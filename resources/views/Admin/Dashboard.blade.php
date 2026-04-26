@@ -21,13 +21,6 @@
         <h2 class="text-2xl font-black tracking-tight">Dashboard</h2>
         <p class="text-xs text-gray-500 mt-1">Overview of your platform</p>
     </div>
-
-    <div class="flex items-center gap-3">
-        <span class="text-sm text-gray-400 font-semibold">Admin</span>
-        <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold">
-            AD
-        </div>
-    </div>
 </nav>
 
 <!-- CONTENT -->

@@ -11,12 +11,6 @@
         <p class="text-sm text-gray-500">Manage event classifications across the platform</p>
     </div>
 
-    <div class="flex items-center gap-3">
-        <span class="text-sm font-semibold text-gray-300">Admin</span>
-        <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold">
-            AD
-        </div>
-    </div>
 </nav>
 
 <div class="p-8">
