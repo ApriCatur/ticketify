@@ -4,26 +4,76 @@
 
 @section('content')
 
-{{-- Navbar --}}
-<nav class="glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
-    <div>
-        <h2 class="text-2xl font-black tracking-tight">Pending Event</h2>
-        <p class="text-xs text-gray-500 mt-1">Review and approve incoming event submissions</p>
-    </div>
+{{-- NAVBAR --}}
+<nav class="glass border-b border-white/5 px-8 py-4">
+    <h2 class="text-2xl font-black">Pending Event</h2>
 </nav>
 
-{{-- Search --}}
-<div class="px-8 py-8">
-    <div class="bg-[#1e1e1e] border border-white/10 rounded-2xl p-4 shadow-xl flex flex-wrap lg:flex-nowrap items-end gap-4">
+{{-- 🔥 HERO CAROUSEL --}}
+<header class="px-8 pt-6">
+    <div class="swiper myHeroSwiper rounded-3xl overflow-hidden shadow-2xl h-[420px] relative">
 
-        <div class="flex-[2] min-w-[200px]">
+        <div class="swiper-wrapper h-full">
+
+            <!-- SLIDE -->
+            <div class="swiper-slide relative h-full">
+
+                <!-- IMAGE -->
+                <img src="{{ asset('images/kmipn.jpeg') }}"
+                    class="w-full h-full object-cover">
+
+                <!-- OVERLAY -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+
+                <!-- CONTENT -->
+                <div class="absolute bottom-0 left-0 w-full p-8 z-20">
+                    <h2 class="text-4xl font-extrabold italic text-white">
+                        Seminar KMIPN 2026
+                    </h2>
+
+                    <p class="text-gray-300 text-sm mt-2 max-w-lg">
+                        Sharing bersama para juara nasional untuk persiapan kompetisi informatika terbesar.
+                    </p>
+                </div>
+            </div>
+
+            <!-- DUPLICATE SLIDE -->
+            <div class="swiper-slide relative h-full">
+                <img src="{{ asset('images/festival musik.jpg') }}"
+                    class="w-full h-full object-cover">
+
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+
+                <div class="absolute bottom-0 left-0 w-full p-8 z-20">
+                    <h2 class="text-4xl font-extrabold italic text-white">
+                        Pergelaran Vokasi 2026
+                    </h2>
+
+                    <p class="text-gray-300 text-sm mt-2 max-w-lg">
+                        Semarakkan perayaan vokasi tahun ini!
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- DOTS -->
+        <div class="swiper-pagination absolute bottom-4 left-0 right-0 z-50"></div>
+    </div>
+</header>
+
+{{-- SEARCH --}}
+<div class="px-8 -mt-6 relative z-40">
+    <div class="bg-[#1e1e1e] border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-wrap lg:flex-nowrap items-end gap-4">
+
+        <div class="flex-[2] min-w-[220px]">
             <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2 block">
                 Search Event
             </label>
-            <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3">
+            <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
                 <i class="fa-solid fa-magnifying-glass text-blue-500"></i>
                 <input type="text" placeholder="Search event..."
-                    class="bg-transparent w-full outline-none text-sm">
+                    class="bg-transparent w-full outline-none text-sm text-gray-200">
             </div>
         </div>
 
@@ -31,7 +81,7 @@
             <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2 block">
                 Location
             </label>
-            <select class="w-full bg-white/5 rounded-xl py-3 px-4 text-sm outline-none">
+            <select class="w-full bg-white/5 rounded-xl py-3 px-4 text-sm outline-none border border-transparent focus:border-blue-500">
                 <option>All Location</option>
             </select>
         </div>
@@ -41,7 +91,7 @@
                 Date
             </label>
             <input type="date"
-                class="w-full bg-white/5 rounded-xl py-3 px-4 text-sm outline-none [color-scheme:dark]">
+                class="w-full bg-white/5 rounded-xl py-3 px-4 text-sm outline-none border border-transparent focus:border-blue-500 [color-scheme:dark]">
         </div>
 
         <button class="px-8 py-3 bg-white text-black rounded-xl font-bold hover:bg-blue-500 hover:text-white transition">
@@ -50,20 +100,19 @@
     </div>
 </div>
 
-{{-- Content --}}
-<div class="flex gap-8 px-8 pb-8">
+{{-- CONTENT --}}
+<div class="flex gap-8 px-8 py-8">
 
-    {{-- Cards --}}
+    {{-- EVENT GRID --}}
     <div class="flex-1">
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             @for ($i = 0; $i < 6; $i++)
-            <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden transition hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/10">
+            <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/40 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
 
-                <div class="relative h-44 overflow-hidden">
-                    <div class="w-full h-full bg-[#18181b] flex items-center justify-center">
-                        <i class="fa-regular fa-image text-4xl text-gray-700"></i>
-                    </div>
+                <div class="relative h-48 overflow-hidden">
+                    <img src="{{ asset('images/kmipn.jpeg') }}"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
 
                     <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-2 rounded-xl text-center border border-white/10">
                         <span class="block text-[10px] font-bold text-blue-400 uppercase">APR</span>
@@ -73,9 +122,7 @@
                 </div>
 
                 <div class="p-5">
-                    <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">
-                        Pending
-                    </span>
+                    <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Pending</span>
 
                     <h3 class="font-bold text-lg mt-2 mb-3 group-hover:text-blue-400 transition">
                         Event Seminar KMIPN
@@ -98,35 +145,28 @@
                         </div>
                     </div>
 
+                    {{-- ADMIN BUTTON --}}
                     <div class="flex gap-2 pt-4 border-t border-white/5">
-
-                        <!-- APPROVE -->
-                        <button
-                            onclick="openApprove()"
-                            class="flex-1 bg-blue-600 text-white py-2 rounded-xl text-xs font-semibold hover:bg-blue-500 transition">
+                        <button onclick="openApprove()"
+                            class="flex-1 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-500 transition">
                             Approve
                         </button>
 
-                        <!-- REJECT -->
-                        <button
-                            onclick="openReject()"
-                            class="flex-1 bg-red-500/10 text-red-400 py-2 rounded-xl text-xs hover:bg-red-500/20 transition">
+                        <button onclick="openReject()"
+                            class="flex-1 py-2 bg-red-500/10 text-red-400 rounded-xl text-xs hover:bg-red-500/20 transition">
                             Reject
                         </button>
 
-                        <!-- DETAIL -->
-                        <button
-                            onclick="openDetail(
-                                'Event Seminar KMIPN',
-                                'Politeknik Negeri Batam',
-                                'Sabtu, 7 Feb 2026',
-                                '15:00 WIB',
-                                'Event seminar membahas perkembangan teknologi terbaru.'
-                            )"
+                        <button onclick="openDetail(
+                            'Event Seminar KMIPN',
+                            'Politeknik Negeri Batam',
+                            'Sabtu, 25 April 2026',
+                            '15:00 WIB',
+                            'Event seminar membahas perkembangan teknologi terbaru.'
+                        )"
                             class="px-4 py-2 border border-white/10 rounded-xl text-xs hover:bg-white/5 transition">
                             Detail
                         </button>
-
                     </div>
                 </div>
             </div>
@@ -135,7 +175,7 @@
         </div>
     </div>
 
-    {{-- Right Panel --}}
+    {{-- RIGHT SIDEBAR --}}
     <aside class="w-80 hidden xl:block">
         <div class="space-y-6">
 
@@ -172,7 +212,8 @@
         </div>
     </aside>
 
-        <!-- ================= MODAL DETAIL FINAL ================= -->
+
+    <!-- ================= MODAL DETAIL FINAL ================= -->
 <div id="detailModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4">
 
     <div class="bg-[#18181b] w-full max-w-5xl max-h-[90vh] rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
@@ -355,7 +396,7 @@
         </div>
     </div>
 </div>
-
 </div>
+
 
 @endsection

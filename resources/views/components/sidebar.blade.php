@@ -17,7 +17,6 @@
             $active = "bg-blue-500 text-white font-bold shadow-lg shadow-blue-500/20";
         @endphp
 
-        <!-- MENU -->
         <div class="space-y-6">
 
             <!-- MAIN MENU -->
@@ -27,7 +26,6 @@
                 </p>
 
                 <nav class="space-y-1">
-
                     <a href="{{ route('admin.dashboard') }}"
                        class="{{ $base }} {{ request()->routeIs('admin.dashboard') ? $active : $inactive }}">
                         <i class="fa-solid fa-chart-line"></i>
@@ -72,6 +70,16 @@
                         <i class="fa-solid fa-gear"></i>
                         Settings
                     </a>
+
+                    <!-- LOGOUT (tidak ubah route) -->
+                    <form>
+                        @csrf
+                        <button type="submit"
+                            class="w-full flex items-center gap-3 p-3 rounded-xl text-sm text-red-400 hover:bg-red-500/10 transition">
+                            <i class="fa-solid fa-power-off"></i>
+                            Logout
+                        </button>
+                    </form>
                 </nav>
             </div>
 
@@ -80,17 +88,7 @@
 
     <!-- BOTTOM AREA -->
     <div class="space-y-6">
-        <!-- LOGOUT -->
-        <form>
-            @csrf
-            <button type="submit"
-                class="w-full flex items-center gap-3 p-3 rounded-xl text-sm text-red-400 hover:bg-red-500/10 transition">
-                <i class="fa-solid fa-power-off"></i>
-                Logout
-            </button>
-        </form>
-
-         <!-- PROFILE -->
+        <!-- PROFILE -->
         <div class="pt-6 border-t border-white/5">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold text-xs text-white">
@@ -105,7 +103,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 </aside>
