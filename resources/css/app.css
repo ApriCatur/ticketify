@@ -13,3 +13,20 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+.swiper-pagination {
+    position: absolute !important;
+    bottom: 10px !important;
+    z-index: 9999 !important;
+}
+
+.swiper-pagination-bullet {
+    background: white !important;
+    opacity: 0.6;
+}
+
+.swiper-pagination-bullet-active {
+    background: #3b82f6 !important;
+    opacity: 1;
+}
+
