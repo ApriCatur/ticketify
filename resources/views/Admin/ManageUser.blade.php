@@ -14,7 +14,7 @@
 
 <div class="p-8">
 
-    {{-- ── STATISTICS ─────────────────────────────────────── --}}
+    {{-- ── STATISTICS --}}
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
 
         <div class="bg-[#1e1e1e] p-6 rounded-2xl border border-white/5">
@@ -36,7 +36,7 @@
 
     </div>
 
-    {{-- ── TABLE CARD ──────────────────────────────────────── --}}
+    {{-- TABLE CARD --}}
     <div class="bg-[#1e1e1e] rounded-2xl border border-white/5 p-6">
 
         {{-- Search + Add --}}
@@ -134,7 +134,7 @@
                                     <button onclick="openDelete('{{ $user[0] }}', '{{ $user[1] }}')"
                                         class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors text-xs font-semibold">
                                         <i class="fa-solid fa-trash text-[11px]"></i>
-                                        Hapus
+                                        Delete
                                     </button>
 
                                 </div>
@@ -150,10 +150,7 @@
     </div>
 </div>
 
-
-{{-- ============================================================
-     MODAL: ADD USER
-     ============================================================ --}}
+{{-- MODAL: ADD USER --}}
 <div id="addModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
     <div class="bg-[#1e1e1e] w-full max-w-xl rounded-3xl border border-white/10 overflow-hidden shadow-2xl animate-modal">
 
@@ -163,7 +160,7 @@
                 <div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
                     <i class="fa-solid fa-user-plus text-white text-sm"></i>
                 </div>
-                <h2 class="text-white font-bold">Tambah Anggota Baru</h2>
+                <h2 class="text-white font-bold">Add New Users</h2>
             </div>
             <button onclick="closeModal('addModal')"
                 class="w-8 h-8 rounded-xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-colors">
@@ -176,22 +173,12 @@
 
             {{-- Section label --}}
             <div class="flex items-center gap-3 mb-5">
-                <span class="text-[9px] font-black text-blue-500 uppercase tracking-widest whitespace-nowrap">Informasi Anggota</span>
+                <span class="text-[9px] font-black text-blue-500 uppercase tracking-widest whitespace-nowrap">User Information</span>
                 <div class="flex-1 h-px bg-blue-500/20"></div>
-                <span class="text-[9px] font-black text-blue-500 uppercase tracking-widest whitespace-nowrap">Detail Anggota</span>
+                <span class="text-[9px] font-black text-blue-500 uppercase tracking-widest whitespace-nowrap">User Details</span>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
-
-                {{-- NIK --}}
-                <div class="flex flex-col gap-2">
-                    <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">NIK</label>
-                    <div class="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-4 py-3 focus-within:border-blue-500 transition-colors">
-                        <i class="fa-solid fa-id-card text-blue-500 text-xs flex-shrink-0"></i>
-                        <input type="text" placeholder="Masukkan NIK..."
-                            class="bg-transparent w-full outline-none border-none ring-0 text-sm text-gray-200 placeholder-gray-600">
-                    </div>
-                </div>
 
                 {{-- Email --}}
                 <div class="flex flex-col gap-2">
@@ -205,10 +192,10 @@
 
                 {{-- Nama Lengkap --}}
                 <div class="flex flex-col gap-2">
-                    <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Nama Lengkap</label>
+                    <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Full Name</label>
                     <div class="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-4 py-3 focus-within:border-blue-500 transition-colors">
                         <i class="fa-solid fa-user text-blue-500 text-xs flex-shrink-0"></i>
-                        <input type="text" placeholder="Nama lengkap sesuai identitas..."
+                        <input type="text" placeholder="Full name as per identification..."
                             class="bg-transparent w-full outline-none border-none ring-0 text-sm text-gray-200 placeholder-gray-600">
                     </div>
                 </div>
@@ -230,30 +217,13 @@
 
                 {{-- Kata Sandi --}}
                 <div class="flex flex-col gap-2">
-                    <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Kata Sandi</label>
+                    <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Password</label>
                     <div class="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-4 py-3 focus-within:border-blue-500 transition-colors">
                         <i class="fa-solid fa-lock text-blue-500 text-xs flex-shrink-0"></i>
                         <input type="password" placeholder="Bawaan: NIK (jika kosong)"
                             class="bg-transparent w-full outline-none border-none ring-0 text-sm text-gray-200 placeholder-gray-600">
-                    </div>
-                    <p class="text-[10px] text-gray-600 ml-1">*Kosongkan untuk menjadikan NIK sebagai kata sandi.</p>
+                        </div>
                 </div>
-
-                {{-- Unit --}}
-                <div class="flex flex-col gap-2">
-                    <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Unit</label>
-                    <div class="relative flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-4 py-3 focus-within:border-blue-500 transition-colors">
-                        <i class="fa-solid fa-building text-blue-500 text-xs flex-shrink-0"></i>
-                        <select class="bg-transparent w-full outline-none border-none ring-0 text-sm text-gray-200 appearance-none cursor-pointer">
-                            <option value=""   class="bg-[#1e1e1e] text-gray-400">Pilih unit...</option>
-                            <option value="ti" class="bg-[#1e1e1e]">Teknik Informatika</option>
-                            <option value="te" class="bg-[#1e1e1e]">Teknik Elektro</option>
-                            <option value="mb" class="bg-[#1e1e1e]">Manajemen Bisnis</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down text-gray-600 text-[10px] absolute right-4 pointer-events-none"></i>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -272,9 +242,7 @@
 </div>
 
 
-{{-- ============================================================
-     MODAL: EDIT USER
-     ============================================================ --}}
+{{-- MODAL: EDIT USER --}}
 <div id="editModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
     <div class="bg-[#1e1e1e] w-full max-w-xl rounded-3xl border border-white/10 overflow-hidden shadow-2xl animate-modal">
 
@@ -284,7 +252,7 @@
                 <div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
                     <i class="fa-solid fa-user-pen text-white text-sm"></i>
                 </div>
-                <h2 class="text-white font-bold">Edit Data Pengguna</h2>
+                <h2 class="text-white font-bold">Edit User Data</h2>
             </div>
             <button onclick="closeModal('editModal')"
                 class="w-8 h-8 rounded-xl bg-white/15 hover:bg-white/25 text-white flex items-center justify-center transition-colors">
@@ -306,22 +274,11 @@
         <div class="p-6 pt-4">
 
             <div class="flex items-center gap-3 mb-5">
-                <span class="text-[9px] font-black text-blue-500 uppercase tracking-widest whitespace-nowrap">Edit Informasi</span>
+                <span class="text-[9px] font-black text-blue-500 uppercase tracking-widest whitespace-nowrap">Edit Information</span>
                 <div class="flex-1 h-px bg-blue-500/20"></div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
-
-                {{-- NIK --}}
-                <div class="flex flex-col gap-2">
-                    <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">NIK</label>
-                    <div class="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-4 py-3 focus-within:border-blue-500 transition-colors">
-                        <i class="fa-solid fa-id-card text-blue-500 text-xs flex-shrink-0"></i>
-                        <input id="editNik" type="text" placeholder="Masukkan NIK..."
-                            class="bg-transparent w-full outline-none border-none ring-0 text-sm text-gray-200 placeholder-gray-600">
-                    </div>
-                </div>
-
                 {{-- Email --}}
                 <div class="flex flex-col gap-2">
                     <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Email</label>
@@ -366,21 +323,6 @@
                     </div>
                     <p class="text-[10px] text-gray-600 ml-1">*Biarkan kosong jika tidak ingin mengubah password.</p>
                 </div>
-
-                {{-- Unit --}}
-                <div class="flex flex-col gap-2">
-                    <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest ml-1">Unit</label>
-                    <div class="relative flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl px-4 py-3 focus-within:border-blue-500 transition-colors">
-                        <i class="fa-solid fa-building text-blue-500 text-xs flex-shrink-0"></i>
-                        <select class="bg-transparent w-full outline-none border-none ring-0 text-sm text-gray-200 appearance-none cursor-pointer">
-                            <option class="bg-[#1e1e1e]">Teknik Informatika</option>
-                            <option class="bg-[#1e1e1e]">Teknik Elektro</option>
-                            <option class="bg-[#1e1e1e]">Manajemen Bisnis</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down text-gray-600 text-[10px] absolute right-4 pointer-events-none"></i>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -398,10 +340,7 @@
     </div>
 </div>
 
-
-{{-- ============================================================
-     MODAL: DELETE USER
-     ============================================================ --}}
+     {{-- MODAL: DELETE USER --}}
 <div id="deleteModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
     <div class="bg-[#1e1e1e] w-full max-w-sm rounded-3xl border border-white/10 overflow-hidden shadow-2xl animate-modal">
 
@@ -411,7 +350,7 @@
                 <div class="w-8 h-8 rounded-xl bg-red-500/20 flex items-center justify-center">
                     <i class="fa-solid fa-trash text-red-400 text-sm"></i>
                 </div>
-                <h2 class="font-bold">Hapus Pengguna</h2>
+                <h2 class="font-bold">Delete User</h2>
             </div>
             <button onclick="closeModal('deleteModal')"
                 class="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white flex items-center justify-center transition-colors">
@@ -426,10 +365,10 @@
                 <i class="fa-solid fa-user-xmark text-red-400 text-2xl"></i>
             </div>
 
-            <h3 class="font-bold text-lg mb-2">Anda yakin menghapus akun ini?</h3>
+            <h3 class="font-bold text-lg mb-2">Are you sure want to delete this user?</h3>
             <p class="text-sm text-gray-500 leading-relaxed mb-5">
-                Tindakan ini <span class="text-red-400 font-semibold">tidak dapat dibatalkan</span>.
-                Akun berikut akan dihapus secara permanen dari sistem.
+                this action <span class="text-red-400 font-semibold">cannot be undone</span>.
+                The following account will be permanently deleted from the system.
             </p>
 
             {{-- User preview --}}
@@ -440,25 +379,19 @@
                     <p id="deleteUserEmail" class="text-xs text-gray-500 truncate"></p>
                 </div>
             </div>
-
-            <p class="text-[11px] text-red-400/80 font-semibold">
-                <i class="fa-solid fa-triangle-exclamation mr-1"></i>
-                Semua data terkait akun ini akan ikut terhapus.
-            </p>
         </div>
 
         {{-- Footer --}}
         <div class="px-6 pb-6 flex gap-3">
             <button onclick="closeModal('deleteModal')"
                 class="flex-1 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-semibold text-gray-300 hover:bg-white/10 transition-colors">
-                Batal
+                Cancel
             </button>
             <button onclick="closeModal('deleteModal')"
                 class="flex-1 flex items-center justify-center gap-2 py-2.5 bg-red-500/15 border border-red-500/25 rounded-xl text-sm font-bold text-red-400 hover:bg-red-500/25 transition-colors active:scale-95">
                 <i class="fa-solid fa-trash"></i> Delete
             </button>
         </div>
-
     </div>
 </div>
 
