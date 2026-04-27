@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticketify - Statistik Event</title>
+    <title>Ticketify - My Statistics Events</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-[#09090b] text-white flex">
@@ -13,99 +12,66 @@
     @include('layouts.sidebar-panitia')
 
     <main class="flex-1 p-10 overflow-y-auto">
-        <header class="mb-10 flex justify-between items-end">
+        <header class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
             <div>
-                <h1 class="text-3xl font-black tracking-tight">Statistik Penjualan</h1>
-                <p class="text-gray-500 text-sm mt-2">Pantau pendapatan dan pertumbuhan peserta secara real-time.</p>
+                <h1 class="text-3xl font-black tracking-tight">My Statistics Events</h1>
+                <p class="text-gray-500 text-sm mt-2">Pantau status dan penjualan tiket event kamu di sini.</p>
             </div>
-            <select class="bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest outline-none text-gray-400">
-                <option>KMIPN VII (April 2026)</option>
-                <option>Seminar Digital Literacy</option>
-            </select>
+
+            <div class="flex gap-3 w-full md:w-auto">
+                <div class="relative flex-1 md:flex-none">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+                    <input type="text" placeholder="Cari event..." class="w-full md:w-64 bg-[#121212] border border-white/5 rounded-xl pl-10 pr-4 py-3 text-xs focus:border-blue-500 outline-none transition-all">
+                </div>
+                <select class="bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest outline-none text-gray-400 focus:border-blue-500">
+                    <option>Semua Status</option>
+                    <option>Active</option>
+                    <option>Pending</option>
+                </select>
+            </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-            <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
-                <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Total Pendapatan</p>
-                <h2 class="text-2xl font-black text-blue-500">Rp 4.500.000</h2>
-                <p class="text-[10px] text-green-500 mt-2"><i class="fa-solid fa-arrow-up"></i> 12% dari target</p>
-            </div>
-            <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
-                <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Tiket Terjual</p>
-                <h2 class="text-2xl font-black text-white">45 <span class="text-gray-600 text-lg">/ 100</span></h2>
-                <p class="text-[10px] text-gray-500 mt-2">Sisa stok: 55 tiket</p>
-            </div>
-            <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
-                <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Kehadiran (Scan)</p>
-                <h2 class="text-2xl font-black text-purple-500">32 <span class="text-gray-600 text-lg">Hadir</span></h2>
-                <p class="text-[10px] text-gray-500 mt-2">71% tingkat kehadiran</p>
-            </div>
-            <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
-                <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Dilihat</p>
-                <h2 class="text-2xl font-black text-white">1.284</h2>
-                <p class="text-[10px] text-gray-500 mt-2">Klik pada landing page</p>
-            </div>
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
 
-        <div class="grid lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 bg-[#121212] p-8 rounded-[2.5rem] border border-white/5">
-                <h3 class="text-sm font-black uppercase tracking-widest mb-6">Tren Penjualan (7 Hari Terakhir)</h3>
-                <canvas id="salesChart" height="150"></canvas>
+                <div class="relative aspect-video overflow-hidden rounded-t-[2rem]">
+                        <img src="{{ asset('images/kmipn.jpeg') }}"
+                        alt="Poster KMIPN VII"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#121212]/50 to-transparent"></div>
+                <div class="absolute top-4 right-4 bg-green-500/20 backdrop-blur-md border border-green-500/50 text-green-500 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-black/30">
+                        Active
+                </div>
             </div>
 
-            <div class="bg-[#121212] p-8 rounded-[2.5rem] border border-white/5">
-                <h3 class="text-sm font-black uppercase tracking-widest mb-6">Kategori Tiket</h3>
-                <canvas id="categoryChart"></canvas>
+                <div class="p-8 space-y-6">
+                    <div>
+                        <h3 class="text-lg font-black text-white truncate mb-1">Seminar Nasional KMIPN VII</h3>
+                        <p class="text-xs text-gray-500 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-day text-blue-500"></i> 25 April 2026, 15:00 WIB
+                        </p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-end">
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Penjualan Tiket</span>
+                            <span class="text-xs font-bold text-white">45 <span class="text-gray-500">/ 100</span></span>
+                        </div>
+                        <div class="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" style="width: 45%"></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-white/5 flex gap-3">
+                        <a href="{{ route('panitia.statistic2') }}" class="flex-1 bg-white/5 hover:bg-blue-500 text-white py-3 rounded-xl text-[10px] font-black uppercase transition-all flex items-center justify-center gap-2 border border-white/5">
+                            <i class="fa-solid fa-statistics"></i> View Statistic
+                        </a>
+
+                    </div>
+                </div>
             </div>
+
         </div>
     </main>
 
-    <script>
-        // Data Dummy untuk Grafik Penjualan
-        const salesCtx = document.getElementById('salesChart').getContext('2d');
-        new Chart(salesCtx, {
-            type: 'line',
-            data: {
-                labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
-                datasets: [{
-                    label: 'Tiket Terjual',
-                    data: [5, 8, 4, 12, 10, 15, 45],
-                    borderColor: '#3b82f6',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#3b82f6'
-                }]
-            },
-            options: {
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#666' } },
-                    x: { grid: { display: false }, ticks: { color: '#666' } }
-                }
-            }
-        });
-
-        // Data Dummy untuk Grafik Kategori
-        const catCtx = document.getElementById('categoryChart').getContext('2d');
-        new Chart(catCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Reguler', 'VIP', 'Early Bird'],
-                datasets: [{
-                    data: [30, 10, 5],
-                    backgroundColor: ['#3b82f6', '#8b5cf6', '#34d399'],
-                    borderWidth: 0,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: { position: 'bottom', labels: { color: '#fff', padding: 20, font: { size: 10, weight: 'bold' } } }
-                }
-            }
-        });
-    </script>
 </body>
 </html>

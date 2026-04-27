@@ -24,11 +24,6 @@
                     <span class="text-sm text-gray-400 font-medium italic">Track your event journeys here.</span>
                 </div>
                 <div class="flex items-center gap-4">
-                    <div class="text-right hidden sm:block">
-                        <p class="text-xs font-bold">Maverick Ari</p>
-                        <p class="text-[10px] text-gray-500">Informatics Student</p>
-                    </div>
-                    <div class="w-10 h-10 rounded-full bg-blue-500 border-2 border-white/10 flex items-center justify-center font-black">M</div>
                 </div>
             </nav>
 
@@ -83,7 +78,10 @@
                             <p class="text-[10px] font-bold text-gray-500 uppercase">Date Purchased</p>
                             <p class="text-xs font-black text-white">21/04/2026</p>
                         </div>
-                        <button class="w-full md:w-auto px-6 py-2.5 bg-white text-black font-black rounded-xl text-[10px] uppercase hover:bg-blue-500 hover:text-white transition-all">View Ticket</button>
+                        <a href="{{ route('pembeli.ticketdigital') }}"
+                                 class="w-full md:w-auto px-6 py-2.5 bg-white text-black font-black rounded-xl text-[10px] uppercase hover:bg-blue-500 hover:text-white transition-all inline-block text-center">
+                                 View Ticket
+                        </a>
                     </div>
 
                 <!-- ini tabel yang kedua -->

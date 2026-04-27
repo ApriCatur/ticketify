@@ -72,11 +72,18 @@ Route::get('/about', function () {
     return view('Pembeli.About');
 })->name('pembeli.about');
 
+Route::get('/ticketdigital', function () {
+    return view('Pembeli.TicketDigital');
+})->name('pembeli.ticketdigital');
+
 // Route untuk halaman detail event
 Route::get('/detail-event', function () {
     return view('pembeli.detail');
 })->name('pembeli.detail');
 
+Route::get('/buatevent', function () {
+    return view('Pembeli.BuatEvent');
+})->name('pembeli.buatevent');
 
 // ini bagian panitia, sesuaikan dengan nama folder dan file view yang sudah dibuat
 Route::get('/panitia/event', function () {
@@ -99,9 +106,17 @@ Route::get('/panitia/statistic', function () {
     return view('Panitia.Statistic');
 })->name('panitia.statistic');
 
+Route::get('/panitia/statistic2', function () {
+    return view('Panitia.Statistic2');
+})->name('panitia.statistic2');
+
 Route::get('/panitia/customerdata', function () {
     return view('Panitia.CustomerData');
 })->name('panitia.customerdata');
+
+Route::get('/panitia/settings', function () {
+    return view('Panitia.settings');
+})->name('panitia.settings');
 
 
 Route::prefix('pages')->group(function () {
@@ -129,4 +144,10 @@ Route::get('/registrasi/settings', function () {
     return view('Registrasi.Settings');
 })->name('registrasi.settings');
 
+Route::get('/registrasi/buatevent', function () {
+    return view('Registrasi.BuatEvent');
+})->name('registrasi.buatevent');
 
+Route::get('/registrasi/detail', function () {
+    return view('Registrasi.Detail');
+})->name('registrasi.detail');

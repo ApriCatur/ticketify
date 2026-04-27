@@ -35,7 +35,7 @@
                 <div class="hidden lg:block">
                     <span class="text-sm text-gray-400 font-medium italic"> Welcome To Ticketify! Discover something new today.</span>
                 </div>
-               
+
             </nav>
 
             <!-- ini bagian poster slider -->
@@ -295,9 +295,9 @@
                         <i class="fa-solid fa-ticket absolute -right-4 -bottom-4 text-white/10 text-8xl -rotate-12 group-hover:rotate-0 transition-all duration-500"></i>
                         <h4 class="font-black text-white mb-2 relative z-10">Buka Event?</h4>
                         <p class="text-xs text-blue-100 mb-4 relative z-10">Kelola tiket organisasimu di sini.</p>
-                        <button class="w-full py-2 bg-white text-blue-600 text-[10px] font-black rounded-lg uppercase hover:bg-blue-50 relative z-10 transition-colors">Buat Sekarang</button>
+                        <a href="{{ route('pembeli.buatevent') }}" class="w-full py-4 px-6 bg-white text-blue-600 text-sm font-bold rounded-xl uppercase hover:bg-blue-50 hover:scale-[1.02] active:scale-95 transition-all duration-200 relative z-10 shadow-lg flex items-center justify-center tracking-wider">Buat Sekarang</a>
                     </div>
-                </div>
+                </div>  
             </div>
         </aside>
     </div>

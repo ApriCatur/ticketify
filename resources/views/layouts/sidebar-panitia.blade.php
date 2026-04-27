@@ -14,13 +14,13 @@
                     <a href="{{ route('panitia.create') }}" class="flex items-center gap-3 p-3  rounded-xl text-sm text-gray-400 hover:text-white transition @if (Route::is('panitia.create')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
                         <i class="fa-solid fa-calendar-plus"></i> Create Event
                     </a>
-                    <a href="{{ route('panitia.myevent') }}" class="flex items-center gap-3 p-3  rounded-xl text-sm text-gray-400 hover:text-white transition  @if (Route::is('panitia.myevent')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
+                    <a href="{{ route('panitia.myevent') }}" class="flex items-center gap-3 p-3  rounded-xl text-sm text-gray-400 hover:text-white transition  @if (Route::is(['panitia.myevent', 'panitia.customerdata'])){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
                         <i class="fa-solid fa-layer-group"></i> My Event
                     </a>
                     <a href="{{ route('panitia.attendance') }}" class="flex items-center gap-3 p-3  rounded-xl text-[13px] text-gray-400 hover:text-white transition @if (Route::is('panitia.attendance')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
                         <i class="fa-solid fa-qrcode"></i> Attendance Verification
                     </a>
-                    <a href="{{ route('panitia.statistic') }}" class="flex items-center gap-3 p-3  rounded-xl text-sm text-gray-400 hover:text-white transition @if (Route::is('panitia.statistic')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
+                    <a href="{{ route('panitia.statistic') }}" class="flex items-center gap-3 p-3  rounded-xl text-sm text-gray-400 hover:text-white transition @if (Route::is(['panitia.statistic', 'panitia.statistic2'])){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
                         <i class="fa-solid fa-chart-line"></i> Statistik
                     </a>
                 </nav>
@@ -29,7 +29,7 @@
             <div>
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Lainnya</p>
                 <nav class="space-y-1">
-                    <a href="#" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm text-gray-400 hover:text-white transition">
+                    <a href="{{ route('panitia.settings') }}" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm text-gray-400 hover:text-white transition @if (Route::is('panitia.settings')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
                         <i class="fa-solid fa-gear"></i> Settings
                     </a>
                     <a href="{{ route('login') }}" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl text-sm text-red-400 transition mt-4 @if (Route::is('login')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
