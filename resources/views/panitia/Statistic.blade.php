@@ -12,12 +12,13 @@
     @include('layouts.sidebar-panitia')
 
     <main class="flex-1 p-10 overflow-y-auto">
-        <header class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
 
-          <!-- untuk button sidebar -->
+         <!-- untuk button sidebar -->
              <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
                 <i class="fa-solid fa-bars-staggered text-2xl"></i>
             </button>
+
+        <header class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
 
             <div>
                 <h1 class="text-3xl font-black tracking-tight">My Statistics Events</h1>

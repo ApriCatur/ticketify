@@ -21,6 +21,12 @@
         <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
 
             <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                 <!-- TOMBOL HAMBURGER: Sekarang muncul di mobile (lg:hidden) -->
+            <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
+                <i class="fa-solid fa-bars-staggered text-2xl"></i>
+            </button>
+
                 <img src="{{ asset('images/polibatam.png') }}" alt="Polibatam" class="h-14">
                 <span class="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">Technical Informatics Project</span>
             </nav>
@@ -67,6 +73,29 @@
             </footer>
         </div>
     </div>
+
+    <script>
+    const openBtn = document.getElementById('open-sidebar');
+    const closeBtn = document.getElementById('close-sidebar');
+    const sidebar = document.getElementById('main-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    // Cek apakah elemen ada sebelum menjalankan fungsi
+    if (openBtn && sidebar) {
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            if (overlay) {
+                overlay.classList.toggle('hidden');
+            }
+            document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
+        }
+
+        openBtn.addEventListener('click', toggleSidebar);
+
+        if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+        if (overlay) overlay.addEventListener('click', toggleSidebar);
+    }
+</script>
 
 </body>
 </html>

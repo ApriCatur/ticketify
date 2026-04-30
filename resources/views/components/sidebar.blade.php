@@ -91,13 +91,13 @@
         <!-- PROFILE -->
         <div class="pt-6 border-t border-white/5">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-bold text-xs text-white">
+                <div class="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center font-bold text-xs text-white">
                     AD
                 </div>
 
                 <div class="overflow-hidden">
                     <p class="text-sm font-bold text-white truncate">Admin User</p>
-                    <p class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">
+                    <p class="text-[10px] text-amber-500 font-bold uppercase tracking-wider">
                         Administrator
                     </p>
                 </div>
