@@ -136,27 +136,47 @@
             </div>
                  </section>
 
-                    <section class="bg-[#181818] rounded-3xl p-10 border border-white/5">
-                        <h4 class="text-gray-500 text-[10px] font-black uppercase tracking-[0.4em] mb-8">Engineered With</h4>
-                        <div class="grid grid-cols-2 gap-8">
-                            <div class="flex items-center gap-4 grayscale hover:grayscale-0 transition duration-500">
-                                <i class="fa-brands fa-laravel text-4xl text-[#FF2D20]"></i>
-                                <div><p class="text-xs font-bold">Laravel</p><p class="text-[9px] text-gray-500 italic">Robust Backend</p></div>
-                            </div>
-                            <div class="flex items-center gap-4 grayscale hover:grayscale-0 transition duration-500">
-                                <i class="fa-brands fa-php text-4xl text-[#777BB4]"></i>
-                                <div><p class="text-xs font-bold">PHP 8.x</p><p class="text-[9px] text-gray-500 italic">Modern Logic</p></div>
-                            </div>
-                            <div class="flex items-center gap-4 grayscale hover:grayscale-0 transition duration-500">
-                                <i class="fa-brands fa-js text-4xl text-[#F7DF1E]"></i>
-                                <div><p class="text-xs font-bold">Tailwind</p><p class="text-[9px] text-gray-500 italic">Reactive UI</p></div>
-                            </div>
-                            <div class="flex items-center gap-4 grayscale hover:grayscale-0 transition duration-500">
-                                <i class="fa-solid fa-database text-3xl text-[#4479A1]"></i>
-                                <div><p class="text-xs font-bold">MySQL</p><p class="text-[9px] text-gray-500 italic">Solid Storage</p></div>
-                            </div>
+            <section class="bg-[#181818] rounded-3xl p-10 border border-white/5">
+                <h4 class="text-gray-500 text-[10px] font-black uppercase tracking-[0.4em] mb-8">Engineered With</h4>
+                <div class="grid grid-cols-2 gap-8">
+                    <!-- Laravel -->
+                    <div class="flex items-center gap-4">
+                        <i class="fa-brands fa-laravel text-4xl text-[#FF2D20]"></i>
+                        <div>
+                            <p class="text-xs font-bold">Laravel</p>
+                            <p class="text-[9px] text-gray-500 italic">Robust Backend</p>
                         </div>
-                    </section>
+                    </div>
+
+                    <!-- PHP -->
+                    <div class="flex items-center gap-4">
+                        <i class="fa-brands fa-php text-4xl text-[#777BB4]"></i>
+                        <div>
+                            <p class="text-xs font-bold">PHP 8.x</p>
+                            <p class="text-[9px] text-gray-500 italic">Modern Logic</p>
+                        </div>
+                    </div>
+
+                    <!-- Tailwind / JS -->
+                    <div class="flex items-center gap-4">
+                        <i class="fa-brands fa-js text-4xl text-[#F7DF1E]"></i>
+                        <div>
+                            <p class="text-xs font-bold">Tailwind</p>
+                            <p class="text-[9px] text-gray-500 italic">Reactive UI</p>
+                        </div>
+                    </div>
+
+                    <!-- MySQL -->
+                    <div class="flex items-center gap-4">
+                        <i class="fa-solid fa-database text-3xl text-[#4479A1]"></i>
+                        <div>
+                            <p class="text-xs font-bold">MySQL</p>
+                            <p class="text-[9px] text-gray-500 italic">Solid Storage</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
                 </div>
             </main>
 

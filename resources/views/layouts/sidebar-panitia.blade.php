@@ -63,13 +63,11 @@
 
     <!-- Profil Section (Bottom) -->
     <div class="mt-auto pt-6 border-t border-white/5">
-        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-2xl">
-            <div class="w-9 h-9 rounded-full bg-green-600 flex items-center justify-center font-bold text-xs text-white">AM</div>
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center font-bold text-xs text-white">AM</div>
             <div class="overflow-hidden">
-                <p class="text-xs font-bold text-white truncate">Ari Maverick</p>
-                <p class="text-[10px] text-green-500 font-bold uppercase tracking-wider flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Online
-                </p>
+                <p class="text-xs font-bold text-white truncate">M Fauzi Azhari</p>
+                <p class="text-[10px] text-green-500 font-bold uppercase tracking-wider">Organiser</p>
             </div>
         </div>
     </div>

@@ -4,6 +4,9 @@
 <div class="min-h-screen bg-[#000000] text-white flex items-center justify-center font-sans">
 
     <div class="bg-[#121212] border border-white/10 w-full max-w-md p-8 rounded-2xl shadow-2xl transition-all duration-300">
+         <div class="flex gap-4">
+                <a href="{{ route('pembeli.event') }}" class="text-sm font-semibold text-gray-400 hover:text-blue-500 transition self-center">Back</a>
+            </div>
 
         <!-- HEADER -->
         <div class="text-center mb-8">
