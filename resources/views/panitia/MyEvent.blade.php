@@ -18,6 +18,11 @@
 
     <main class="flex-1 p-6 lg:p-10 overflow-y-auto">
         <header class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                   <!-- untuk button sidebar -->
+             <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
+                <i class="fa-solid fa-bars-staggered text-2xl"></i>
+            </button>
+            
             <div>
                 <h1 class="text-3xl font-black tracking-tight uppercase italic text-blue-500">My Events</h1>
                 <p class="text-gray-500 text-sm mt-2 font-medium">Kelola dan pantau seluruh event kamu dalam satu daftar.</p>
@@ -118,6 +123,28 @@
 
         </div>
     </main>
+<script>
+    const openBtn = document.getElementById('open-sidebar');
+    const closeBtn = document.getElementById('close-sidebar');
+    const sidebar = document.getElementById('main-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    // Cek apakah elemen ada sebelum menjalankan fungsi
+    if (openBtn && sidebar) {
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            if (overlay) {
+                overlay.classList.toggle('hidden');
+            }
+            document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
+        }
+
+        openBtn.addEventListener('click', toggleSidebar);
+
+        if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+        if (overlay) overlay.addEventListener('click', toggleSidebar);
+    }
+</script>
 
 </body>
 </html>

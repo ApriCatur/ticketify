@@ -16,6 +16,12 @@
     <main class="flex-1 p-10">
         <div class="max-w-4xl">
             <header class="mb-8">
+
+              <!-- untuk button sidebar -->
+             <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
+                <i class="fa-solid fa-bars-staggered text-2xl"></i>
+            </button>
+
                 <h1 class="text-3xl font-black tracking-tight">Account Settings</h1>
                 <p class="text-gray-500 text-sm mt-2">Kelola informasi profil dan keamanan akun kamu.</p>
             </header>
@@ -100,6 +106,29 @@
             </div>
         </div>
     </main>
+    
+    <script>
+    const openBtn = document.getElementById('open-sidebar');
+    const closeBtn = document.getElementById('close-sidebar');
+    const sidebar = document.getElementById('main-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    // Cek apakah elemen ada sebelum menjalankan fungsi
+    if (openBtn && sidebar) {
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            if (overlay) {
+                overlay.classList.toggle('hidden');
+            }
+            document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
+        }
+
+        openBtn.addEventListener('click', toggleSidebar);
+
+        if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+        if (overlay) overlay.addEventListener('click', toggleSidebar);
+    }
+</script>
 
 </body>
 </html>

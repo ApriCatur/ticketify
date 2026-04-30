@@ -34,7 +34,7 @@
         </select>
     </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Total Pendapatan</p>
                 <h2 class="text-2xl font-black text-blue-500">Rp 4.500.000</h2>
@@ -49,11 +49,6 @@
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Kehadiran (Scan)</p>
                 <h2 class="text-2xl font-black text-purple-500">32 <span class="text-gray-600 text-lg">Hadir</span></h2>
                 <p class="text-[10px] text-gray-500 mt-2">71% tingkat kehadiran</p>
-            </div>
-            <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
-                <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Dilihat</p>
-                <h2 class="text-2xl font-black text-white">1.284</h2>
-                <p class="text-[10px] text-gray-500 mt-2">Klik pada landing page</p>
             </div>
         </div>
 

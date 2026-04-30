@@ -15,7 +15,7 @@
 
      <nav class="sticky top-0 z-50 glass px-8 py-4 flex justify-between items-center">
             <div class="flex gap-4">
-                <a href="{{ route('pembeli.myticket') }}" class="text-sm font-semibold text-gray-400 hover:text-white transition self-center">Back</a>
+                <a href="{{ route('pembeli.myticket') }}" class="text-sm font-semibold text-gray-400 hover:text-blue-500 transition self-center">Back</a>
             </div>
         </nav>
     </br>

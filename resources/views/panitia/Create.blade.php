@@ -14,6 +14,10 @@
 
     <main class="flex-1 p-10 overflow-y-auto">
         <header class="mb-10">
+                   <!-- untuk button sidebar -->
+             <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
+                <i class="fa-solid fa-bars-staggered text-2xl"></i>
+            </button>
             <h1 class="text-3xl font-black tracking-tight">Create New Event</h1>
             <p class="text-gray-500 text-sm mt-2 font-medium">Isi formulir di bawah untuk mengajukan event baru ke Admin.</p>
         </header>
@@ -155,6 +159,28 @@
 
         </form>
     </main>
+<script>
+    const openBtn = document.getElementById('open-sidebar');
+    const closeBtn = document.getElementById('close-sidebar');
+    const sidebar = document.getElementById('main-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    // Cek apakah elemen ada sebelum menjalankan fungsi
+    if (openBtn && sidebar) {
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            if (overlay) {
+                overlay.classList.toggle('hidden');
+            }
+            document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
+        }
+
+        openBtn.addEventListener('click', toggleSidebar);
+
+        if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+        if (overlay) overlay.addEventListener('click', toggleSidebar);
+    }
+</script>
 
 </body>
 </html>
