@@ -22,6 +22,8 @@
             <p class="text-gray-500 text-sm mt-2">Scan QR Code pada tiket peserta untuk melakukan verifikasi kehadiran.</p>
         </header>
 
+        
+
         <div class="grid lg:grid-cols-12 gap-10">
 
             <div class="lg:col-span-7 space-y-6">

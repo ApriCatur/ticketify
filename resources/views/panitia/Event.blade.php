@@ -32,7 +32,7 @@
         <!-- ini bagian navbar -->
         <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
             <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
-                
+
                  <!-- untuk button sidebar -->
              <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
                 <i class="fa-solid fa-bars-staggered text-2xl"></i>
@@ -161,7 +161,7 @@
                 </div>
 
                 <!-- Event Cards 1 -->
-                 <a href="{{ route('pembeli.detail') }}" class="cursor-pointer">
+                 <a href="{{ route('panitia.detailevent') }}" class="cursor-pointer">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
                     <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all duration-300 spotify-shadow">
                         <div class="relative h-44 overflow-hidden">

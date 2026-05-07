@@ -54,6 +54,32 @@
                             <input type="text" placeholder="Masukkan nama event" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all">
                         </div>
 
+                        <!-- KATEGORI EVENT -->
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">
+                                Kategori Event
+                            </label>
+
+                            <select
+                                class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all text-white">
+
+                                <option value="" disabled selected class="bg-[#121212]">
+                                    Pilih kategori event
+                                </option>
+
+                                <option class="bg-[#121212]">Music Concert</option>
+                                <option class="bg-[#121212]">Seminar</option>
+                                <option class="bg-[#121212]">Workshop</option>
+                                <option class="bg-[#121212]">Festival</option>
+                                <option class="bg-[#121212]">Sport</option>
+                                <option class="bg-[#121212]">Competition</option>
+                                <option class="bg-[#121212]">Exhibition</option>
+                                <option class="bg-[#121212]">Community</option>
+                                <option class="bg-[#121212]">Education</option>
+                                <option class="bg-[#121212]">Entertainment</option>
+                            </select>
+                        </div>
+
                         <div class="space-y-2">
                              <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Event Location</label>
                              <input type="text" placeholder="Masukkan lokasi event (contoh: Batam, Kepulauan Riau)" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all">

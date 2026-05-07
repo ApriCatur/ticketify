@@ -119,6 +119,11 @@ Route::get('/panitia/settings', function () {
 })->name('panitia.settings');
 
 
+Route::get('/panitia/detailevent', function () {
+    return view('Panitia.DetailEvent');
+})->name('panitia.detailevent');
+
+
 Route::prefix('pages')->group(function () {
     // Route untuk halaman list produk
     Route::get('/product', [ProdukController::class, 'index']);
