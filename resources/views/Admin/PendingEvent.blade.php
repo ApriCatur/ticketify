@@ -116,70 +116,66 @@
     <div class="flex-1">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            @for ($i = 0; $i < 6; $i++)
-            <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/40 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
+            @forelse($pendingEvents as $event)
+                <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/40 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
 
-                <div class="relative h-48 overflow-hidden">
-                    <img src="{{ asset('images/kmipn.jpeg') }}"
-                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="{{ $event->banner ? asset('storage/' . $event->banner) : asset('images/kmipn.jpeg') }}"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
 
-                    <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-2 rounded-xl text-center border border-white/10">
-                        <span class="block text-[10px] font-bold text-blue-400 uppercase">APR</span>
-                        <span class="block text-lg font-black">25</span>
-                        <span class="text-[10px] text-gray-500">2026</span>
+                        <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-2 rounded-xl text-center border border-white/10">
+                            <span class="block text-[10px] font-bold text-blue-400 uppercase">{{ \Illuminate\Support\Carbon::parse($event->date)->format('M') }}</span>
+                            <span class="block text-lg font-black">{{ \Illuminate\Support\Carbon::parse($event->date)->format('d') }}</span>
+                            <span class="text-[10px] text-gray-500">{{ \Illuminate\Support\Carbon::parse($event->date)->format('Y') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-5">
+                        <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Pending</span>
+
+                        <h3 class="font-bold text-lg mt-2 mb-3 group-hover:text-blue-400 transition">
+                            {{ $event->name }}
+                        </h3>
+
+                        <div class="space-y-2 text-xs text-gray-400 mb-5">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-location-dot"></i>
+                                {{ $event->location }}
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <i class="fa-regular fa-clock"></i>
+                                {{ \Illuminate\Support\Carbon::parse($event->time_start)->format('H:i') }} WIB
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-ticket"></i>
+                                From IDR {{ number_format($event->price, 0, ',', '.') }}
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2 pt-4 border-t border-white/5">
+                            <form action="{{ route('admin.events.approve', $event) }}" method="POST" class="flex-1">
+                                @csrf
+                                <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-500 transition">Approve</button>
+                            </form>
+
+                            <form action="{{ route('admin.events.reject', $event) }}" method="POST" class="flex-1">
+                                @csrf
+                                <button type="submit" class="w-full py-2 bg-red-500/10 text-red-400 rounded-xl text-xs hover:bg-red-500/20 transition">Reject</button>
+                            </form>
+
+                            <button type="button" class="px-4 py-2 border border-white/10 rounded-xl text-xs hover:bg-white/5 transition"
+                                data-event='@json($event)'
+                                onclick="openDetailFromElement(this)">Detail</button>
+                        </div>
                     </div>
                 </div>
-
-                <div class="p-5">
-                    <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Pending</span>
-
-                    <h3 class="font-bold text-lg mt-2 mb-3 group-hover:text-blue-400 transition">
-                        Event Seminar KMIPN
-                    </h3>
-
-                    <div class="space-y-2 text-xs text-gray-400 mb-5">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-location-dot"></i>
-                            Politeknik Negeri Batam
-                        </div>
-
-                        <div class="flex items-center gap-2">
-                            <i class="fa-regular fa-clock"></i>
-                            15:00 WIB
-                        </div>
-
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-ticket"></i>
-                            From IDR 40.000
-                        </div>
-                    </div>
-
-                    {{-- ADMIN BUTTON --}}
-                    <div class="flex gap-2 pt-4 border-t border-white/5">
-                        <button onclick="openApprove()"
-                            class="flex-1 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-500 transition">
-                            Approve
-                        </button>
-
-                        <button onclick="openReject()"
-                            class="flex-1 py-2 bg-red-500/10 text-red-400 rounded-xl text-xs hover:bg-red-500/20 transition">
-                            Reject
-                        </button>
-
-                        <button onclick="openDetail(
-                            'Event Seminar KMIPN',
-                            'Politeknik Negeri Batam',
-                            'Sabtu, 25 April 2026',
-                            '15:00 WIB',
-                            'Event seminar membahas perkembangan teknologi terbaru.'
-                        )"
-                            class="px-4 py-2 border border-white/10 rounded-xl text-xs hover:bg-white/5 transition">
-                            Detail
-                        </button>
-                    </div>
+            @empty
+                <div class="col-span-2 text-center text-gray-400 py-20 bg-[#1e1e1e] border border-white/5 rounded-3xl">
+                    Tidak ada event pending saat ini.
                 </div>
-            </div>
-            @endfor
+            @endforelse
 
         </div>
     </div>
@@ -249,6 +245,7 @@
                 <div>
                     <div class="rounded-2xl overflow-hidden border border-white/10">
                         <img
+                            id="detailPoster"
                             src="https://via.placeholder.com/600x750"
                             alt="Poster Event"
                             class="w-full h-[340px] object-cover">
@@ -310,34 +307,8 @@
             <div class="space-y-4">
                 <h3 class="text-xl font-bold">Available Tickets</h3>
 
-                <!-- Regular Ticket -->
-                <div class="bg-gradient-to-r from-[#111827] to-[#18181b] border border-white/10 rounded-2xl px-5 py-4 flex justify-between items-center">
-                    <div>
-                        <p class="text-blue-400 font-bold text-lg">
-                            <i class="fa-solid fa-ticket mr-2"></i>Regular Ticket
-                        </p>
-                        <p class="text-xs text-gray-500 mt-1">Event Entry</p>
-                    </div>
-
-                    <div class="text-right">
-                        <p class="text-xs text-gray-500">Stock: 100</p>
-                        <p class="text-blue-400 text-xl font-bold">IDR 20.000</p>
-                    </div>
-                </div>
-
-                <!-- VIP Ticket -->
-                <div class="bg-gradient-to-r from-[#111827] to-[#18181b] border border-yellow-500/40 rounded-2xl px-5 py-4 flex justify-between items-center">
-                    <div>
-                        <p class="text-yellow-400 font-bold text-lg">
-                            <i class="fa-solid fa-crown mr-2"></i>VIP Ticket
-                        </p>
-                        <p class="text-xs text-gray-500 mt-1">Exclusive Front Row + F&B</p>
-                    </div>
-
-                    <div class="text-right">
-                        <p class="text-xs text-gray-500">Stock: 50</p>
-                        <p class="text-blue-400 text-xl font-bold">IDR 50.000</p>
-                    </div>
+                <div id="detailTickets" class="space-y-4">
+                    <!-- tickets rendered here by JS -->
                 </div>
             </div>
 

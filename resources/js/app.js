@@ -24,6 +24,94 @@ window.openDetail = function (title, location, date, time, desc) {
     document.getElementById('detailModal').classList.add('flex');
 }
 
+window.openDetailFromElement = function (el) {
+    // el can be the button element with dataset.event (JSON) or dataset fields
+    let eventData = null;
+    if (!el) return;
+    if (el.dataset && el.dataset.event) {
+        try { eventData = JSON.parse(el.dataset.event); } catch (e) { eventData = null; }
+    }
+    if (!eventData) {
+        // fallback to previous dataset approach
+        return window.openDetail(el.dataset.title || '', el.dataset.location || '', el.dataset.date || '', el.dataset.time || '', el.dataset.desc || '');
+    }
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    const poster = document.getElementById('detailPoster');
+    if (poster) {
+        if (eventData.banner) poster.src = (eventData.banner.startsWith('http') ? eventData.banner : ('/storage/' + eventData.banner));
+        else if (eventData.banner_url) poster.src = eventData.banner_url;
+        else poster.src = 'https://via.placeholder.com/600x750';
+    }
+
+    const dateStr = eventData.date ? new Date(eventData.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+    const timeStr = eventData.time_start ? (eventData.time_end ? (eventData.time_start + ' - ' + eventData.time_end) : eventData.time_start) : '';
+
+    const titleEl = document.getElementById('detailTitle');
+    const locEl = document.getElementById('detailLocation');
+    const dateEl = document.getElementById('detailDate');
+    const timeEl = document.getElementById('detailTime');
+    const descEl = document.getElementById('detailDesc');
+
+    if (titleEl) titleEl.innerText = eventData.name || '';
+    if (locEl) locEl.innerText = eventData.location || '';
+    if (dateEl) dateEl.innerText = dateStr;
+    if (timeEl) timeEl.innerText = timeStr;
+    if (descEl) descEl.innerText = eventData.description || '';
+
+    // Tickets
+    const ticketsContainer = document.getElementById('detailTickets');
+    if (ticketsContainer) {
+        ticketsContainer.innerHTML = '';
+        let ticketTypes = eventData.ticket_types || [];
+        if ((!ticketTypes || ticketTypes.length === 0) && eventData.ticket_type) {
+            ticketTypes = [{ name: eventData.ticket_type, price: eventData.price, stock: eventData.stock }];
+        }
+        if (!ticketTypes || ticketTypes.length === 0) {
+            ticketsContainer.innerHTML = '<div class="text-gray-400">No tickets available</div>';
+        } else {
+            ticketTypes.forEach(t => {
+                const name = t.name || t.ticket_type || 'Ticket';
+                const price = t.price ? Number(t.price).toLocaleString('id-ID') : '0';
+                const stock = (t.stock === undefined || t.stock === null) ? '-' : t.stock;
+                const desc = t.description || '';
+                const isVip = String(name).toLowerCase().includes('vip');
+                const borderClass = isVip ? 'border-yellow-500/40' : 'border-white/10';
+                const titleClass = isVip ? 'text-yellow-400 font-bold text-lg' : 'text-blue-400 font-bold text-lg';
+
+                const block = `
+                <div class="bg-gradient-to-r from-[#111827] to-[#18181b] border ${borderClass} rounded-2xl px-5 py-4 flex justify-between items-center">
+                    <div>
+                        <p class="${titleClass}">
+                            <i class="fa-solid fa-ticket mr-2"></i>${escapeHtml(name)}
+                        </p>
+                        ${desc ? `<p class="text-xs text-gray-500 mt-1">${escapeHtml(desc)}</p>` : ''}
+                    </div>
+
+                    <div class="text-right">
+                        <p class="text-xs text-gray-500">Stock: ${escapeHtml(String(stock))}</p>
+                        <p class="text-blue-400 text-xl font-bold">IDR ${escapeHtml(price)}</p>
+                    </div>
+                </div>`;
+
+                ticketsContainer.insertAdjacentHTML('beforeend', block);
+            });
+        }
+    }
+
+    document.getElementById('detailModal').classList.remove('hidden');
+    document.getElementById('detailModal').classList.add('flex');
+}
+
 window.closeDetail = function () {
     document.getElementById('detailModal').classList.add('hidden');
 }

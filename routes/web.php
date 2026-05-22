@@ -1,158 +1,95 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\RoleApplicationController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Pembeli\EventController;
+use App\Http\Controllers\Panitia\EventPanitiaController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ManageUserController;
+use App\Http\Controllers\Admin\EventCategoriesController;
+use App\Http\Controllers\Admin\PendingEventController;
+use App\Http\Controllers\Admin\PublishedEventController;
 
-use App\Http\Controllers\App\Http\Controllers\Pembeli\EventController;
-use Termwind\Components\Raw;
+// Panggil Middleware Filter Role buatan kita
+use App\Http\Middleware\RoleMiddleware;
 
-Route::get('/', function () {
-    return view('welcome');
+/*
+|--------------------------------------------------------------------------
+| 1. GUEST / BELUM LOGIN (Halaman Registrasi & Auth)
+|--------------------------------------------------------------------------
+*/
+Route::get('/login', function () { return view('Auth.Login'); })->name('login');
+Route::get('/register', function () { return view('Auth.Register'); })->name('register');
+
+Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
+Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/registrasi/event', function () { return view('Registrasi.Event'); })->name('registrasi.event');
+Route::get('/registrasi/myticket', function () { return view('Registrasi.MyTicket'); })->name('registrasi.myticket');
+Route::get('/registrasi/about', function () { return view('Registrasi.About'); })->name('registrasi.about');
+Route::get('/registrasi/settings', function () { return view('Registrasi.Settings'); })->name('registrasi.settings');
+Route::get('/registrasi/buatevent', function () { return view('Registrasi.BuatEvent'); })->name('registrasi.buatevent');
+Route::get('/registrasi/detail', function () { return view('Registrasi.Detail'); })->name('registrasi.detail');
+
+/*
+|--------------------------------------------------------------------------
+| 2. USER SUDAH LOGIN (DIPROTEKSI AUTH + FILTER ROLE MIDDLEWARE)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->group(function () {
+
+    /* ================= SISI PEMBELI (CUSTOMER) ================= */
+    Route::middleware([RoleMiddleware::class . ':pembeli'])->group(function () {
+        Route::get('/pembeli/event', [EventController::class, 'index'])->name('pembeli.event');
+        Route::get('/my-tickets', function () { return view('Pembeli.MyTicket'); })->name('pembeli.myticket');
+        Route::get('/settings', function () { return view('Pembeli.settings'); })->name('pembeli.settings');
+        Route::get('/about', function () { return view('Pembeli.About'); })->name('pembeli.about');
+        Route::get('/ticketdigital', function () { return view('Pembeli.TicketDigital'); })->name('pembeli.ticketdigital');
+        Route::get('/detail-event/{event}', [EventController::class, 'show'])->name('pembeli.detail');
+        Route::get('/buatevent', function () { return view('Pembeli.BuatEvent'); })->name('pembeli.buatevent');
+        Route::post('/ajukan-panitia', [RoleApplicationController::class, 'store'])->name('role.apply');
+    });
+
+    /* ================= SISI PANITIA (ORGANISER) ================= */
+    Route::middleware([RoleMiddleware::class . ':panitia'])->prefix('panitia')->group(function () {
+        Route::get('/event', [EventPanitiaController::class, 'index'])->name('panitia.event');
+        Route::get('/create', function () { return view('Panitia.create'); })->name('panitia.create');
+
+        Route::get('/store', function () { return redirect()->route('panitia.create'); });
+        Route::post('/store', [EventPanitiaController::class, 'store'])->name('panitia.store');
+        
+        Route::get('/myevent', [\App\Http\Controllers\Panitia\MyEventController::class, 'index'])->name('panitia.myevent');
+        Route::get('/attendance', function () { return view('Panitia.Attendance'); })->name('panitia.attendance');
+        Route::get('/statistic', function () { return view('Panitia.Statistic'); })->name('panitia.statistic');
+        Route::get('/statistic2', function () { return view('Panitia.Statistic2'); })->name('panitia.statistic2');
+        Route::get('/customerdata', function () { return view('Panitia.CustomerData'); })->name('panitia.customerdata');
+        Route::get('/settings', function () { return view('Panitia.settings'); })->name('panitia.settings');
+        Route::get('/detailevent', function () { return view('Panitia.detailevent'); })->name('panitia.detailevent');
+    });
+
+    /* ================= SISI ADMIN ================= */
+    Route::middleware([RoleMiddleware::class . ':admin'])->prefix('admin')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/PublishedEvents', [PublishedEventController::class, 'index'])->name('admin.PublishedEvent');
+        Route::get('/PendingEvents', [PendingEventController::class, 'index'])->name('admin.PendingEvent');
+        Route::post('/events/{event}/approve', [PendingEventController::class, 'approve'])->name('admin.events.approve');
+        Route::post('/events/{event}/reject', [PendingEventController::class, 'reject'])->name('admin.events.reject');
+        Route::post('/events/{event}/unpublish', [PublishedEventController::class, 'unpublish'])->name('admin.events.unpublish');
+        Route::get('/users', [ManageUserController::class, 'index'])->name('admin.users');
+        Route::get('/categories', [EventCategoriesController::class, 'index'])->name('admin.categories');
+        Route::get('/Settings', function () { return view('Admin.Settings'); })->name('admin.Settings');
+        Route::get('/role-applications', [\App\Http\Controllers\RoleApplicationController::class, 'index'])->name('admin.role-applications');
+        Route::post('/role-applications/{application}/approve', [\App\Http\Controllers\RoleApplicationController::class, 'approve'])->name('admin.role-applications.approve');
+        Route::post('/role-applications/{application}/reject', [\App\Http\Controllers\RoleApplicationController::class, 'reject'])->name('admin.role-applications.reject');
+    });
+
 });
 
-Route::get('login', function () {
-    return view('login');
-});
-Route::get('/app', function () {
-    return view('app');
-});
-
-Route::prefix('admin')->group(function () {
-
-    Route::get('/Dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-
-    Route::get('/PublishedEvents', function () {
-        return view('admin.PublishedEvent');
-    })->name('admin.PublishedEvent');
-
-    Route::get('/PendingEvents', function () {
-        return view('admin.PendingEvent');
-    })->name('admin.PendingEvent');
-
-    Route::get('/ManageUsers', function () {
-        return view('admin.ManageUser');
-    })->name('admin.ManageUser');
-
-    Route::get('/EventCategories', function () {
-        return view('admin.EventCategories');
-    })->name('admin.EventCategories');
-
-    Route::get('/Settings', function () {
-        return view('admin.Settings');
-    })->name('admin.Settings');
-
-});
-
-// ini bagian pembeli, sesuaikan dengan nama folder dan file view yang sudah dibuat
-Route::get('/', function () {
-    // Gunakan titik untuk menandakan folder.
-    // view('NamaFolder.NamaSubFolder.NamaFile')
-    return view('Pembeli.Event');
-})->name('pembeli.event');
-
-Route::get('/login', function () {
-    // Sesuaikan juga untuk halaman Login jika berada di folder Auth
-    return view('Auth.Login');
-})->name('login');
-
-Route::get('/my-tickets', function () {
-    return view('Pembeli.MyTicket');
-})->name('pembeli.myticket');
-
-Route::get('/register', function () {
-    return view('Auth.Register');
-})->name('register');
-
-Route::get('/settings', function () {
-    return view('Pembeli.Settings');
-})->name('pembeli.settings');
-
-Route::get('/about', function () {
-    return view('Pembeli.About');
-})->name('pembeli.about');
-
-Route::get('/ticketdigital', function () {
-    return view('Pembeli.TicketDigital');
-})->name('pembeli.ticketdigital');
-
-// Route untuk halaman detail event
-Route::get('/detail-event', function () {
-    return view('pembeli.detail');
-})->name('pembeli.detail');
-
-Route::get('/buatevent', function () {
-    return view('Pembeli.BuatEvent');
-})->name('pembeli.buatevent');
-
-// ini bagian panitia, sesuaikan dengan nama folder dan file view yang sudah dibuat
-Route::get('/panitia/event', function () {
-    return view('Panitia.event');
-})->name('panitia.event');
-
-Route::get('/panitia/create', function () {
-    return view('Panitia.create');
-})->name('panitia.create');
-
-Route::get('/panitia/myevent', function () {
-    return view('Panitia.MyEvent');
-})->name('panitia.myevent');
-
-Route::get('/panitia/attendance', function () {
-    return view('Panitia.Attendance');
-})->name('panitia.attendance');
-
-Route::get('/panitia/statistic', function () {
-    return view('Panitia.Statistic');
-})->name('panitia.statistic');
-
-Route::get('/panitia/statistic2', function () {
-    return view('Panitia.Statistic2');
-})->name('panitia.statistic2');
-
-Route::get('/panitia/customerdata', function () {
-    return view('Panitia.CustomerData');
-})->name('panitia.customerdata');
-
-Route::get('/panitia/settings', function () {
-    return view('Panitia.settings');
-})->name('panitia.settings');
-
-
-Route::get('/panitia/detailevent', function () {
-    return view('Panitia.DetailEvent');
-})->name('panitia.detailevent');
-
-
-Route::prefix('pages')->group(function () {
-    // Route untuk halaman list produk
-    Route::get('/product', [ProdukController::class, 'index']);
-
-    // Kamu bisa menambah route lain di sini nanti (home, about, dll) [cite: 64]
-});
-
-
-// ini untuk tampilan yang belum register atau belum login, sesuaikan dengan nama folder dan file view yang sudah dibuat
-Route::get('/registrasi/event', function () {
-    return view('Registrasi.Event');
-})->name('registrasi.event');
-
-Route::get('/registrasi/myticket', function () {
-    return view('Registrasi.MyTicket');
-})->name('registrasi.myticket');
-
-Route::get('/registrasi/about', function () {
-    return view('Registrasi.About');
-})->name('registrasi.about');
-
-Route::get('/registrasi/settings', function () {
-    return view('Registrasi.Settings');
-})->name('registrasi.settings');
-
-Route::get('/registrasi/buatevent', function () {
-    return view('Registrasi.BuatEvent');
-})->name('registrasi.buatevent');
-
-Route::get('/registrasi/detail', function () {
-    return view('Registrasi.Detail');
-})->name('registrasi.detail');
+/* --- 3. LAIN-LAIN --- */
+Route::get('/app', function () { return view('app'); });
+Route::get('/event-card', function () { return view('components.event-card'); });
+Route::get('/event-detail', function () { return view('components.event-detail'); });
+Route::prefix('pages')->group(function () { Route::get('/product', [ProdukController::class, 'index']); });

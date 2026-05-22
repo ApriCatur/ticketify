@@ -22,7 +22,7 @@
              <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
                 <i class="fa-solid fa-bars-staggered text-2xl"></i>
             </button>
-            
+
             <div>
                 <h1 class="text-3xl font-black tracking-tight uppercase italic text-blue-500">My Events</h1>
                 <p class="text-gray-500 text-sm mt-2 font-medium">Kelola dan pantau seluruh event kamu dalam satu daftar.</p>
@@ -44,82 +44,71 @@
                 <div class="col-span-2 text-right">Actions</div>
             </div>
 
-            <div class="event-row bg-[#121212] border border-white/5 rounded-2xl p-4 md:px-8 md:py-5 transition-all duration-300">
-                <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-6">
+            @forelse($events as $event)
+                <div class="event-row bg-[#121212] border border-white/5 rounded-2xl p-4 md:px-8 md:py-5 transition-all duration-300">
+                    <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-6">
 
-                    <div class="md:col-span-5 flex items-center gap-5">
-                        <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-white/10">
-                            <img src="{{ asset('images/kmipn.jpeg') }}" class="w-full h-full object-cover">
+                        <div class="md:col-span-5 flex items-center gap-5">
+                            <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-white/10">
+                                <img src="{{ $event->banner ? asset('storage/'.$event->banner) : asset('images/kmipn.jpeg') }}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="min-w-0">
+                                <h3 class="text-sm font-black text-white truncate uppercase tracking-tight">{{ $event->name }}</h3>
+                                <p class="text-[10px] text-gray-500 mt-1 flex items-center gap-2 uppercase font-bold">
+                                    <i class="fa-solid fa-calendar text-blue-500"></i> {{ \Illuminate\Support\Carbon::parse($event->date)->format('d F Y') }}
+                                </p>
+                            </div>
                         </div>
-                        <div class="min-w-0">
-                            <h3 class="text-sm font-black text-white truncate uppercase tracking-tight">Seminar Nasional KMIPN VII</h3>
-                            <p class="text-[10px] text-gray-500 mt-1 flex items-center gap-2 uppercase font-bold">
-                                <i class="fa-solid fa-calendar text-blue-500"></i> 25 April 2026
-                            </p>
+
+                        <div class="md:col-span-2 flex justify-start md:justify-center">
+                            @if($event->status === 'published')
+                                <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
+                                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                                    Active
+                                </div>
+                            @elseif($event->status === 'pending')
+                                <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
+                                    <i class="fa-solid fa-clock-rotate-left"></i> Pending
+                                </div>
+                            @else
+                                <div class="flex items-center gap-2 bg-gray-500/10 border border-gray-500/30 text-gray-400 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
+                                    {{ ucfirst($event->status) }}
+                                </div>
+                            @endif
                         </div>
+
+                        <div class="md:col-span-3 space-y-2">
+                            <div class="flex justify-between text-[9px] font-black uppercase tracking-widest text-gray-500">
+                                <span>Sold: <b class="text-white">0</b></span>
+                                <span>Target: {{ $event->stock ?? '-' }}</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.4)]" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2 flex justify-end items-center gap-3">
+
+                        <!-- Edit Event -->
+                        <a href="{{ route('panitia.create') }}"
+                            class="flex items-center justify-center w-11 h-11 bg-white/5 hover:bg-white/10 rounded-xl text-gray-400 hover:text-white transition-all duration-200 border border-white/5 hover:scale-105 active:scale-95"
+                            title="Edit Event">
+                            <i class="fa-solid fa-pen-to-square text-sm"></i>
+                        </a>
+
+                        <!-- Data Peserta -->
+                        <a href="{{ route('panitia.customerdata') }}"
+                            class="flex items-center justify-center w-11 h-11 bg-blue-600/10 hover:bg-blue-600 text-blue-500 hover:text-white rounded-xl transition-all duration-200 border border-blue-500/20 hover:scale-105 active:scale-95"
+                            title="Data Peserta">
+                            <i class="fa-solid fa-table text-sm"></i>
+                        </a>
+
                     </div>
-
-                    <div class="md:col-span-2 flex justify-start md:justify-center">
-                        <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
-                            <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                            Active
-                        </div>
-                    </div>
-
-                    <div class="md:col-span-3 space-y-2">
-                        <div class="flex justify-between text-[9px] font-black uppercase tracking-widest text-gray-500">
-                            <span>Sold: <b class="text-white">45</b></span>
-                            <span>Target: 100</span>
-                        </div>
-                        <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                            <div class="h-full bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.4)]" style="width: 45%"></div>
-                        </div>
-                    </div>
-
-                    <div class="md:col-span-2 flex justify-end items-center gap-3">
-
-                    <!-- Edit Event -->
-                    <a href="{{ route('panitia.create') }}"
-                        class="flex items-center justify-center w-11 h-11 bg-white/5 hover:bg-white/10 rounded-xl text-gray-400 hover:text-white transition-all duration-200 border border-white/5 hover:scale-105 active:scale-95"
-                        title="Edit Event">
-                        <i class="fa-solid fa-pen-to-square text-sm"></i>
-                    </a>
-
-                    <!-- Data Peserta -->
-                    <a href="{{ route('panitia.customerdata') }}"
-                        class="flex items-center justify-center w-11 h-11 bg-blue-600/10 hover:bg-blue-600 text-blue-500 hover:text-white rounded-xl transition-all duration-200 border border-blue-500/20 hover:scale-105 active:scale-95"
-                        title="Data Peserta">
-                        <i class="fa-solid fa-table text-sm"></i>
-                    </a>
-
-                </div>
-                </div>
-            </div>
-
-            <div class="event-row bg-[#121212]/50 border border-white/5 rounded-2xl p-4 md:px-8 md:py-5 transition-all duration-300 opacity-60">
-                <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-6">
-                    <div class="md:col-span-5 flex items-center gap-5">
-                        <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 grayscale opacity-50">
-                            <img src="https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?q=80&w=2070" class="w-full h-full object-cover">
-                        </div>
-                        <div>
-                            <h3 class="text-sm font-black text-gray-400 truncate uppercase tracking-tight">Workshop UI/UX Design</h3>
-                            <p class="text-[10px] text-gray-600 mt-1 uppercase font-bold tracking-widest">Waiting for Admin Approval</p>
-                        </div>
-                    </div>
-                    <div class="md:col-span-2 flex justify-start md:justify-center">
-                        <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
-                            <i class="fa-solid fa-clock-rotate-left"></i> Pending
-                        </div>
-                    </div>
-                    <div class="md:col-span-3">
-                        <p class="text-[9px] text-gray-600 font-bold italic">Penjualan belum tersedia.</p>
-                    </div>
-                    <div class="md:col-span-2 flex justify-end">
-                        <span class="text-[9px] font-black text-gray-700 uppercase tracking-widest p-3">Locked</span>
                     </div>
                 </div>
-            </div>
+            @empty
+                <div class="text-center py-8 text-gray-400">Belum ada event. Klik "New Event" untuk menambahkan.</div>
+            @endforelse
 
         </div>
     </main>

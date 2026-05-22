@@ -42,10 +42,10 @@
                     <form action="{{ route('login') }}" method="POST" class="space-y-5">
                         @csrf
                         <div>
-                            <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Email / Username</label>
+                            <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Email</label>
                             <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
                                 <i class="fa-solid fa-envelope text-blue-500 text-sm"></i>
-                                <input type="email" name="email" placeholder="maverick@student.polibatam.ac.id"
+                                <input type="email" name="email" placeholder="AlamatEmail@gmail.com"
                                     class="bg-transparent w-full outline-none text-sm text-gray-200 placeholder:text-gray-700">
                             </div>
                         </div>
@@ -54,8 +54,13 @@
                             <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Password</label>
                             <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
                                 <i class="fa-solid fa-lock text-blue-500 text-sm"></i>
-                                <input type="password" name="password" placeholder="••••••••"
+
+                                <input type="password" id="password" name="password" placeholder="••••••••"
                                     class="bg-transparent w-full outline-none text-sm text-gray-200 placeholder:text-gray-700">
+
+                                <button type="button" onclick="togglePassword()" class="text-gray-400 hover:text-white transition">
+                                    <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                                </button>
                             </div>
                         </div>
 
@@ -80,6 +85,23 @@
             </footer>
         </div>
     </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+    </script>
 
 </body>
 </html>

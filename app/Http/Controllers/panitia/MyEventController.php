@@ -1,11 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\panitia;
+namespace App\Http\Controllers\Panitia;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-class MyEvent extends Controller
+class MyEventController extends Controller
 {
-    //
+    /**
+     * Display a listing of the current user's events.
+     */
+    public function index()
+    {
+        $events = Event::where('user_id', Auth::id())->orderByDesc('date')->get();
+
+        return view('Panitia.MyEvent', compact('events'));
+    }
 }

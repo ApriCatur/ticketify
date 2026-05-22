@@ -51,18 +51,29 @@
             <main class="flex-1 flex items-center justify-center p-8">
                 <div class="w-full max-w-xl bg-[#1e1e1e] border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl animate-regis">
                     <div class="mb-10 text-center">
-                        <h2 class="text-3xl font-black italic tracking-tighter mb-2 italic">Get Started</h2>
+                        <h2 class="text-3xl font-black italic tracking-tighter mb-2">Get Started</h2>
                         <p class="text-xs text-gray-500 uppercase tracking-[0.2em] font-bold">Create your Ticketify account</p>
                     </div>
 
-                    <form action="#" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    @if ($errors->any())
+                        <div class="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl mb-6 text-xs">
+                            <div class="font-bold uppercase tracking-wider mb-2 text-red-500"><i class="fa-solid fa-circle-exclamation mr-1"></i> Register Failed:</div>
+                            <ul class="list-disc list-inside space-y-1 text-gray-400">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('register.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         @csrf
 
                         <div class="md:col-span-2">
                             <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Full Name</label>
                             <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
                                 <i class="fa-solid fa-user text-blue-500 text-sm w-5 text-center"></i>
-                                <input type="text" name="name" placeholder="Maverick Ari" class="bg-transparent w-full outline-none text-sm text-gray-200">
+                                <input type="text" name="name" placeholder="Nama Lengkap Anda" required value="{{ old('name') }}" class="bg-transparent w-full outline-none text-sm text-gray-200">
                             </div>
                         </div>
 
@@ -70,7 +81,7 @@
                             <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Email Address</label>
                             <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
                                 <i class="fa-solid fa-envelope text-blue-500 text-sm w-5 text-center"></i>
-                                <input type="email" name="email" placeholder="example@gmail.com" class="bg-transparent w-full outline-none text-sm text-gray-200">
+                                <input type="email" name="email" placeholder="Alamat Email Anda" required value="{{ old('email') }}" class="bg-transparent w-full outline-none text-sm text-gray-200">
                             </div>
                         </div>
 
@@ -78,7 +89,7 @@
                             <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Phone Number</label>
                             <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
                                 <i class="fa-solid fa-phone text-blue-500 text-sm w-5 text-center"></i>
-                                <input type="tel" name="phone" placeholder="0812345678" class="bg-transparent w-full outline-none text-sm text-gray-200">
+                                <input type="tel" name="phone_number" placeholder="Nomor Telepon Anda" value="{{ old('phone_number') }}" class="bg-transparent w-full outline-none text-sm text-gray-200">
                             </div>
                         </div>
 
@@ -86,15 +97,23 @@
                             <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Password</label>
                             <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
                                 <i class="fa-solid fa-lock text-blue-500 text-sm w-5 text-center"></i>
-                                <input type="password" name="password" placeholder="••••••••" class="bg-transparent w-full outline-none text-sm text-gray-200">
+                                <input type="password" id="password" name="password" placeholder="••••••••" required class="bg-transparent w-full outline-none text-sm text-gray-200">
+
+                                <button type="button" onclick="togglePassword('password', 'eyeIcon1')" class="text-gray-400 hover:text-white transition">
+                                    <i id="eyeIcon1" class="fa-solid fa-eye"></i>
+                                </button>
                             </div>
                         </div>
 
                         <div>
                             <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Confirm Password</label>
                             <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
-                                <i class="fa-solid fa-shield-check text-blue-500 text-sm w-5 text-center"></i>
-                                <input type="password" name="password_confirmation" placeholder="••••••••" class="bg-transparent w-full outline-none text-sm text-gray-200">
+                                <i class="fa-solid fa-lock-keyhole text-blue-500 text-sm w-5 text-center"></i>
+                                <input type="password" id="confirmPassword" name="password_confirmation" placeholder="••••••••" required class="bg-transparent w-full outline-none text-sm text-gray-200">
+
+                                <button type="button" onclick="togglePassword('confirmPassword', 'eyeIcon2')" class="text-gray-400 hover:text-white transition">
+                                    <i id="eyeIcon2" class="fa-solid fa-eye"></i>
+                                </button>
                             </div>
                         </div>
 
@@ -123,6 +142,23 @@
             </footer>
         </div>
     </div>
+
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+    </script>
 
 </body>
 </html>

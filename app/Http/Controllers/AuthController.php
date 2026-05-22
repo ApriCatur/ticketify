@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+class AuthController extends Controller
+{
+    // 1. PROSES REGISTRASI
+    public function register(Request $request)
+    {
+        // Validasi input data pendaftaran
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'phone_number' => 'required|string|max:20',
+            'password' => 'required|string|min:8',
+        ]);
+
+        // Simpan data ke database dengan default role 'pembeli'
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'password' => Hash::make($request->password),
+            'role' => 'pembeli',
+        ]);
+
+        // Alur Baru: Setelah sukses daftar, arahkan ke halaman LOGIN dengan pesan sukses
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login menggunakan akun Anda.');
+    }
+
+    // 2. PROSES LOGIN MULTI-ROLE
+    public function login(Request $request)
+    {
+        // Validasi input login
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        // Proses Autentikasi / Cek Akun
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            // Ambil data user yang baru saja berhasil login
+            $user = Auth::user();
+
+            // Pengecekan Role untuk Pengalihan Halaman (Redirect)
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->role === 'panitia') {
+                return redirect()->route('panitia.event');
+            }
+
+            // Jika rolenya 'pembeli', arahkan ke halaman pembeli
+            return redirect()->route('pembeli.event');
+        }
+
+        // Jika email atau password salah, kembalikan ke halaman login dengan error
+        return back()->withErrors([
+            'email' => 'Email atau password yang Anda masukkan salah.',
+        ])->onlyInput('email');
+    }
+
+    // 3. PROSES LOGOUT
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
+    }
+}

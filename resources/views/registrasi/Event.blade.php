@@ -170,123 +170,113 @@
 </div>
 
             <!-- ini Judul Bagian Event Terpopuler -->
-            <main class="p-8">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-2xl font-black italic tracking-tighter">Popular Event</h2>
-                    <a href="#" class="text-sm text-blue-400 hover:underline">See All</a>
-                </div>
+                      <!-- ini Judul Bagian Event Terpopuler -->
+    <main class="p-8">
+    <div class="flex justify-between items-center mb-8">
+        <h2 class="text-2xl font-black italic tracking-tighter">Popular Event</h2>
+        <a href="#" class="text-sm text-blue-400 hover:underline">See All</a>
+    </div>
 
-                <!-- Event Cards 1 -->
-                 <a href="{{ route('registrasi.detail') }}" class="cursor-pointer">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
-                    <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all duration-300 spotify-shadow">
-                        <div class="relative h-44 overflow-hidden">
-                            <img src="{{ asset('images/kmipn.jpeg') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Event">
-                            <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-center border border-white/10">
-                                <span class="block text-[10px] font-bold text-blue-400 uppercase leading-none">Apr</span>
-                                <span class="block text-lg font-black leading-none">25</span>
-                                <span class="text-[10px] font-black text-gray-400 leading-none">2026</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Education</span>
-                            <h3 class="font-bold text-lg mt-1 mb-3 line-clamp-1 group-hover:text-blue-400 transition-colors">Event Seminar KMIPN 2026</h3>
-                            <div class="space-y-2 mb-6 text-xs text-gray-400"><div class="flex items-center gap-2"><i class="fa-solid fa-location-dot w-4"></i> Polibatam, Gedung Utama</div><div class="flex items-center gap-2"><i class="fa-solid fa-clock w-4"></i> 13:00 WIB</div></div>
-                            <div class="flex items-center justify-between pt-4 border-t border-white/5"><div class="text-sm font-black">IDR 45.000</div><button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">Beli Tiket</button></div>
-                        </div>
-                    </div>
-                    </a>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
 
-                    <!-- event 2 -->
-                    <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all duration-300 spotify-shadow">
-                        <div class="relative h-44 overflow-hidden">
-                            <img src="{{ asset('images/festival musik.jpg') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Event">
-                            <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-center border border-white/10">
-                                <span class="block text-[10px] font-bold text-blue-400 uppercase leading-none">Mei</span>
-                                <span class="block text-lg font-black leading-none">05</span>
-                                <span class="text-[10px] font-black text-gray-400 leading-none">2026</span>
-                            </div>
-                        </div>
+        <!-- Contoh Panggil Event 1 -->
+       <x-event-card
+    image="{{ asset('images/kmipn.jpeg') }}"
+    month="Apr" day="25" year="2026"
+    category="Education"
+    title="Event Seminar KMIPN 2026"
+    location="Polibatam, Gedung Utama"
+    startTime="13:00"
+    endTime="16:00"
+    price="IDR 45.000"
+>
+    <button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
+        Beli Tiket
+    </button>
+</x-event-card>
 
-                        <div class="p-5">
-                            <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Music Event</span>
-                            <h3 class="font-bold text-lg mt-1 mb-3 line-clamp-1 group-hover:text-blue-400 transition-colors">Pergelaran Vokasi 2026</h3>
-                            <div class="space-y-2 mb-6 text-xs text-gray-400"><div class="flex items-center gap-2"><i class="fa-solid fa-location-dot w-4"></i> Depan Technopreneur</div><div class="flex items-center gap-2"><i class="fa-solid fa-clock w-4"></i> 09:00 WIB</div></div>
-                            <div class="flex items-center justify-between pt-4 border-t border-white/5"><div class="text-sm font-black">IDR 25.000</div><button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">Beli Tiket</button></div>
-                        </div>
-                    </div>
+        <!-- Contoh Panggil Event 2 (Tanpa nulis ulang CSS Card) -->
+      <x-event-card
+    image="{{ asset('images/festival musik.jpg') }}"
+    month="Mei" day="05" year="2026"
+    category="Music Event"
+    title="Pergelaran Vokasi 2026"
+    location="Depan Technopreneur"
+    startTime="18.00"
+    endTime="22.00"
+    price="IDR 45.000"
+>
+    <button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
+        Beli Tiket
+    </button>
+</x-event-card>
 
-                    <!-- Event 3 -->
-                    <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all duration-300 spotify-shadow">
-                        <div class="relative h-44 overflow-hidden">
-                            <img src="{{ asset('images/robotika1.jpg') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Event">
-                            <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-center border border-white/10">
-                                <span class="block text-[10px] font-bold text-blue-400 uppercase leading-none">Mei</span>
-                                <span class="block text-lg font-black leading-none">12</span>
-                                <span class="text-[10px] font-black text-gray-400 leading-none">2026</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Education</span>
-                            <h3 class="font-bold text-lg mt-1 mb-3 line-clamp-1 group-hover:text-blue-400 transition-colors">Robotika oleh Barelang FC</h3>
-                            <div class="space-y-2 mb-6 text-xs text-gray-400"><div class="flex items-center gap-2"><i class="fa-solid fa-location-dot w-4"></i> Auditorium Polibatam</div><div class="flex items-center gap-2"><i class="fa-solid fa-clock w-4"></i> 14:00 WIB</div></div>
-                            <div class="flex items-center justify-between pt-4 border-t border-white/5"><div class="text-sm font-black">FREE</div><button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">Daftar</button></div>
-                        </div>
-                    </div>
+  <!-- Contoh Panggil Event 3 (Tanpa nulis ulang CSS Card) -->
+      <x-event-card
+    image="{{ asset('images/robotika1.jpg') }}"
+    month="Mei" day="12" year="2026"
+    category="Education"
+    title="Robotika OLeh Barelang FC"
+    location="Auditorium Polibatam"
+    startTime="13:00"
+    endTime="17:00"
+    price="IDR 45.000"
+>
+    <button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
+        Beli Tiket
+    </button>
+</x-event-card>
 
-                    <!-- Event 4 -->
-                    <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all duration-300 spotify-shadow">
-                        <div class="relative h-44 overflow-hidden">
-                            <img src="{{ asset('images/seni.jpg') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Event">
-                            <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-center border border-white/10">
-                                <span class="block text-[10px] font-bold text-blue-400 uppercase leading-none">Jun</span>
-                                <span class="block text-lg font-black leading-none">01</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Teater</span>
-                            <h3 class="font-bold text-lg mt-1 mb-3 line-clamp-1 group-hover:text-blue-400 transition-colors">Polibatam Night Festival</h3>
-                            <div class="space-y-2 mb-6 text-xs text-gray-400"><div class="flex items-center gap-2"><i class="fa-solid fa-location-dot w-4"></i> Lapangan Parkir</div><div class="flex items-center gap-2"><i class="fa-solid fa-clock w-4"></i> 19:00 WIB</div></div>
-                            <div class="flex items-center justify-between pt-4 border-t border-white/5"><div class="text-sm font-black">IDR 75.000</div><button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">Beli Tiket</button></div>
-                        </div>
-                    </div>
+  <!-- Contoh Panggil Event 4 (Tanpa nulis ulang CSS Card) -->
+      <x-event-card
+    image="{{ asset('images/seni.jpg') }}"
+    month="1" day="June" year="2026"
+    category="Teater"
+    title="Polibatam Night  Festival"
+    location="Lapangan Parkir Polibatam"
+    startTime="19.00"
+    endTime="21.00"
+    price="IDR 45.000"
+>
+    <button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
+        Beli Tiket
+    </button>
+</x-event-card>
 
-                    <!-- Event 5 -->
-                    <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all duration-300 spotify-shadow">
-                        <div class="relative h-44 overflow-hidden">
-                            <img src="{{ asset('images/pec.jpg') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Event">
-                            <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-center border border-white/10">
-                                <span class="block text-[10px] font-bold text-blue-400 uppercase leading-none">Jun</span>
-                                <span class="block text-lg font-black leading-none">10</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">WorkShop</span>
-                            <h3 class="font-bold text-lg mt-1 mb-3 line-clamp-1 group-hover:text-blue-400 transition-colors">How to be confident speak english</h3>
-                            <div class="space-y-2 mb-6 text-xs text-gray-400"><div class="flex items-center gap-2"><i class="fa-solid fa-location-dot w-4"></i> Technopreneur Lt.2 Sekupang</div><div class="flex items-center gap-2"><i class="fa-solid fa-clock w-4"></i> 10:00 WIB</div></div>
-                            <div class="flex items-center justify-between pt-4 border-t border-white/5"><div class="text-sm font-black">IDR 15.000</div><button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">Beli Tiket</button></div>
-                        </div>
-                    </div>
+  <!-- Contoh Panggil Event 5 (Tanpa nulis ulang CSS Card) -->
+      <x-event-card
+    image="{{ asset('images/pec.jpg') }}"
+    month="June" day="10" year="2026"
+    category="Workshop"
+    title="How to be a confident speaker"
+    location="Polibatam, Gedung Utama"
+    startTime="13:00"
+    endTime="16:00"
+    price="IDR 45.000"
+>
+    <button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
+        Beli Tiket
+    </button>
+</x-event-card>
 
-                    <!-- Event 6 -->
-                    <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all duration-300 spotify-shadow">
-                        <div class="relative h-44 overflow-hidden">
-                            <img src="{{ asset('images/bisnis.jpg') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Event">
-                            <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-center border border-white/10">
-                                <span class="block text-[10px] font-bold text-blue-400 uppercase leading-none">Jul</span>
-                                <span class="block text-lg font-black leading-none">20</span>
-                            </div>
-                        </div>
-                        <div class="p-5">
-                            <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">WorkShop</span>
-                            <h3 class="font-bold text-lg mt-1 mb-3 line-clamp-1 group-hover:text-blue-400 transition-colors">How to Start Your Own Business</h3>
-                            <div class="space-y-2 mb-6 text-xs text-gray-400"><div class="flex items-center gap-2"><i class="fa-solid fa-location-dot w-4"></i> Technopreneur Lt.3 Bt Aji</div><div class="flex items-center gap-2"><i class="fa-solid fa-clock w-4"></i> 13:00 WIB</div></div>
-                            <div class="flex items-center justify-between pt-4 border-t border-white/5"><div class="text-sm font-black">IDR 20.000</div><button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">Beli Tiket</button></div>
-                        </div>
-                    </div>
-                </div>
-            </main>
+  <!-- Contoh Panggil Event 6 (Tanpa nulis ulang CSS Card) -->
+      <x-event-card
+    image="{{ asset('images/bisnis.jpg') }}"
+    month="Jul" day="20" year="2026"
+    category="Workshop"
+    title="How to Start Your Own Business"
+    location="Polibatam, Gedung Utama"
+    startTime="13:00"
+    endTime="16:00"
+    price="IDR 45.000"
+>
+    <button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
+        Beli Tiket
+    </button>
+</x-event-card>
 
+    </div>
+</main>
             <footer class="mt-auto bg-black/20 border-t border-white/5 p-8 text-center">
                 <p class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em]">&copy; 2026 Informatics Engineering - Polibatam</p>
             </footer>
