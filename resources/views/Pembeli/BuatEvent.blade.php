@@ -107,11 +107,15 @@
     });
 
     // PERBAIKAN DI SINI: Langsung panggil alert tanpa bungkus tag <script> lagi
-    @if(session('success'))
+</script> @if(session('success'))
+    <script>
         alert("{{ session('success') }}");
-    @endif
+    </script>
+@endif
 
-    @if(session('error'))
+@if(session('error'))
+    <script>
         alert("{{ session('error') }}");
-    @endif
-</script>
+    </script>
+@endif
+

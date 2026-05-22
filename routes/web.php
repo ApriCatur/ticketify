@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\ManageUserController;
 use App\Http\Controllers\Admin\EventCategoriesController;
 use App\Http\Controllers\Admin\PendingEventController;
 use App\Http\Controllers\Admin\PublishedEventController;
+use App\Http\Controllers\Pembeli\SettingsController;
+use App\Http\Controllers\Pembeli\MyTicketController;
 
 // Panggil Middleware Filter Role buatan kita
 use App\Http\Middleware\RoleMiddleware;
@@ -41,11 +43,18 @@ Route::get('/registrasi/detail', function () { return view('Registrasi.Detail');
 */
 Route::middleware(['auth'])->group(function () {
 
-    /* ================= SISI PEMBELI (CUSTOMER) ================= */
+  /* ================= SISI PEMBELI (CUSTOMER) ================= */
     Route::middleware([RoleMiddleware::class . ':pembeli'])->group(function () {
         Route::get('/pembeli/event', [EventController::class, 'index'])->name('pembeli.event');
-        Route::get('/my-tickets', function () { return view('Pembeli.MyTicket'); })->name('pembeli.myticket');
-        Route::get('/settings', function () { return view('Pembeli.settings'); })->name('pembeli.settings');
+        Route::get('/my-tickets', [MyTicketController::class, 'index'])->name('pembeli.myticket');
+
+        // 1. TAMPILKAN HALAMAN SETTINGS (Sekarang lewat Controller agar bisa ambil data DB)
+        Route::get('/settings', [SettingsController::class, 'index'])->name('pembeli.settings');
+
+        // 2. PROSES UPDATE DATA KE DATABASE (Tambahkan 2 baris ini)
+        Route::put('/settings/update-profile', [SettingsController::class, 'updateProfile'])->name('pembeli.settings.update-profile');
+        Route::put('/settings/update-password', [SettingsController::class, 'updatePassword'])->name('pembeli.settings.update-password');
+
         Route::get('/about', function () { return view('Pembeli.About'); })->name('pembeli.about');
         Route::get('/ticketdigital', function () { return view('Pembeli.TicketDigital'); })->name('pembeli.ticketdigital');
         Route::get('/detail-event/{event}', [EventController::class, 'show'])->name('pembeli.detail');
@@ -60,7 +69,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/store', function () { return redirect()->route('panitia.create'); });
         Route::post('/store', [EventPanitiaController::class, 'store'])->name('panitia.store');
-        
+
         Route::get('/myevent', [\App\Http\Controllers\Panitia\MyEventController::class, 'index'])->name('panitia.myevent');
         Route::get('/attendance', function () { return view('Panitia.Attendance'); })->name('panitia.attendance');
         Route::get('/statistic', function () { return view('Panitia.Statistic'); })->name('panitia.statistic');

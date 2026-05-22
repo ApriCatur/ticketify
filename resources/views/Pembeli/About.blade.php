@@ -60,7 +60,7 @@
                 <section class="mb-32">
                     <div class="flex items-end justify-between mb-12 border-b border-white/10 pb-4">
                         <div>
-                            <h2 class="text-3xl font-black italic uppercase italic">Meet The Crew</h2>
+                            <h2 class="text-3xl font-black uppercase italic">Meet The Crew</h2>
                             <p class="text-gray-500 text-xs mt-2 uppercase tracking-widest">Collaborators of Ticketify System</p>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                             </div>
                             <h3 class="font-black italic text-xl tracking-tight mb-1">M. Fauzi Azhari</h3>
                             <p class="text-[10px] font-bold text-[#1DB954] uppercase tracking-widest mb-4">Lead Fullstack Developer</p>
-                            <p class="text-[11px] text-gray-500 mb-6 italic italic">"Turning complex logic into seamless experiences."</p>
+                            <p class="text-[11px] text-gray-500 mb-6 italic">"Turning complex logic into seamless experiences."</p>
                             <div class="flex justify-center gap-4">
                                 <a href="#" class="text-gray-500 hover:text-white transition text-lg"><i class="fa-brands fa-github"></i></a>
                                 <a href="#" class="text-gray-500 hover:text-white transition text-lg"><i class="fa-brands fa-linkedin"></i></a>
@@ -87,7 +87,7 @@
                             </div>
                             <h3 class="font-black italic text-xl tracking-tight mb-1">Syarifah B. S.</h3>
                             <p class="text-[10px] font-bold text-[#8b5cf6] uppercase tracking-widest mb-4">Fullstack Developer</p>
-                            <p class="text-[11px] text-gray-500 mb-6 italic italic">"Structuring data with precision and passion."</p>
+                            <p class="text-[11px] text-gray-500 mb-6 italic">"Structuring data with precision and passion."</p>
                             <div class="flex justify-center gap-4">
                                 <a href="#" class="text-gray-500 hover:text-white transition text-lg"><i class="fa-brands fa-github"></i></a>
                                 <a href="#" class="text-gray-500 hover:text-white transition text-lg"><i class="fa-brands fa-linkedin"></i></a>
@@ -101,7 +101,7 @@
                             </div>
                             <h3 class="font-black italic text-xl tracking-tight mb-1">Apri Catur P.</h3>
                             <p class="text-[10px] font-bold text-[#f59e0b] uppercase tracking-widest mb-4">Fullstack Developer</p>
-                            <p class="text-[11px] text-gray-500 mb-6 italic italic">"Crafting interfaces that resonate with users."</p>
+                            <p class="text-[11px] text-gray-500 mb-6 italic">"Crafting interfaces that resonate with users."</p>
                             <div class="flex justify-center gap-4">
                                 <a href="#" class="text-gray-500 hover:text-white transition text-lg"><i class="fa-brands fa-github"></i></a>
                                 <a href="#" class="text-gray-500 hover:text-white transition text-lg"><i class="fa-brands fa-linkedin"></i></a>

@@ -46,29 +46,37 @@
         </div>
     </div>
 
-   <div class="flex items-center gap-3 mt-auto pt-4 border-t border-white/5">
-    @if(auth()->check())
-        <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-black text-white text-xs uppercase tracking-wider">
-            {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
-        </div>
+    <div class="flex items-center gap-3 mt-auto pt-4 border-t border-white/5">
+        @if(auth()->check())
+            {{-- MODIFIKASI DISINI: Cek apakah user punya foto profil --}}
+            @if(auth()->user()->profile_picture)
+                <div class="w-10 h-10 rounded-full overflow-hidden border border-white/10">
+                    <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="Profile" class="w-full h-full object-cover">
+                </div>
+            @else
+                {{-- Fallback ke Inisial Nama jika tidak ada foto profil --}}
+                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-black text-white text-xs uppercase tracking-wider">
+                    {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+                </div>
+            @endif
 
-        <div class="flex flex-col min-w-0">
-            <p class="text-sm font-bold text-white tracking-tight leading-tight truncate">
-                {{ auth()->user()->name }}
-            </p>
-            <p class="text-[9px] text-blue-400 font-extrabold uppercase tracking-widest mt-0.5">
-                {{ auth()->user()->role ?? 'CUSTOMER' }}
-            </p>
-        </div>
-    @else
-        <div class="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center font-black text-white text-xs uppercase">
-            G
-        </div>
-        <div class="flex flex-col min-w-0">
-            <p class="text-sm font-bold text-white truncate">Guest User</p>
-            <p class="text-[9px] text-gray-400 font-extrabold uppercase">GUEST</p>
-        </div>
-    @endif
-</div>
+            <div class="flex flex-col min-w-0">
+                <p class="text-sm font-bold text-white tracking-tight leading-tight truncate">
+                    {{ auth()->user()->name }}
+                </p>
+                <p class="text-[9px] text-blue-400 font-extrabold uppercase tracking-widest mt-0.5">
+                    {{ auth()->user()->role ?? 'PEMBELI' }}
+                </p>
+            </div>
+        @else
+            <div class="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center font-black text-white text-xs uppercase">
+                G
+            </div>
+            <div class="flex flex-col min-w-0">
+                <p class="text-sm font-bold text-white truncate">Guest User</p>
+                <p class="text-[9px] text-gray-400 font-extrabold uppercase">GUEST</p>
+            </div>
+        @endif
+    </div>
 
 </aside>

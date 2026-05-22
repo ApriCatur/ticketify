@@ -25,12 +25,13 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-    'name',
-    'email',
-    'phone_number', // <-- Tambahkan ini agar Laravel mengizinkan pengisian kolom phone_number
-    'password',
-    'role', // <-- Tambahkan ini agar Laravel mengizinkan pengisian kolom role
-];
+        'name',
+        'email',
+        'phone_number',
+        'password',
+        'role',
+        'profile_picture',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -60,5 +61,10 @@ class User extends Authenticatable
     public function roleApplications()
     {
         return $this->hasMany(RoleApplication::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
     }
 }
