@@ -11,15 +11,13 @@
 
     @include('layouts.sidebar-panitia')
 
-    <main class="flex-1 p-10 overflow-y-auto">
+    <main class="flex-1 p-10 overflow-y-auto h-screen">
 
-         <!-- untuk button sidebar -->
-             <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
-                <i class="fa-solid fa-bars-staggered text-2xl"></i>
-            </button>
+        <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors mb-4">
+            <i class="fa-solid fa-bars-staggered text-2xl"></i>
+        </button>
 
         <header class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-
             <div>
                 <h1 class="text-3xl font-black tracking-tight">My Statistics Events</h1>
                 <p class="text-gray-500 text-sm mt-2">Pantau status dan penjualan tiket event kamu di sini.</p>
@@ -40,66 +38,96 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
 
-                <div class="relative aspect-video overflow-hidden rounded-t-[2rem]">
-                        <img src="{{ asset('images/kmipn.jpeg') }}"
-                        alt="Poster KMIPN VII"
-                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#121212]/50 to-transparent"></div>
-                <div class="absolute top-4 right-4 bg-green-500/20 backdrop-blur-md border border-green-500/50 text-green-500 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-black/30">
-                        Active
+            @forelse($events as $item)
+    @php
+        // 1. DIUBAH: Gunakan $item->stock sesuai database
+        $kuota = $item->stock ?? 0;
+
+        // Perhitungan tiket terjual (tetap pertahankan relasi kamu jika ada)
+        $terjual = $item->registrations_count ?? ($item->registrations ? $item->registrations->count() : 0);
+        $persentase = $kuota > 0 ? ($terjual / $kuota) * 100 : 0;
+    @endphp
+
+    <div class="bg-[#121212] rounded-[2rem] overflow-hidden border border-white/5 flex flex-col group hover:border-white/10 transition-all duration-300">
+
+        <div class="relative aspect-video overflow-hidden">
+            @if($item->banner)
+                <img src="{{ asset('storage/' . $item->banner) }}"
+                     alt="Poster {{ $item->name }}"
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+            @else
+                <img src="{{ asset('images/kmipn.jpeg') }}"
+                     alt="Default Poster"
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+            @endif
+            <div class="absolute inset-0 bg-gradient-to-t from-[#121212]/80 via-[#121212]/20 to-transparent"></div>
+
+            <div class="absolute top-4 right-4 bg-green-500/20 backdrop-blur-md border border-green-500/50 text-green-500 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-black/30">
+                {{ $item->status ?? 'Active' }}
+            </div>
+        </div>
+
+        <div class="p-8 flex flex-col flex-1 justify-between space-y-6">
+            <div>
+                <h3 class="text-lg font-black text-white truncate mb-1" title="{{ $item->name }}">
+                    {{ $item->name }}
+                </h3>
+                <p class="text-xs text-gray-500 flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-day text-blue-500"></i>
+                    {{ \Carbon\Carbon::parse($item->date)->format('d F Y, H:i') }} WIB
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <div class="flex justify-between items-end">
+                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Penjualan Tiket</span>
+                    <span class="text-xs font-bold text-white">
+                        {{ $terjual }} <span class="text-gray-500">/ {{ $kuota }}</span>
+                    </span>
+                </div>
+                <div class="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+                   <div class="h-full bg-blue-500 rounded-full shadow-lg transition-all duration-500"
+                         style="width: {{ $persentase }}%"></div>
                 </div>
             </div>
 
-                <div class="p-8 space-y-6">
-                    <div>
-                        <h3 class="text-lg font-black text-white truncate mb-1">Seminar Nasional KMIPN VII</h3>
-                        <p class="text-xs text-gray-500 flex items-center gap-2">
-                            <i class="fa-solid fa-calendar-day text-blue-500"></i> 25 April 2026, 15:00 WIB
-                        </p>
-                    </div>
-
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-end">
-                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Penjualan Tiket</span>
-                            <span class="text-xs font-bold text-white">45 <span class="text-gray-500">/ 100</span></span>
-                        </div>
-                        <div class="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-                            <div class="h-full bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" style="width: 45%"></div>
-                        </div>
-                    </div>
-
-                    <div class="pt-4 border-t border-white/5 flex gap-3">
-                        <a href="{{ route('panitia.statistic2') }}" class="flex-1 bg-white/5 hover:bg-blue-500 text-white py-3 rounded-xl text-[10px] font-black uppercase transition-all flex items-center justify-center gap-2 border border-white/5">
-                            <i class="fa-solid fa-statistics"></i> View Statistic
-                        </a>
-
-                    </div>
-                </div>
-            </div>
-
+            <a href="{{ route('panitia.statistic.detail', $item->id) }}"
+               class="inline-block text-center w-full bg-white/5 hover:bg-blue-600 hover:text-white text-white font-bold text-xs py-3 px-4 rounded-xl transition-all shadow-md">
+                VIEW STATISTIC
+            </a>
+        </div>
+    </div>
+@empty
+    <div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-400">
+        <i class="fa-solid fa-chart-pie text-5xl mb-4 text-white/10"></i>
+        <p class="text-sm">Belum ada event yang terdaftar untuk melihat statistik.</p>
+    </div>
+@endforelse
         </div>
     </main>
-<script>
-    const openBtn = document.getElementById('open-sidebar');
-    const closeBtn = document.getElementById('close-sidebar');
-    const sidebar = document.getElementById('main-sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
 
-    // Cek apakah elemen ada sebelum menjalankan fungsi
-    if (openBtn && sidebar) {
-        function toggleSidebar() {
-            sidebar.classList.toggle('-translate-x-full');
-            if (overlay) {
-                overlay.classList.toggle('hidden');
+    <script>
+        // Membungkus kode ke dalam scope lokal agar aman dan rapi
+        (function() {
+            const openBtn = document.getElementById('open-sidebar');
+            const closeBtn = document.getElementById('close-sidebar');
+            const sidebar = document.getElementById('main-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            if (openBtn && sidebar) {
+                function toggleSidebar() {
+                    sidebar.classList.toggle('-translate-x-full');
+                    if (overlay) {
+                        overlay.classList.toggle('hidden');
+                    }
+                    document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
+                }
+
+                openBtn.addEventListener('click', toggleSidebar);
+                if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+                if (overlay) overlay.addEventListener('click', toggleSidebar);
             }
-            document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
-        }
-
-        openBtn.addEventListener('click', toggleSidebar);
-
-        if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
-        if (overlay) overlay.addEventListener('click', toggleSidebar);
-    }
-</script>
+        })();
+    </script>
 </body>
 </html>

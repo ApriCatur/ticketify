@@ -72,11 +72,20 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/myevent', [\App\Http\Controllers\Panitia\MyEventController::class, 'index'])->name('panitia.myevent');
         Route::get('/attendance', function () { return view('Panitia.Attendance'); })->name('panitia.attendance');
-        Route::get('/statistic', function () { return view('Panitia.Statistic'); })->name('panitia.statistic');
+
+        // Halaman utama daftar statistik event (Gambar 1)
+        Route::get('/statistic', [\App\Http\Controllers\Panitia\StatisticController::class, 'index'])->name('panitia.statistic');
+
+        // Halaman detail statistik spesifik berdasarkan ID Event (Gambar 2)
+        Route::get('/statistic/{id}', [\App\Http\Controllers\Panitia\StatisticController::class, 'show'])->name('panitia.statistic.detail');
+
         Route::get('/statistic2', function () { return view('Panitia.Statistic2'); })->name('panitia.statistic2');
         Route::get('/customerdata', function () { return view('Panitia.CustomerData'); })->name('panitia.customerdata');
         Route::get('/settings', function () { return view('Panitia.settings'); })->name('panitia.settings');
-        Route::get('/detailevent', function () { return view('Panitia.detailevent'); })->name('panitia.detailevent');
+
+        Route::get('/settings', [\App\Http\Controllers\Panitia\SettingsController::class, 'index'])->name('panitia.settings');
+        Route::put('/settings/profile', [\App\Http\Controllers\Panitia\SettingsController::class, 'updateProfile'])->name('profile.update');
+        Route::put('/settings/password', [\App\Http\Controllers\Panitia\SettingsController::class, 'updatePassword'])->name('password.update');
     });
 
     /* ================= SISI ADMIN ================= */

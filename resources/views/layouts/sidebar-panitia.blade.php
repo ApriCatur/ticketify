@@ -44,7 +44,7 @@
         <div>
             <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Lainnya</p>
             <nav class="space-y-1">
-                <a href="{{ route('panitia.settings') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ Route::is('panitia.settings') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+                <a href="{{ route('panitia.settings') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ request()->is('panitia/settings*') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
                     <i class="fa-solid fa-gear w-5"></i> Settings
                 </a>
 
@@ -61,9 +61,14 @@
 
     <div class="mt-auto pt-6 border-t border-white/5">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center font-bold text-xs text-white uppercase tracking-wider flex-shrink-0">
-                {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-            </div>
+            @if(Auth::user()->profile_picture && \Illuminate\Support\Facades\Storage::disk('public')->exists(Auth::user()->profile_picture))
+                <img src="{{ asset('storage/' . Auth::user()->profile_picture) }}" class="w-8 h-8 rounded-full object-cover flex-shrink-0 border border-white/10" alt="Profile">
+            @else
+                <div class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center font-bold text-xs text-white uppercase tracking-wider flex-shrink-0">
+                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                </div>
+            @endif
+
             <div class="overflow-hidden min-w-0 flex-1">
                 <p class="text-xs font-bold text-white truncate">
                     {{ Auth::user()->name }}
