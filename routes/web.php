@@ -16,6 +16,7 @@ use App\Http\Controllers\Pembeli\SettingsController as PembeliSettingsController
 use App\Http\Controllers\Panitia\EventPanitiaController;
 use App\Http\Controllers\Panitia\EventController as PanitiaEventController;
 use App\Http\Controllers\Panitia\MyEventController;
+use App\Http\Controllers\Panitia\AttendanceController;
 use App\Http\Controllers\Panitia\StatisticController;
 use App\Http\Controllers\Panitia\SettingsController as PanitiaSettingsController;
 
@@ -93,7 +94,9 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/my-events/{id}', [PanitiaEventController::class, 'update'])->name('events.update');
 
         // Attendance & Customer Data (FIXED: Diarahkan dinamis ke Controller menggunakan Parameter ID)
-        Route::get('/attendance', function () { return view('Panitia.Attendance'); })->name('panitia.attendance');
+        Route::get('/attendance', [AttendanceController::class, 'index'])->name('panitia.attendance');
+        Route::post('/attendance/verify', [AttendanceController::class, 'verifyTicket'])->name('panitia.verify-ticket');
+        Route::get('/attendance/statistics', [AttendanceController::class, 'getStatistics'])->name('panitia.attendance-stats');
         Route::get('/myevent/{id}/attendees', [PanitiaEventController::class, 'attendees'])->name('panitia.customerdata');
 
         // Statistik Event

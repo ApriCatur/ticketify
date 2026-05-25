@@ -17,11 +17,15 @@ class Ticket extends Model
         'purchase_date',
         'date_used',
         'qr_code',
+        'is_attended',
+        'attended_at',
     ];
 
     protected $casts = [
         'purchase_date' => 'datetime',
         'date_used' => 'datetime',
+        'attended_at' => 'datetime',
+        'is_attended' => 'boolean',
     ];
 
     // Relasi ke User

@@ -39,13 +39,35 @@
                         <p class="text-xs text-gray-500 uppercase tracking-[0.2em]">Enter your credentials</p>
                     </div>
 
+                    {{-- Notifikasi Error Password Salah --}}
+                    @if ($errors->has('email'))
+                        <div class="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-2xl flex items-start gap-3">
+                            <i class="fa-solid fa-circle-exclamation text-red-400 text-lg mt-0.5 flex-shrink-0"></i>
+                            <div>
+                                <p class="text-red-400 text-sm font-bold">Login Gagal</p>
+                                <p class="text-red-300/80 text-xs mt-1">{{ $errors->first('email') }}</p>
+                            </div>
+                        </div>
+                    @endif
+
+                    {{-- Notifikasi Sukses Registrasi --}}
+                    @if (session('success'))
+                        <div class="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-2xl flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-green-400 text-lg mt-0.5 flex-shrink-0"></i>
+                            <div>
+                                <p class="text-green-400 text-sm font-bold">Berhasil</p>
+                                <p class="text-green-300/80 text-xs mt-1">{{ session('success') }}</p>
+                            </div>
+                        </div>
+                    @endif
+
                     <form action="{{ route('login') }}" method="POST" class="space-y-5">
                         @csrf
                         <div>
                             <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Email</label>
-                            <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
+                            <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition @error('email') border-red-500 focus-within:border-red-500 @enderror">
                                 <i class="fa-solid fa-envelope text-blue-500 text-sm"></i>
-                                <input type="email" name="email" placeholder="AlamatEmail@gmail.com"
+                                <input type="email" name="email" value="{{ old('email') }}" placeholder="AlamatEmail@gmail.com"
                                     class="bg-transparent w-full outline-none text-sm text-gray-200 placeholder:text-gray-700">
                             </div>
                         </div>

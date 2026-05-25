@@ -2,7 +2,7 @@
     <div class="swiper myHeroSwiper rounded-3xl overflow-hidden shadow-2xl">
         <div class="swiper-wrapper">
             @forelse($events->take(5) as $carouselEvent)
-                <div class="swiper-slide relative h-[350px] group cursor-pointer" onclick="window.location='{{ route('pembeli.detail', $carouselEvent) }}'">
+                <div class="swiper-slide relative h-[350px] group cursor-pointer" onclick="window.location='{{ route('pembeli.detail', $carouselEvent) }}">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10"></div>
 
                     <img src="{{ $carouselEvent->banner ? asset('storage/' . $carouselEvent->banner) : asset('images/kmipn.jpeg') }}"
