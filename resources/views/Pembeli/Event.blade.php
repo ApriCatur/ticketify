@@ -45,7 +45,7 @@
                     @include('components.event')
                 </div>
 
-                
+
             </div>
 
             <aside class="w-full xl:w-80 flex flex-col sticky top-0 h-auto xl:h-screen p-8 space-y-8 bg-[#121212] overflow-y-auto border-t xl:border-t-0 border-white/5">

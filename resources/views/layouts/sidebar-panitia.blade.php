@@ -30,9 +30,12 @@
                     <i class="fa-solid fa-calendar-plus w-5"></i> Create Event
                 </a>
                <a href="{{ route('panitia.myevent') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition {{ request()->routeIs('panitia.myevent*') || request()->is('*my-events*') ? 'font-bold bg-blue-500 text-white shadow-lg shadow-blue-500/10' : 'font-medium hover:bg-white/5 hover:text-white' }}">
-                    <i class="fa-solid fa-layer-group w-5 text-center text-xs"></i>
-                    <span>My Event</span>
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
+                {{ request()->routeIs('panitia.myevent') || request()->routeIs('panitia.customerdata') ? 'bg-blue-600 text-white font-bold shadow-lg shadow-blue-600/20' : 'text-gray-400 hover:bg-white/[0.03] hover:text-white' }}">
+                    <div class="flex items-center justify-center w-5 h-5">
+                        <i class="fa-solid fa-layer-group text-sm transition-transform group-hover:scale-110"></i>
+                    </div>
+                    <span class="text-sm">My Event</span>
                 </a>
                 <a href="{{ route('panitia.attendance') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ Route::is('panitia.attendance') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 font-medium hover:text-white hover:bg-white/5' }}">
                     <i class="fa-solid fa-qrcode w-5"></i> Attendance
@@ -42,7 +45,7 @@
                     <span>Statistik
                 </a>
             </nav>
-        </div>
+        </div>  
 
         <div>
             <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Lainnya</p>
