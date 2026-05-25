@@ -6,20 +6,24 @@
     <title>Ticketify - Customer Data</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
 </head>
-<body class="bg-[#09090b] text-white flex">
+<body class="bg-[#09090b] text-white flex min-h-screen">
 @include('layouts.sidebar-panitia')
 
     <main class="flex-1 p-10 overflow-y-auto">
         <header class="mb-10">
-            <div class="flex items-center gap-2 text-xs text-gray-500 mb-4 font-bold  tracking-widest">
-                <a href="{{ route('panitia.myevent') }}" class="hover:text-blue-500">My Events</a>
+            <div class="flex items-center gap-2 text-xs text-gray-500 mb-4 font-bold tracking-widest">
+                <a href="{{ route('panitia.myevent') }}" class="hover:text-blue-500">MY EVENTS</a>
                 <i class="fa-solid fa-chevron-right text-[8px]"></i>
-                <span class="text-white">Attendee List</span>
+                <span class="text-white">ATTENDEE LIST</span>
             </div>
             <div class="flex justify-between items-end">
                 <div>
-                    <h1 class="text-3xl font-black tracking-tight">Seminar Nasional KMIPN VII</h1>
+                    <h1 class="text-3xl font-black tracking-tight uppercase italic text-blue-500">{{ $event->name }}</h1>
                     <p class="text-gray-500 text-sm mt-2 font-medium">Daftar lengkap peserta yang telah membeli tiket.</p>
                 </div>
                 <button class="bg-white/5 hover:bg-white/10 text-white px-6 py-3 rounded-xl text-xs font-black uppercase transition-all flex items-center gap-2 border border-white/5">
@@ -53,61 +57,60 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-white/5">
-                    <tr class="hover:bg-white/[0.02] transition-colors group">
-                        <td class="p-6 text-sm font-bold text-gray-600">01</td>
-                        <td class="p-6">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-blue-600/20 text-blue-500 flex items-center justify-center font-bold text-[10px]">AM</div>
-                                <div>
-                                    <p class="text-sm font-black text-white">Ari Maverick</p>
-                                    <p class="text-[11px] text-gray-500">ari.maverick@email.com</p>
+                    @forelse($attendees as $index => $ticket)
+                        <tr class="hover:bg-white/[0.02] transition-colors group">
+                            <td class="p-6 text-sm font-bold text-gray-600">
+                                {{ sprintf('%02d', $attendees->firstItem() + $index) }}
+                            </td>
+                            <td class="p-6">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-600/20 text-blue-500 flex items-center justify-center font-bold text-[10px] uppercase">
+                                        {{ substr($ticket->user->name ?? '??', 0, 2) }}
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-black text-white">{{ $ticket->user->name ?? 'User Terhapus' }}</p>
+                                        <p class="text-[11px] text-gray-500">{{ $ticket->user->email ?? '-' }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="p-6 text-xs text-gray-400 font-medium">0812-3456-7890</td>
-                        <td class="p-6">
-                            <span class="bg-purple-500/10 text-purple-500 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border border-purple-500/20">VIP</span>
-                        </td>
-                        <td class="p-6">
-                            <code class="bg-[#18181b] px-3 py-1 rounded-md text-blue-400 font-mono text-xs border border-white/5 group-hover:border-blue-500/50">TKT-77291X</code>
-                        </td>
-                        <td class="p-6 text-[11px] text-gray-500">22 Apr 2026, 14:20</td>
-                    </tr>
-
-                    <tr class="hover:bg-white/[0.02] transition-colors group">
-                        <td class="p-6 text-sm font-bold text-gray-600">02</td>
-                        <td class="p-6">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-green-600/20 text-green-500 flex items-center justify-center font-bold text-[10px]">JD</div>
-                                <div>
-                                    <p class="text-sm font-black text-white">John Doe</p>
-                                    <p class="text-[11px] text-gray-500">johndoe@email.com</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="p-6 text-xs text-gray-400 font-medium">0857-9988-1122</td>
-                        <td class="p-6">
-                            <span class="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border border-blue-500/20">Reguler</span>
-                        </td>
-                        <td class="p-6">
-                            <code class="bg-[#18181b] px-3 py-1 rounded-md text-blue-400 font-mono text-xs border border-white/5 group-hover:border-blue-500/50">TKT-11029Z</code>
-                        </td>
-                        <td class="p-6 text-[11px] text-gray-500">22 Apr 2026, 15:05</td>
-                    </tr>
+                            </td>
+                            <td class="p-6 text-xs text-gray-400 font-medium">
+                                {{ $ticket->user->no_telp ?? $ticket->user->phone ?? '-' }}
+                            </td>
+                            <td class="p-6">
+                                @if(strtoupper($ticket->ticket_type ?? '') === 'VIP')
+                                    <span class="bg-purple-500/10 text-purple-500 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border border-purple-500/20">VIP</span>
+                                @else
+                                    <span class="bg-blue-500/10 text-blue-500 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border border-blue-500/20">{{ $ticket->ticket_type ?? 'REGULER' }}</span>
+                                @endif
+                            </td>
+                            <td class="p-6">
+                                <code class="bg-[#18181b] px-3 py-1 rounded-md text-blue-400 font-mono text-xs border border-white/5 group-hover:border-blue-500/50">
+                                    {{ $ticket->unique_code ?? $ticket->code ?? '-' }}
+                                </code>
+                            </td>
+                            <td class="p-6 text-[11px] text-gray-500">
+                                {{ $ticket->created_at ? $ticket->created_at->format('d M Y, H:i') : '-' }}
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="p-10 text-center text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                Belum ada peserta yang membeli tiket untuk event ini.
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
 
-            <div class="p-6 bg-white/[0.01] border-t border-white/5 flex justify-between items-center">
-                <p class="text-[10px] font-black text-gray-600 uppercase tracking-widest">Showing 2 of 45 Attendees</p>
-                <div class="flex gap-2">
-                    <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-gray-500 hover:text-white transition"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
-                    <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-500/20">1</button>
-                    <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-gray-400 hover:text-white transition font-bold text-xs">2</button>
-                    <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-gray-500 hover:text-white transition"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+            <div class="p-6 bg-white/[0.01] border-t border-white/5 flex flex-col sm:flex-row gap-4 justify-between items-center">
+                <p class="text-[10px] font-black text-gray-600 uppercase tracking-widest">
+                    Showing {{ $attendees->firstItem() ?? 0 }} to {{ $attendees->lastItem() ?? 0 }} of {{ $attendees->total() }} Attendees
+                </p>
+                <div class="flex items-center shadow-lg shadow-blue-500/5 rounded-lg overflow-hidden border border-white/5">
+                    {{ $attendees->links('pagination::tailwind') }}
                 </div>
             </div>
         </div>
     </main>
-
 </body>
 </html>

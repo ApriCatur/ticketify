@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class EventController extends Controller
@@ -13,7 +14,7 @@ class EventController extends Controller
     // =========================================================================
     // 1. MENAMPILKAN HALAMAN UTAMA PANITIA (DENGAN URUTAN STATUS & UPCOMING)
     // =========================================================================
-   public function index()
+    public function index()
     {
         // Ambil data hari ini
         $today = Carbon::today();
@@ -154,5 +155,29 @@ class EventController extends Controller
         $event->save();
 
         return redirect()->route('panitia.myevent')->with('success', $message);
+    }
+
+    // =========================================================================
+    // 4. MENAMPILKAN DATA PESERTA / ATTENDEE LIST (DINAMIS)
+    // =========================================================================
+    public function attendees($id)
+    {
+        // Ambil data event atau berikan error 404 jika id salah
+        $event = Event::findOrFail($id);
+
+        // Ambil data peserta yang membeli tiket event ini melalui Query Builder (Join ke tabel users)
+        $attendees = DB::table('tickets')
+            ->join('users', 'tickets.user_id', '=', 'users.id')
+            ->where('tickets.event_id', $id)
+            ->select(
+                'tickets.*',
+                'users.name as user_name',
+                'users.email as user_email',
+                'users.no_telp as user_phone'
+            )
+            ->paginate(10);
+
+        // Mengarahkan ke view folder Panitia dengan membawa data event dan peserta
+        return view('Panitia.CustomerData', compact('event', 'attendees'));
     }
 }

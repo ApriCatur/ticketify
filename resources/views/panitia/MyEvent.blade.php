@@ -89,20 +89,21 @@
                     </div>
                 </div>
 
-                <div class="md:col-span-2 flex justify-end items-center gap-3">
-                    @if($event->status !== 'rejected')
-                        <a href="{{ route('events.edit', $event->id) }}" class="flex items-center justify-center w-11 h-11 bg-white/5 hover:bg-white/10 rounded-xl text-gray-400 hover:text-white transition-all duration-200 border border-white/5 hover:scale-105 active:scale-95" title="Edit Event">
-                            <i class="fa-solid fa-pen-to-square text-sm"></i>
-                        </a>
-                        <a href="{{ route('panitia.customerdata') }}" class="flex items-center justify-center w-11 h-11 bg-blue-600/10 hover:bg-blue-600 text-blue-500 hover:text-white rounded-xl transition-all duration-200 border border-blue-500/20 hover:scale-105 active:scale-95" title="Data Peserta">
-                            <i class="fa-solid fa-table text-sm"></i>
-                        </a>
-                    @else
-                        <div class="flex items-center gap-1.5 text-[10px] text-zinc-600 font-bold uppercase tracking-wider bg-zinc-900/50 border border-zinc-800/50 px-3 py-2 rounded-xl select-none">
-                            <i class="fa-solid fa-lock text-[9px]"></i> Locked
-                        </div>
-                    @endif
+               <div class="flex items-center justify-end md:col-span-2 gap-3">
+            @if($event->status !== 'rejected')
+                <a href="{{ route('events.edit', $event->id) }}" class="flex items-center justify-center w-11 h-11 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white rounded-xl transition-colors border border-white/5">
+                    <i class="fa-solid fa-pen-to-square text-sm"></i>
+                </a>
+
+                <a href="{{ route('panitia.customerdata', $event->id) }}" class="flex items-center justify-center w-11 h-11 bg-blue-600/10 hover:bg-blue-600/20 text-blue-500 hover:text-blue-400 rounded-xl transition-colors border border-blue-500/10">
+                    <i class="fa-solid fa-table text-sm"></i>
+                </a>
+            @else
+                <div class="flex items-center gap-1.5 text-[10px] text-zinc-600 font-bold uppercase tracking-wider bg-zinc-900/50 border border-zinc-800/50 px-3 py-2 rounded-xl">
+                    <i class="fa-solid fa-lock text-[9px]"></i> Locked
                 </div>
+            @endif
+        </div>
 
             </div>
         </div>

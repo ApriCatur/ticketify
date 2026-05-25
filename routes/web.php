@@ -77,7 +77,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     /* ================= SISI PANITIA (ORGANISER) ================= */
-        Route::middleware([RoleMiddleware::class . ':panitia'])->prefix('panitia')->group(function () {
+    Route::middleware([RoleMiddleware::class . ':panitia'])->prefix('panitia')->group(function () {
         Route::get('/event', [EventPanitiaController::class, 'index'])->name('panitia.event');
 
         // Pembuatan Event
@@ -85,16 +85,16 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/store', function () { return redirect()->route('panitia.create'); });
         Route::post('/store', [EventPanitiaController::class, 'store'])->name('panitia.store');
 
-        Route::get('/panitia/event', [App\Http\Controllers\Panitia\EventController::class, 'index'])->name('panitia.event');
+        Route::get('/panitia/event', [PanitiaEventController::class, 'index'])->name('panitia.event');
 
         // Management My Event & Edit (Sudah diarahkan ke PanitiaEventController via Alias)
         Route::get('/myevent', [MyEventController::class, 'index'])->name('panitia.myevent');
         Route::get('/my-events/{id}/edit', [PanitiaEventController::class, 'edit'])->name('events.edit');
         Route::put('/my-events/{id}', [PanitiaEventController::class, 'update'])->name('events.update');
 
-        // Attendance
+        // Attendance & Customer Data (FIXED: Diarahkan dinamis ke Controller menggunakan Parameter ID)
         Route::get('/attendance', function () { return view('Panitia.Attendance'); })->name('panitia.attendance');
-        Route::get('/customerdata', function () { return view('Panitia.CustomerData'); })->name('panitia.customerdata');
+        Route::get('/myevent/{id}/attendees', [PanitiaEventController::class, 'attendees'])->name('panitia.customerdata');
 
         // Statistik Event
         Route::get('/statistic', [StatisticController::class, 'index'])->name('panitia.statistic');
