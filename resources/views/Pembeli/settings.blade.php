@@ -46,14 +46,14 @@
         <div class="bg-[#121212] p-8 rounded-[2.5rem] border border-white/5 max-w-4xl shadow-2xl">
 
             <div x-show="activeTab === 'profile'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95">
-                <form action="{{ route('pembeli.settings.update-profile') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('pembeli.settings.update_profile') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
                     <div class="flex items-center gap-6 mb-8">
                         <div class="relative w-24 h-24 group">
                             <img id="avatar-preview"
-                                 src="{{ auth()->user()->profile_picture ? \Illuminate\Support\Facades\Storage::url(auth()->user()->profile_picture) : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' }}"
+                                 src="{{ auth()->user()->profile_picture ? asset('storage/' . auth()->user()->profile_picture) : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' }}"
                                  class="w-full h-full object-cover rounded-full border-2 border-white/10 group-hover:border-blue-500/50 transition-all duration-300"
                                  alt="Profile Picture">
 
@@ -65,7 +65,7 @@
                         <div>
                             <h4 class="text-sm font-bold text-gray-200">Profile Picture</h4>
                             <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG. Max 2MB.</p>
-                            @error('profile_picture')
+                            @error('update_profile')
                                 <span class="text-xs text-red-500 mt-1 block font-medium">{{ $message }}</span>
                             @enderror
                         </div>

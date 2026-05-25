@@ -66,7 +66,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Settings Profil Pembeli
         Route::get('/settings', [PembeliSettingsController::class, 'index'])->name('pembeli.settings');
-        Route::put('/settings/update-profile', [PembeliSettingsController::class, 'updateProfile'])->name('pembeli.settings.update-profile');
+        Route::put('/settings/update_profile', [PembeliSettingsController::class, 'updateProfile'])->name('pembeli.settings.update_profile');
         Route::put('/settings/update-password', [PembeliSettingsController::class, 'updatePassword'])->name('pembeli.settings.update-password');
 
         // View Static Pembeli

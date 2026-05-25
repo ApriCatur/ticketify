@@ -8,13 +8,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
+use App\Models\User;
 
 class SettingsController extends Controller
 {
     // Menampilkan halaman settings pembeli
     public function index()
     {
-        return view('Pembeli.settings'); // Sesuaikan huruf kapital folder 'Pembeli' jika diperlukan
+        return view('Pembeli.settings'); 
     }
 
     // Memproses update Profile Details
@@ -23,7 +24,10 @@ class SettingsController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        // Validasi inputan form frontend
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
@@ -31,18 +35,13 @@ class SettingsController extends Controller
             'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
 
-        // Tangani upload foto profil jika ada berkas masuk
         if ($request->hasFile('profile_picture')) {
-            // Hapus foto lama di storage jika ada
             if ($user->profile_picture) {
                 Storage::disk('public')->delete($user->profile_picture);
             }
-
-            // Simpan foto baru ke direktori storage/app/public/profiles
             $path = $request->file('profile_picture')->store('profiles', 'public');
         }
 
-        // Siapkan array untuk update data agar lebih aman dari error kolom database
         $updateData = [
             'name'  => $request->name,
             'email' => $request->email,
@@ -53,10 +52,8 @@ class SettingsController extends Controller
             $updateData['profile_picture'] = $path;
         }
 
-        // Eksekusi update langsung ke tabel users berdasarkan ID
-        \App\Models\User::where('id', $user->id)->update($updateData);
+        $user->update($updateData);
 
-        // Redirect disesuaikan dengan ->name('pembeli.settings') di web.php kamu
         return redirect()->route('pembeli.settings')->with('success', 'Informasi profil berhasil diperbarui.');
     }
 
@@ -71,17 +68,18 @@ class SettingsController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        // Periksa apakah password lama cocok dengan yang di database
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
         if (!Hash::check($request->old_password, $user->password)) {
             return back()->withErrors(['old_password' => 'Password lama yang kamu masukkan salah.']);
         }
 
-        // Set password baru menggunakan Query Builder agar aman
-        \App\Models\User::where('id', $user->id)->update([
+        $user->update([
             'password' => Hash::make($request->password)
         ]);
 
-        // Redirect disesuaikan dengan ->name('pembeli.settings') di web.php kamu
         return redirect()->route('pembeli.settings')->with('success', 'Password akun berhasil diganti.');
     }
 }
