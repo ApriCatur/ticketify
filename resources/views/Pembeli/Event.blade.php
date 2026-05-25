@@ -84,22 +84,12 @@
                                     </div>
                                 </div>
                             @endforeach
-                        @else
-                            <div class="group p-4 bg-[#1e1e1e] border border-white/5 rounded-2xl hover:border-blue-500/30 transition-all cursor-pointer">
-                                <div class="flex gap-4 items-center">
-                                    <div class="flex-shrink-0 w-12 h-12 bg-blue-500/10 rounded-xl flex flex-col items-center justify-center border border-blue-500/20">
-                                        <span class="text-[10px] font-bold text-blue-400 uppercase leading-none">MEI</span>
-                                        <span class="text-lg font-black text-white mt-0.5 leading-none">02</span>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <h4 class="text-sm font-bold text-white tracking-tight truncate">Workshop Laravel</h4>
-                                        <p class="text-[10px] text-gray-500 mt-1 uppercase flex items-center gap-1">
-                                            <i class="fa-regular fa-clock text-[9px]"></i> 09:00 WIB
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
+                          @else
+                        <div class="text-center py-8 bg-[#1e1e1e] border border-dashed border-white/5 rounded-2xl">
+                            <i class="fa-solid fa-calendar-xmark text-gray-700 text-xl mb-2 block"></i>
+                            <p class="text-[11px] text-gray-500 font-medium">Belum ada event terdekat</p>
+                        </div>
+                    @endif
                     </div>
                 </div>
 

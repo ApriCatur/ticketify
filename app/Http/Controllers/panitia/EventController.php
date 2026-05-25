@@ -22,14 +22,19 @@ class EventController extends Controller
         // Query Utama: Fokus urutkan berdasarkan status published terlebih dahulu secara mutlak
         $events = Event::orderByRaw("FIELD(LOWER(status), 'published', 'pending', 'rejected') ASC")
             ->orderBy('date', 'desc') // Tanggal terbaru hanya berlaku untuk sesama status yang sama
-            ->get();
+            ->get() ?? collect(); // Memastikan jika null, berubah menjadi collection kosong yang aman
 
-        // FIX: Mengubah status 'active' menjadi 'published' sesuai isi database asli
+        // FIX AMAN: Mengubah status 'active' menjadi 'published' sesuai isi database asli
+        // Ditambahkan penanganan default kosong agar Blade komponen tidak crash (Error 500)
         $upcomingEvents = Event::where('status', 'published')
             ->whereDate('date', '>=', $today)
             ->orderBy('date', 'asc')
             ->take(3)
             ->get();
+
+        if (!$upcomingEvents) {
+            $upcomingEvents = collect(); // Force menjadi collection kosong jika null
+        }
 
         // FIX: Kirimkan juga variabel $events ke view agar bagian banner & popular event tetap tampil
         return view('panitia.event', compact('events', 'upcomingEvents'));

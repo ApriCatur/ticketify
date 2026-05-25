@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class EventPanitiaController extends Controller
 {
@@ -14,12 +15,22 @@ class EventPanitiaController extends Controller
      */
     public function index()
     {
+        // Ambil data hari ini
+        $today = Carbon::today();
+
         // Hanya menampilkan event yang sudah disetujui admin dan dipublikasikan.
         $events = Event::where('status', 'published')
             ->orderBy('date', 'asc')
             ->get();
 
-        return view('Panitia.event', compact('events'));
+        // Ambil 5 event terdekat dari tanggal sekarang (Upcoming Events)
+        $upcomingEvents = Event::where('status', 'published')
+            ->whereDate('date', '>=', $today)
+            ->orderBy('date', 'asc')
+            ->take(5)
+            ->get();
+
+        return view('Panitia.event', compact('events', 'upcomingEvents'));
     }
 
     // Fungsi memproses data form saat tombol "AJUKAN EVENT SEKARANG" ditekan
@@ -30,6 +41,7 @@ class EventPanitiaController extends Controller
             'name' => 'required|string|max:255',
             'category' => 'required|string',
             'location' => 'required|string',
+            'social_link' => 'nullable|url',
             'date' => 'required|date',
             'time_start' => 'required',
             'time_end' => 'required',
@@ -38,9 +50,11 @@ class EventPanitiaController extends Controller
             'ticket_types.*.price' => 'required|numeric|min:0',
             'ticket_types.*.stock' => 'required|integer|min:0',
             'description' => 'required|string',
+            'maps_link' => 'nullable|string',
             'terms' => 'required|string',
-            'banner' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'organiser_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'organiser_description' => 'nullable|string',
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'organiser_photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $ticketTypes = $validated['ticket_types'];

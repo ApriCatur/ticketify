@@ -1,12 +1,12 @@
 <div id="sidebar-overlay"
-     class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] hidden transition-opacity duration-300">
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] hidden transition-opacity duration-300">
 </div>
 
 <aside id="main-sidebar"
     class="fixed inset-y-0 left-0 w-64 -translate-x-full z-[70]
-           lg:translate-x-0 lg:sticky lg:top-0 lg:z-0
-           flex flex-col h-screen border-r border-white/5 p-6 bg-[#09090b]
-           backdrop-blur-xl lg:backdrop-blur-none transition-transform duration-300 ease-in-out">
+        lg:translate-x-0 lg:sticky lg:top-0 lg:z-0
+        flex flex-col h-screen border-r border-white/5 p-6 bg-[#09090b]
+        backdrop-blur-xl lg:backdrop-blur-none transition-transform duration-300 ease-in-out">
 
     <div class="flex items-center justify-between mb-8">
         <div class="flex items-center gap-2">
@@ -26,26 +26,24 @@
                 <a href="{{ route('panitia.event') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ Route::is('panitia.event') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 font-medium hover:text-white hover:bg-white/5' }}">
                     <i class="fa-solid fa-house w-5"></i> Event
                 </a>
+
                 <a href="{{ route('panitia.create') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ Route::is('panitia.create') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 font-medium hover:text-white hover:bg-white/5' }}">
                     <i class="fa-solid fa-calendar-plus w-5"></i> Create Event
                 </a>
-               <a href="{{ route('panitia.myevent') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group
-                {{ request()->routeIs('panitia.myevent') || request()->routeIs('panitia.customerdata') ? 'bg-blue-600 text-white font-bold shadow-lg shadow-blue-600/20' : 'text-gray-400 hover:bg-white/[0.03] hover:text-white' }}">
-                    <div class="flex items-center justify-center w-5 h-5">
-                        <i class="fa-solid fa-layer-group text-sm transition-transform group-hover:scale-110"></i>
-                    </div>
-                    <span class="text-sm">My Event</span>
+
+                <a href="{{ route('panitia.myevent') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ request()->routeIs('panitia.myevent') || request()->routeIs('panitia.customerdata') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 font-medium hover:text-white hover:bg-white/5' }}">
+                    <i class="fa-solid fa-layer-group w-5"></i> My Event
                 </a>
+
                 <a href="{{ route('panitia.attendance') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ Route::is('panitia.attendance') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 font-medium hover:text-white hover:bg-white/5' }}">
                     <i class="fa-solid fa-qrcode w-5"></i> Attendance
                 </a>
+
                 <a href="{{ route('panitia.statistic') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ request()->is('panitia/statistic*') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 font-medium hover:text-white hover:bg-white/5' }}">
-                    <i class="fa-solid fa-chart-line w-5"></i>
-                    <span>Statistik
+                    <i class="fa-solid fa-chart-line w-5"></i> Statistik
                 </a>
             </nav>
-        </div>  
+        </div>
 
         <div>
             <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Lainnya</p>
@@ -55,7 +53,7 @@
                 </a>
 
                 <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-panitia').submit();"
-                   class="flex items-center gap-3 p-3 rounded-xl text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition mt-4">
+                    class="flex items-center gap-3 p-3 rounded-xl text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition mt-4">
                     <i class="fa-solid fa-power-off w-5"></i> Logout
                 </a>
                 <form action="{{ route('logout') }}" method="POST" id="logout-form-panitia" class="hidden">

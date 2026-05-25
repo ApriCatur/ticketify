@@ -31,7 +31,7 @@
 
 <form action="{{ url()->current() }}" method="GET" class="px-8 -mt-10 relative z-30">
     <div class="bg-[#1e1e1e] border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-wrap lg:flex-nowrap items-end gap-4">
-        
+
         <div class="flex-[2] min-w-[200px]">
             <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2 block ml-1">Search Event Name</label>
             <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
@@ -48,10 +48,16 @@
                 </div>
                 <select name="category" class="w-full bg-white/5 border border-transparent rounded-xl py-3 pl-10 pr-8 text-xs font-bold text-gray-300 focus:border-blue-500 outline-none transition-all appearance-none cursor-pointer">
                     <option value="" class="bg-[#1e1e1e]">Semua</option>
+                    <option value="Music Concert" class="bg-[#1e1e1e]" {{ request('category') == 'Music Concert' ? 'selected' : '' }}>Music Concert</option>
+                    <option value="Seminar" class="bg-[#1e1e1e]" {{ request('category') == 'Seminar' ? 'selected' : '' }}>Seminar</option>
+                    <option value="Workshop" class="bg-[#1e1e1e]" {{ request('category') == 'Workshop' ? 'selected' : '' }}>Workshop</option>
+                    <option value="Festival" class="bg-[#1e1e1e]" {{ request('category') == 'Festival' ? 'selected' : '' }}>Festival</option>
+                    <option value="Sport" class="bg-[#1e1e1e]" {{ request('category') == 'Sport' ? 'selected' : '' }}>Sport</option>
+                    <option value="Competition" class="bg-[#1e1e1e]" {{ request('category') == 'Competition' ? 'selected' : '' }}>Competition</option>
+                    <option value="Exhibition" class="bg-[#1e1e1e]" {{ request('category') == 'Exhibition' ? 'selected' : '' }}>Exhibition</option>
+                    <option value="Community" class="bg-[#1e1e1e]" {{ request('category') == 'Community' ? 'selected' : '' }}>Community</option>
                     <option value="Education" class="bg-[#1e1e1e]" {{ request('category') == 'Education' ? 'selected' : '' }}>Education</option>
-                    <option value="Music" class="bg-[#1e1e1e]" {{ request('category') == 'Music' ? 'selected' : '' }}>Music</option>
-                    <option value="Technology" class="bg-[#1e1e1e]" {{ request('category') == 'Technology' ? 'selected' : '' }}>Technology</option>
-                    <option value="Art & Theater" class="bg-[#1e1e1e]" {{ request('category') == 'Art & Theater' ? 'selected' : '' }}>Art & Theater</option>
+                    <option value="Entertainment" class="bg-[#1e1e1e]" {{ request('category') == 'Entertainment' ? 'selected' : '' }}>Entertainment</option>
                 </select>
                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-500">
                     <i class="fa-solid fa-chevron-down text-[10px]"></i>
@@ -82,7 +88,7 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
-        @if(!empty($events) && count($events))
+        @if(!empty($events) && (is_array($events) || is_object($events)) && count($events) > 0)
             @foreach($events as $event)
                 <x-event-card
                     image="{{ $event->banner ? asset('storage/' . $event->banner) : asset('images/kmipn.jpeg') }}"
