@@ -23,20 +23,23 @@
         <div>
             <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Organizer Menu</p>
             <nav class="space-y-1">
-                <a href="{{ route('panitia.event') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ Route::is('panitia.event') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+                <a href="{{ route('panitia.event') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ Route::is('panitia.event') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 font-medium hover:text-white hover:bg-white/5' }}">
                     <i class="fa-solid fa-house w-5"></i> Event
                 </a>
-                <a href="{{ route('panitia.create') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ Route::is('panitia.create') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+                <a href="{{ route('panitia.create') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ Route::is('panitia.create') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 font-medium hover:text-white hover:bg-white/5' }}">
                     <i class="fa-solid fa-calendar-plus w-5"></i> Create Event
                 </a>
-                <a href="{{ route('panitia.myevent') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ Route::is(['panitia.myevent', 'panitia.customerdata']) ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
-                    <i class="fa-solid fa-layer-group w-5"></i> My Event
+               <a href="{{ route('panitia.myevent') }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition {{ request()->routeIs('panitia.myevent*') || request()->is('*my-events*') ? 'font-bold bg-blue-500 text-white shadow-lg shadow-blue-500/10' : 'font-medium hover:bg-white/5 hover:text-white' }}">
+                    <i class="fa-solid fa-layer-group w-5 text-center text-xs"></i>
+                    <span>My Event</span>
                 </a>
-                <a href="{{ route('panitia.attendance') }}" class="flex items-center gap-3 p-3 rounded-xl text-[13px] transition-all {{ Route::is('panitia.attendance') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+                <a href="{{ route('panitia.attendance') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ Route::is('panitia.attendance') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 font-medium hover:text-white hover:bg-white/5' }}">
                     <i class="fa-solid fa-qrcode w-5"></i> Attendance
                 </a>
-                <a href="{{ route('panitia.statistic') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ Route::is(['panitia.statistic', 'panitia.statistic2']) ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
-                    <i class="fa-solid fa-chart-line w-5"></i> Statistik
+                <a href="{{ route('panitia.statistic') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ request()->is('panitia/statistic*') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 font-medium hover:text-white hover:bg-white/5' }}">
+                    <i class="fa-solid fa-chart-line w-5"></i>
+                    <span>Statistik
                 </a>
             </nav>
         </div>
@@ -44,12 +47,12 @@
         <div>
             <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Lainnya</p>
             <nav class="space-y-1">
-                <a href="{{ route('panitia.settings') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ request()->is('panitia/settings*') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+                <a href="{{ route('panitia.settings') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm transition-all {{ request()->is('panitia/settings*') ? 'bg-blue-500 text-white font-bold' : 'text-gray-400 font-medium hover:text-white hover:bg-white/5' }}">
                     <i class="fa-solid fa-gear w-5"></i> Settings
                 </a>
 
                 <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-panitia').submit();"
-                   class="flex items-center gap-3 p-3 rounded-xl text-sm text-red-400 hover:bg-red-500/10 transition mt-4">
+                   class="flex items-center gap-3 p-3 rounded-xl text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition mt-4">
                     <i class="fa-solid fa-power-off w-5"></i> Logout
                 </a>
                 <form action="{{ route('logout') }}" method="POST" id="logout-form-panitia" class="hidden">

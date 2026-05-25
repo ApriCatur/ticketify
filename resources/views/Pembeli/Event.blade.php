@@ -18,7 +18,6 @@
         ::-webkit-scrollbar-track { background: #0f0f0f; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 
-        /* Custom Swiper Pagination */
         .swiper-pagination-bullet { background: #fff; opacity: 0.5; }
         .swiper-pagination-bullet-active { background: #3b82f6; opacity: 1; width: 20px; border-radius: 5px; transition: all 0.3s; }
     </style>
@@ -27,82 +26,107 @@
 
     <div class="flex max-w-[1600px] mx-auto min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
 
-    @include('layouts.sidebar-pembeli')
+        @include('layouts.sidebar-pembeli')
 
-    <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
-        <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
+        <div class="flex-1 flex flex-col xl:flex-row min-w-0">
 
-            <div class="flex items-center gap-4">
-                <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
-                    <i class="fa-solid fa-bars-staggered text-2xl"></i>
-                </button>
+            <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
+                <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
+                    <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
+                        <i class="fa-solid fa-bars-staggered text-2xl"></i>
+                    </button>
 
-                <div class="hidden lg:block">
-                    <span class="text-sm text-gray-400 font-medium italic"> Welcome To Ticketify! Discover something new today.</span>
+                    <div class="hidden lg:block">
+                        <span class="text-sm text-gray-400 font-medium italic">Welcome To Ticketify! Discover something new today.</span>
+                    </div>
+                </nav>
+
+                <div class="flex-1 p-8 space-y-8">
+                    @include('components.event')
                 </div>
+
+                
             </div>
 
-            <div class="flex items-center gap-4">
-                </div>
-        </nav>
+            <aside class="w-full xl:w-80 flex flex-col sticky top-0 h-auto xl:h-screen p-8 space-y-8 bg-[#121212] overflow-y-auto border-t xl:border-t-0 border-white/5">
 
-        @include('components.event')
+                <div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-black italic tracking-tighter text-white">Upcoming</h2>
+                        <i class="fa-solid fa-calendar-check text-blue-500"></i>
+                    </div>
 
-    <aside class="w-80 hidden xl:flex flex-col sticky top-0 h-screen p-8 space-y-8">
-        <div>
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-black italic tracking-tighter text-white">Upcoming</h2>
-                <i class="fa-solid fa-calendar-check text-blue-500"></i>
-            </div>
-            <div class="space-y-4">
-                <div class="group p-4 bg-[#1e1e1e] border border-white/5 rounded-2xl hover:border-blue-500/30 transition-all cursor-pointer">
-                    <div class="flex gap-4">
-                        <div class="flex-shrink-0 w-12 h-12 bg-blue-500/10 rounded-xl flex flex-col items-center justify-center border border-blue-500/20">
-                            <span class="text-[10px] font-bold text-blue-400 uppercase leading-none">Mei</span>
-                            <span class="text-lg font-black text-white">02</span>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-bold group-hover:text-blue-400 transition-colors">Workshop Laravel</h4>
-                            <p class="text-[10px] text-gray-500 mt-1 uppercase">09:00 WIB</p>
-                        </div>
+                    <div class="space-y-4">
+                        @if(isset($upcomingEvents) && $upcomingEvents->count() > 0)
+                            @foreach($upcomingEvents as $upEvent)
+                                @php
+                                    $eventDate = \Carbon\Carbon::parse($upEvent->date);
+                                @endphp
+                                <div class="group p-4 bg-[#1e1e1e] border border-white/5 rounded-2xl hover:border-blue-500/30 transition-all cursor-pointer">
+                                    <div class="flex gap-4 items-center">
+                                        <div class="flex-shrink-0 w-12 h-12 bg-blue-500/10 rounded-xl flex flex-col items-center justify-center border border-blue-500/20">
+                                            <span class="text-[10px] font-bold text-blue-400 uppercase leading-none">
+                                                {{ $eventDate->translatedFormat('M') }}
+                                            </span>
+                                            <span class="text-lg font-black text-white mt-0.5 leading-none">
+                                                {{ $eventDate->format('d') }}
+                                            </span>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <h4 class="text-sm font-bold text-white tracking-tight truncate group-hover:text-blue-400 transition-colors">
+                                                {{ $upEvent->name }}
+                                            </h4>
+                                            <p class="text-[10px] text-gray-500 mt-1 uppercase flex items-center gap-1">
+                                                <i class="fa-regular fa-clock text-[9px]"></i>
+                                                {{ \Carbon\Carbon::parse($upEvent->time_start)->format('H:i') }} WIB
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="group p-4 bg-[#1e1e1e] border border-white/5 rounded-2xl hover:border-blue-500/30 transition-all cursor-pointer">
+                                <div class="flex gap-4 items-center">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-blue-500/10 rounded-xl flex flex-col items-center justify-center border border-blue-500/20">
+                                        <span class="text-[10px] font-bold text-blue-400 uppercase leading-none">MEI</span>
+                                        <span class="text-lg font-black text-white mt-0.5 leading-none">02</span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="text-sm font-bold text-white tracking-tight truncate">Workshop Laravel</h4>
+                                        <p class="text-[10px] text-gray-500 mt-1 uppercase flex items-center gap-1">
+                                            <i class="fa-regular fa-clock text-[9px]"></i> 09:00 WIB
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
-                <div class="mt-8 p-6 bg-gradient-to-br from-blue-600 to-blue-900 rounded-2xl shadow-xl relative overflow-hidden group">
-                    <i class="fa-solid fa-ticket absolute -right-4 -bottom-4 text-white/10 text-8xl -rotate-12 group-hover:rotate-0 transition-all duration-500"></i>
-                    <h4 class="font-black text-white mb-2 relative z-10">Buka Event?</h4>
-                    <p class="text-xs text-blue-100 mb-4 relative z-10">Kelola tiket organisasimu di sini.</p>
-                    <a href="{{ route('pembeli.buatevent') }}" class="w-full py-4 px-6 bg-white text-blue-600 text-sm font-bold rounded-xl uppercase hover:bg-blue-50 hover:scale-[1.02] active:scale-95 transition-all duration-200 relative z-10 shadow-lg flex items-center justify-center tracking-wider">Buat Sekarang</a>
+
+                <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-6 shadow-xl relative overflow-hidden mt-auto">
+                    <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-white/5 rounded-full blur-xl"></div>
+                    <div class="relative z-10 space-y-4">
+                        <h3 class="text-white font-black text-lg tracking-tight">Buka Event?</h3>
+                        <p class="text-blue-100 text-xs leading-relaxed">Kelola tiket organisasimu di sini.</p>
+                        <a href="#" class="w-full bg-white text-blue-700 font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider hover:bg-gray-100 transition shadow-lg block text-center">
+                            BUAT SEKARANG
+                        </a>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </aside>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script>
-    const swiper = new Swiper('.myHeroSwiper', {
-        loop: true,
-        autoplay: { delay: 5000, disableOnInteraction: false },
-        pagination: { el: '.swiper-pagination', clickable: true },
-        effect: 'fade',
-        fadeEffect: { crossFade: true },
-    });
-</script>
+            </aside>
 
-<script>
-    const openBtn = document.getElementById('open-sidebar');
-    const sidebar = document.getElementById('main-sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
+        </div> </div>
 
-    if (openBtn && sidebar) {
-        function toggleSidebar() {
-            sidebar.classList.toggle('-translate-x-full');
-            if (overlay) overlay.classList.toggle('hidden');
-            document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
-        }
-        openBtn.addEventListener('click', toggleSidebar);
-        if (overlay) overlay.addEventListener('click', toggleSidebar);
-    }
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.myHeroSwiper', {
+            loop: true,
+            autoplay: { delay: 5000, disableOnInteraction: false },
+            pagination: { el: '.swiper-pagination', clickable: true },
+            effect: 'fade',
+            fadeEffect: { crossFade: true },
+        });
+    </script>
 </body>
 </html>

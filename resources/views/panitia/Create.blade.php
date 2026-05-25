@@ -29,6 +29,7 @@
             <p class="text-gray-500 text-sm mt-2 font-medium">Isi formulir di bawah untuk mengajukan event baru ke Admin.</p>
         </header>
 
+        {{-- Menampilkan Error Validasi Jika Ada Inputan yang Kurang/Salah --}}
         @if ($errors->any())
             <div class="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-sm">
                 <ul class="list-disc pl-5 space-y-1">
@@ -39,6 +40,7 @@
             </div>
         @endif
 
+        {{-- Navigasi Step Menu --}}
         <div class="flex gap-8 mb-8 border-b border-white/5">
             <button type="button" @click="activeTab = 'ticket'" :class="activeTab === 'ticket' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'" class="pb-4 font-bold text-sm transition-all flex items-center gap-2">
                 <span class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-[10px]">1</span> Ticket
@@ -51,11 +53,16 @@
             </button>
         </div>
 
+        {{-- TUNGGAL FORM UTAMA UNTUK SUBMIT KE BACKEND --}}
         <form action="{{ route('panitia.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <div x-show="activeTab === 'ticket'" class="space-y-8" x-data="{ bannerName: '' }">
+            {{-- ========================================================================= --}}
+            {{-- STEP 1: TICKET & INFO UTAMA --}}
+            {{-- ========================================================================= --}}
+            <div x-show="activeTab === 'ticket'" class="space-y-8">
                 <div class="grid md:grid-cols-2 gap-8">
+                    {{-- Input Poster --}}
                     <div class="space-y-4">
                         <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Poster Event</label>
                         <div class="border-2 border-dashed border-white/10 rounded-3xl p-[110px] text-center hover:border-blue-500/50 transition-colors bg-[#121212] group relative overflow-hidden">
@@ -66,6 +73,7 @@
                         </div>
                     </div>
 
+                    {{-- Form Field Kiri --}}
                     <div class="space-y-6">
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Nama Event</label>
@@ -99,23 +107,24 @@
                             <input type="url" name="social_link" value="{{ old('social_link') }}" placeholder="https://instagram.com/..." class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all">
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-3 gap-4">
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal</label>
-                                <input type="date" name="date" value="{{ old('date') }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
+                                <input type="date" name="date" value="{{ old('date') }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-2 text-xs focus:border-blue-500 outline-none transition-all" required>
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Waktu Mulai</label>
-                                <input type="time" name="time_start" value="{{ old('time_start') }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
+                                <input type="time" name="time_start" value="{{ old('time_start') }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-2 text-xs focus:border-blue-500 outline-none transition-all" required>
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Waktu Selesai</label>
-                                <input type="time" name="time_end" value="{{ old('time_end') }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
+                                <input type="time" name="time_end" value="{{ old('time_end') }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-2 text-xs focus:border-blue-500 outline-none transition-all" required>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                {{-- Skema Tiket Dinamis Alpine JS --}}
                 <div class="bg-[#121212] p-8 rounded-3xl border border-white/5">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="font-bold text-sm flex items-center gap-2">
@@ -125,7 +134,7 @@
                     </div>
 
                     <template x-for="(ticket, index) in ticketRows" :key="index">
-                        <div class="grid md:grid-cols-12 gap-4 items-end bg-white/[0.02] p-4 rounded-2xl border border-white/5">
+                        <div class="grid md:grid-cols-12 gap-4 items-end bg-white/[0.02] p-4 rounded-2xl border border-white/5 mb-4">
                             <div class="md:col-span-4 space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Jenis Tiket</label>
                                 <input :name="`ticket_types[${index}][name]`" type="text" x-model="ticket.name" placeholder="Contoh: Reguler / VIP" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none" required>
@@ -150,6 +159,9 @@
                 </div>
             </div>
 
+            {{-- ========================================================================= --}}
+            {{-- STEP 2: EVENT DETAIL --}}
+            {{-- ========================================================================= --}}
             <div x-show="activeTab === 'detail'" class="space-y-8" style="display: none;">
                 <div class="space-y-2">
                     <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Deskripsi Event</label>
@@ -170,7 +182,10 @@
                 </div>
             </div>
 
-            <div x-show="activeTab === 'organiser'" class="space-y-8" style="display: none;" x-data="{ orgPhotoName: '' }">
+            {{-- ========================================================================= --}}
+            {{-- STEP 3: ORGANISER (FINAL TAB) --}}
+            {{-- ========================================================================= --}}
+            <div x-show="activeTab === 'organiser'" class="space-y-8" style="display: none;">
                 <div class="grid md:grid-cols-2 gap-8">
                     <div class="space-y-2">
                         <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Deskripsi Organisasi</label>
@@ -187,27 +202,21 @@
                     </div>
                 </div>
 
-             <form action="{{ route('panitia.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-
-    <div class="pt-10 flex justify-end gap-4 border-t border-white/5">
-        <button type="button" 
-                @click="activeTab = 'detail'"
-                class="px-8 py-4 rounded-2xl bg-white/5 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all text-gray-300">
-            Kembali
-        </button>
-
-        <button type="submit"
-                class="px-10 py-4 rounded-2xl bg-blue-600 text-white text-xs font-black uppercase tracking-widest hover:bg-blue-700 shadow-lg shadow-blue-600/20 active:scale-95 transition-all">
-            Ajukan Event Sekarang
-        </button>
-    </div>
-</form>
+                {{-- Action Akhir Tombol Submit --}}
+                <div class="pt-10 flex justify-end gap-4 border-t border-white/5">
+                    <button type="button" @click="activeTab = 'detail'" class="px-8 py-4 rounded-2xl bg-white/5 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all text-gray-300">
+                        Kembali
+                    </button>
+                    <button type="submit" class="px-10 py-4 rounded-2xl bg-blue-600 text-white text-xs font-black uppercase tracking-widest hover:bg-blue-700 shadow-lg shadow-blue-600/20 active:scale-95 transition-all">
+                        Ajukan Event Sekarang
+                    </button>
+                </div>
             </div>
 
         </form>
     </main>
 
+    {{-- Script Handler Sidebar Responsif --}}
     <script>
         const openBtn = document.getElementById('open-sidebar');
         const closeBtn = document.getElementById('close-sidebar');
