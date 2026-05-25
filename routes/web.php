@@ -13,8 +13,7 @@ use App\Http\Controllers\Pembeli\MyTicketController;
 use App\Http\Controllers\Pembeli\SettingsController as PembeliSettingsController;
 
 // Panitia Controllers (Menggunakan Alias untuk menghindari tabrakan nama)
-use App\Http\Controllers\Panitia\EventPanitiaController;
-use App\Http\Controllers\Panitia\EventController as PanitiaEventController;
+use App\Http\Controllers\Panitia\EventController as PanitiaEventController; // FIXED: Controller tunggal untuk Event Panitia
 use App\Http\Controllers\Panitia\MyEventController;
 use App\Http\Controllers\Panitia\AttendanceController;
 use App\Http\Controllers\Panitia\StatisticController;
@@ -79,21 +78,21 @@ Route::middleware(['auth'])->group(function () {
 
     /* ================= SISI PANITIA (ORGANISER) ================= */
     Route::middleware([RoleMiddleware::class . ':panitia'])->prefix('panitia')->group(function () {
-        Route::get('/event', [EventPanitiaController::class, 'index'])->name('panitia.event');
 
-        // Pembuatan Event
+        // Halaman Utama Panitia (FIXED: Menggunakan PanitiaEventController)
+        Route::get('/event', [PanitiaEventController::class, 'index'])->name('panitia.event');
+
+        // Pembuatan Event (FIXED: diarahkan ke PanitiaEventController@store)
         Route::get('/create', function () { return view('Panitia.create'); })->name('panitia.create');
         Route::get('/store', function () { return redirect()->route('panitia.create'); });
-        Route::post('/store', [EventPanitiaController::class, 'store'])->name('panitia.store');
+        Route::post('/store', [PanitiaEventController::class, 'store'])->name('panitia.store');
 
-        Route::get('/panitia/event', [PanitiaEventController::class, 'index'])->name('panitia.event');
-
-        // Management My Event & Edit (Sudah diarahkan ke PanitiaEventController via Alias)
+        // Management My Event & Edit (FIXED: Nama route disesuaikan dengan prefix .panitia agar konsisten)
         Route::get('/myevent', [MyEventController::class, 'index'])->name('panitia.myevent');
-        Route::get('/my-events/{id}/edit', [PanitiaEventController::class, 'edit'])->name('events.edit');
-        Route::put('/my-events/{id}', [PanitiaEventController::class, 'update'])->name('events.update');
+        Route::get('/my-events/{id}/edit', [PanitiaEventController::class, 'edit'])->name('panitia.events.edit');
+        Route::put('/my-events/{id}', [PanitiaEventController::class, 'update'])->name('panitia.events.update');
 
-        // Attendance & Customer Data (FIXED: Diarahkan dinamis ke Controller menggunakan Parameter ID)
+        // Attendance & Customer Data
         Route::get('/attendance', [AttendanceController::class, 'index'])->name('panitia.attendance');
         Route::post('/attendance/verify', [AttendanceController::class, 'verifyTicket'])->name('panitia.verify-ticket');
         Route::get('/attendance/statistics', [AttendanceController::class, 'getStatistics'])->name('panitia.attendance-stats');
@@ -104,7 +103,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/statistic/{id}', [StatisticController::class, 'show'])->name('panitia.statistic.detail');
         Route::get('/statistic2', function () { return view('Panitia.Statistic2'); })->name('panitia.statistic2');
 
-        // Settings Profil Panitia (Route ganda duplikat lama sudah dibersihkan)
+        // Settings Profil Panitia
         Route::get('/settings', [PanitiaSettingsController::class, 'index'])->name('panitia.settings');
         Route::put('/settings/profile', [PanitiaSettingsController::class, 'updateProfile'])->name('profile.update');
         Route::put('/settings/password', [PanitiaSettingsController::class, 'updatePassword'])->name('password.update');

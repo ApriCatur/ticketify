@@ -53,7 +53,8 @@
             </button>
         </div>
 
-        <form action="{{ route('events.update', $event->id) }}" method="POST" enctype="multipart/form-data" id="editEventForm" novalidate>
+        {{-- FIXED: Mengubah route ke panitia.events.update --}}
+        <form action="{{ route('panitia.events.update', $event->id) }}" method="POST" enctype="multipart/form-data" id="editEventForm" novalidate>
             @csrf
             @method('PUT')
 
