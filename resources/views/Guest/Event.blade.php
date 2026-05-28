@@ -27,7 +27,7 @@
 
     <div class="flex max-w-[1600px] mx-auto min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
 
-    @include('layouts.sidebar-registrasi')
+    @include('layouts.sidebar-guest')
 
         <!-- ini bagian navbar -->
         <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
@@ -305,7 +305,7 @@
                         <i class="fa-solid fa-ticket absolute -right-4 -bottom-4 text-white/10 text-8xl -rotate-12 group-hover:rotate-0 transition-all duration-500"></i>
                         <h4 class="font-black text-white mb-2 relative z-10">Buka Event?</h4>
                         <p class="text-xs text-blue-100 mb-4 relative z-10">Kelola tiket organisasimu di sini.</p>
-                        <a href="{{ route('registrasi.buatevent') }}" class="w-full py-4 px-6 bg-white text-blue-600 text-sm font-bold rounded-xl uppercase hover:bg-blue-50 hover:scale-[1.02] active:scale-95 transition-all duration-200 relative z-10 shadow-lg flex items-center justify-center tracking-wider">Buat Sekarang</a>
+                        <a href="{{ route('guest.buatevent') }}" class="w-full py-4 px-6 bg-white text-blue-600 text-sm font-bold rounded-xl uppercase hover:bg-blue-50 hover:scale-[1.02] active:scale-95 transition-all duration-200 relative z-10 shadow-lg flex items-center justify-center tracking-wider">Buat Sekarang</a>
             </div>
         </aside>
     </div>

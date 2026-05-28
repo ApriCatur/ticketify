@@ -13,10 +13,10 @@
     <div class="max-w-6xl mx-auto">
      <div class="max-w-6xl mx-auto">
     <div class="flex items-center gap-4 mb-8">
-        <a href="{{ route('panitia.event') }}" class="bg-[#18181b] hover:bg-white hover:text-black transition-all px-4 py-2 rounded-lg text-xs font-bold border border-white/5 flex items-center">
+        <a href="{{ route('panitia.myevent') }}" class="bg-[#18181b] hover:bg-white hover:text-black transition-all px-4 py-2 rounded-lg text-xs font-bold border border-white/5 flex items-center">
             <i class="fa-solid fa-arrow-left mr-2"></i> Back
         </a>
-        <h1 class="text-2xl font-black tracking-tight italic uppercase">Event Seminar KMIPN VII</h1>
+        <h1 class="text-2xl font-black tracking-tight italic uppercase">{{ $event->name }}</h1>
     </div>
 </div>
 

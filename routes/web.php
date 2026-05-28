@@ -42,13 +42,13 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.st
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Preview Frontend Saja (Sebelum Login)
-Route::prefix('registrasi')->group(function () {
-    Route::get('/event', function () { return view('Registrasi.Event'); })->name('registrasi.event');
-    Route::get('/myticket', function () { return view('Registrasi.MyTicket'); })->name('registrasi.myticket');
-    Route::get('/about', function () { return view('Registrasi.About'); })->name('registrasi.about');
-    Route::get('/settings', function () { return view('Registrasi.Settings'); })->name('registrasi.settings');
-    Route::get('/buatevent', function () { return view('Registrasi.BuatEvent'); })->name('registrasi.buatevent');
-    Route::get('/detail', function () { return view('Registrasi.Detail'); })->name('registrasi.detail');
+Route::prefix('guest')->group(function () {
+    Route::get('/event', function () { return view('Guest.Event'); })->name('guest.event');
+    Route::get('/myticket', function () { return view('Guest.MyTicket'); })->name('guest.myticket');
+    Route::get('/about', function () { return view('Guest.About'); })->name('guest.about');
+    Route::get('/settings', function () { return view('Guest.Settings'); })->name('guest.settings');
+    Route::get('/buatevent', function () { return view('Guest.BuatEvent'); })->name('guest.buatevent');
+    Route::get('/detail', function () { return view('Guest.Detail'); })->name('guest.detail');
 });
 
 /*
@@ -89,6 +89,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Management My Event & Edit (FIXED: Nama route disesuaikan dengan prefix .panitia agar konsisten)
         Route::get('/myevent', [MyEventController::class, 'index'])->name('panitia.myevent');
+        Route::get('/my-events/{id}', [PanitiaEventController::class, 'show'])->name('panitia.events.show');
         Route::get('/my-events/{id}/edit', [PanitiaEventController::class, 'edit'])->name('panitia.events.edit');
         Route::put('/my-events/{id}', [PanitiaEventController::class, 'update'])->name('panitia.events.update');
 

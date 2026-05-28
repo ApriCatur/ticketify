@@ -28,7 +28,7 @@
                     <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
                     <input type="text" placeholder="Cari event..." class="w-full md:w-64 bg-[#121212] border border-white/5 rounded-xl pl-10 pr-4 py-3 text-xs focus:border-blue-500 outline-none transition-all">
                 </div>
-              
+
             </div>
         </header>
 
@@ -58,8 +58,19 @@
             @endif
             <div class="absolute inset-0 bg-gradient-to-t from-[#121212]/80 via-[#121212]/20 to-transparent"></div>
 
-            <div class="absolute top-4 right-4 bg-green-500/20 backdrop-blur-md border border-green-500/50 text-green-500 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg shadow-black/30">
-                {{ $item->status ?? 'Active' }}
+            @php
+                $displayStatus = $item->getDisplayStatus();
+                $statusConfig = [
+                    'published' => ['bg' => 'bg-emerald-500/20', 'border' => 'border-emerald-500/50', 'text' => 'text-emerald-500', 'label' => 'Active'],
+                    'completed' => ['bg' => 'bg-blue-500/20', 'border' => 'border-blue-500/50', 'text' => 'text-blue-500', 'label' => 'Completed'],
+                    'pending' => ['bg' => 'bg-amber-500/20', 'border' => 'border-amber-500/50', 'text' => 'text-amber-500', 'label' => 'Pending'],
+                    'rejected' => ['bg' => 'bg-red-500/20', 'border' => 'border-red-500/50', 'text' => 'text-red-500', 'label' => 'Rejected'],
+                ];
+                $config = $statusConfig[$displayStatus] ?? $statusConfig['published'];
+            @endphp
+
+            <div class="absolute top-4 right-4 backdrop-blur-md border rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-widest shadow-lg shadow-black/30 {{ $config['bg'] }} {{ $config['border'] }} {{ $config['text'] }}">
+                {{ $config['label'] }}
             </div>
         </div>
 

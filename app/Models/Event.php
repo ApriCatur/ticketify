@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Event extends Model
 {
@@ -44,5 +45,26 @@ class Event extends Model
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
+    }
+
+    /**
+     * Mendapatkan status display event
+     * Jika event sudah lewat tanggalnya, status akan menjadi 'completed'
+     * Selain itu, kembalikan status asli dari database
+     */
+    public function getDisplayStatus()
+    {
+        // Jika status bukan 'published', kembalikan status aslinya
+        if ($this->status !== 'published') {
+            return $this->status;
+        }
+
+        // Cek apakah tanggal event sudah lewat hari ini
+        $eventDate = Carbon::parse($this->date)->endOfDay();
+        if ($eventDate < Carbon::now()) {
+            return 'completed';
+        }
+
+        return $this->status;
     }
 }

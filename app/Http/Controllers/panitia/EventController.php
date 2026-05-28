@@ -175,6 +175,15 @@ class EventController extends Controller
     }
 
     // =========================================================================
+    // 3.5 MENAMPILKAN DETAIL EVENT (SEPERTI PEMBELI DAN GUEST)
+    // =========================================================================
+    public function show($id)
+    {
+        $event = Event::findOrFail($id);
+        return view('Panitia.detailevent', compact('event'));
+    }
+
+    // =========================================================================
     // 3. MENAMPILKAN HALAMAN EDIT EVENT
     // =========================================================================
     public function edit($id)
@@ -193,6 +202,18 @@ class EventController extends Controller
             );
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Event yang sudah completed (tanggal sudah lewat) tidak boleh diedit
+        |--------------------------------------------------------------------------
+        */
+        if ($event->getDisplayStatus() === 'completed') {
+            abort(
+                403,
+                'Event yang sudah selesai tidak dapat diubah lagi.'
+            );
+        }
+
         return view('Panitia.EditEvent', compact('event'));
     }
 
@@ -207,6 +228,13 @@ class EventController extends Controller
             abort(
                 403,
                 'Event yang ditolak oleh Admin tidak dapat diubah kembali.'
+            );
+        }
+
+        if ($event->getDisplayStatus() === 'completed') {
+            abort(
+                403,
+                'Event yang sudah selesai tidak dapat diubah lagi.'
             );
         }
 

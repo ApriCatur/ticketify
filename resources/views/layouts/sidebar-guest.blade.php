@@ -14,13 +14,13 @@
                 <div>
                     <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Home</p>
                     <nav class="space-y-1">
-                        <a href="{{ route('registrasi.event') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm text-gray-400 hover:text-white transition @if (Route::is('registrasi.event')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
+                        <a href="{{ route('guest.event') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm text-gray-400 hover:text-white transition @if (Route::is('guest.event')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
                             <i class="fa-solid fa-home"></i> Event
                         </a>
-                        <a href="{{ route('registrasi.about') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm text-gray-400 hover:text-white transition truncate @if (Route::is('registrasi.about')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
+                        <a href="{{ route('guest.about') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm text-gray-400 hover:text-white transition truncate @if (Route::is('guest.about')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
                             <i class="fa-solid fa-compass"></i> About Us
                         </a>
-                        <a href="{{ route('registrasi.myticket') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm text-gray-400 hover:text-white transition truncate @if (Route::is('registrasi.myticket')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
+                        <a href="{{ route('guest.myticket') }}" class="flex items-center gap-3 p-3 rounded-xl text-sm text-gray-400 hover:text-white transition truncate @if (Route::is('guest.myticket')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
                             <i class="fa-solid fa-ticket"></i> My Tickets
                         </a>
                     </nav>
@@ -28,7 +28,7 @@
                 <div>
                     <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Lainnya</p>
                     <nav class="space-y-1">
-                        <a href="{{ route('registrasi.settings') }}" class="flex items-center gap-3 p-3  rounded-xl text-sm text-gray-400 hover:text-white transition @if (Route::is('registrasi.settings')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
+                        <a href="{{ route('guest.settings') }}" class="flex items-center gap-3 p-3  rounded-xl text-sm text-gray-400 hover:text-white transition @if (Route::is('guest.settings')){{ 'bg-blue-500 text-white font-bold hover:none ' }}@endif">
                             <i class="fa-solid fa-gear"></i> Settings
                         </a>
 

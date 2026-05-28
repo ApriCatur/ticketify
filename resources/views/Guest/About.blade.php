@@ -19,7 +19,7 @@
 
     <div class="flex max-w-[1600px] mx-auto min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
 
-        @include('layouts.sidebar-registrasi')
+        @include('layouts.sidebar-guest')
 
         <div class="flex-1 flex flex-col min-w-0 border-r border-white/5 spotify-gradient">
             <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">

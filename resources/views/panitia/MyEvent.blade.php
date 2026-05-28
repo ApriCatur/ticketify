@@ -60,22 +60,29 @@
                         </div>
 
                         <div class="md:col-span-2 flex justify-start md:justify-center">
-                            @if($event->status === 'published')
+                            @php
+                                $displayStatus = $event->getDisplayStatus();
+                            @endphp
+                            @if($displayStatus === 'published')
                                 <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
                                     <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
                                     Active
                                 </div>
-                            @elseif($event->status === 'pending')
+                            @elseif($displayStatus === 'completed')
+                                <div class="flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 text-blue-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
+                                    <i class="fa-solid fa-circle-check"></i> Completed
+                                </div>
+                            @elseif($displayStatus === 'pending')
                                 <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
                                     <i class="fa-solid fa-clock-rotate-left"></i> Pending
                                 </div>
-                            @elseif($event->status === 'rejected')
+                            @elseif($displayStatus === 'rejected')
                                 <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
                                     <i class="fa-solid fa-circle-xmark"></i> Rejected
                                 </div>
                             @else
                                 <div class="flex items-center gap-2 bg-gray-500/10 border border-gray-500/30 text-gray-400 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
-                                    {{ ucfirst($event->status) }}
+                                    {{ ucfirst($displayStatus) }}
                                 </div>
                             @endif
                         </div>
@@ -91,7 +98,10 @@
                         </div>
 
                         <div class="flex items-center justify-end md:col-span-2 gap-3">
-                            @if($event->status !== 'rejected')
+                            @php
+                                $canEdit = $event->status !== 'rejected' && $displayStatus !== 'completed';
+                            @endphp
+                            @if($canEdit)
                                 {{-- FIXED: Mengubah nama route ke panitia.events.edit --}}
                                 <a href="{{ route('panitia.events.edit', $event->id) }}" class="flex items-center justify-center w-11 h-11 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white rounded-xl transition-colors border border-white/5">
                                     <i class="fa-solid fa-pen-to-square text-sm"></i>
