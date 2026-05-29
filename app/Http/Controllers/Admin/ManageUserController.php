@@ -14,17 +14,21 @@ class ManageUserController extends Controller
     // Tampilkan semua user aktif + user yang dihapus (soft deleted)
     public function index(Request $request)
     {
-        $query = User::query();
+        $search = $request->search;
 
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('email', 'like', '%' . $search . '%');
-            });
-        }
+        $admins = User::where('role', 'admin')
+            ->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
+            ->latest()->get();
 
-        $users           = $query->select('id', 'name', 'email', 'phone_number', 'role')->latest()->get();
+        $pembeli = User::where('role', 'pembeli')
+            ->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
+            ->latest()->get();
+
+        $panitia = User::where('role', 'panitia')
+            ->with('panitiaProfile')
+            ->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
+            ->latest()->get();
+
         $totalUsers      = User::count();
         $totalAdmins     = User::where('role', 'admin')->count();
         $totalOrganizers = User::where('role', 'panitia')->count();
@@ -32,7 +36,8 @@ class ManageUserController extends Controller
         $deletedUsers    = User::onlyTrashed()->get();
 
         return view('Admin.ManageUser', compact(
-            'users', 'totalUsers', 'totalAdmins', 'totalOrganizers', 'totalCustomers', 'deletedUsers'
+            'admins', 'pembeli', 'panitia',
+            'totalUsers', 'totalAdmins', 'totalOrganizers', 'totalCustomers', 'deletedUsers'
         ));
     }
 
