@@ -78,10 +78,10 @@
                         </div>
 
                         <div>
-                            <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Email Address</label>
+                            <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">NIM (Nomor Induk Mahasiswa)</label>
                             <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
-                                <i class="fa-solid fa-envelope text-blue-500 text-sm w-5 text-center"></i>
-                                <input type="email" name="email" placeholder="Alamat Email Anda" required value="{{ old('email') }}" class="bg-transparent w-full outline-none text-sm text-gray-200">
+                                <i class="fa-solid fa-id-card text-blue-500 text-sm w-5 text-center"></i>
+                                <input type="text" name="nim" placeholder="Masukkan NIM Anda" required value="{{ old('nim') }}" class="bg-transparent w-full outline-none text-sm text-gray-200">
                             </div>
                         </div>
 
@@ -89,7 +89,7 @@
                             <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Phone Number</label>
                             <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
                                 <i class="fa-solid fa-phone text-blue-500 text-sm w-5 text-center"></i>
-                                <input type="tel" name="phone_number" placeholder="Nomor Telepon Anda" value="{{ old('phone_number') }}" class="bg-transparent w-full outline-none text-sm text-gray-200">
+                                <input type="tel" name="phone_number" placeholder="Nomor Telepon Anda" required value="{{ old('phone_number') }}" class="bg-transparent w-full outline-none text-sm text-gray-200">
                             </div>
                         </div>
 
@@ -108,7 +108,7 @@
                         <div>
                             <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Confirm Password</label>
                             <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
-                                <i class="fa-solid fa-lock-keyhole text-blue-500 text-sm w-5 text-center"></i>
+                                <i class="fa-solid fa-lock text-blue-500 text-sm w-5 text-center"></i>
                                 <input type="password" id="confirmPassword" name="password_confirmation" placeholder="••••••••" required class="bg-transparent w-full outline-none text-sm text-gray-200">
 
                                 <button type="button" onclick="togglePassword('confirmPassword', 'eyeIcon2')" class="text-gray-400 hover:text-white transition">

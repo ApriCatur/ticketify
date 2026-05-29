@@ -20,7 +20,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
-        'email',
+        'nim', // Menggantikan email agar bisa mass-assignment saat registrasi
         'phone_number',
         'password',
         'role',
@@ -33,8 +33,7 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'password' => 'hashed', // Tetap mempertahankan hashing otomatis bawaan Laravel
     ];
 
     public function events()

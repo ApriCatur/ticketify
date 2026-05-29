@@ -12,10 +12,10 @@ class AuthController extends Controller
     // 1. PROSES REGISTRASI
     public function register(Request $request)
     {
-        // Validasi input data pendaftaran
+        // Validasi input data pendaftaran (email diganti nim)
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'nim' => 'required|string|max:50|unique:users,nim',
             'phone_number' => 'required|string|max:20',
             'password' => 'required|string|min:8',
         ]);
@@ -23,7 +23,7 @@ class AuthController extends Controller
         // Simpan data ke database dengan default role 'pembeli'
         User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'nim' => $request->nim,
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->password),
             'role' => 'pembeli',
@@ -36,13 +36,13 @@ class AuthController extends Controller
     // 2. PROSES LOGIN MULTI-ROLE
     public function login(Request $request)
     {
-        // Validasi input login
+        // Validasi input login menggunakan NIM
         $credentials = $request->validate([
-            'email' => 'required|email',
+            'nim' => 'required|string',
             'password' => 'required',
         ]);
 
-        // Proses Autentikasi / Cek Akun
+        // Proses Autentikasi / Cek Akun berdasarkan NIM dan Password
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
@@ -60,10 +60,10 @@ class AuthController extends Controller
             return redirect()->route('pembeli.event');
         }
 
-        // Jika email atau password salah, kembalikan ke halaman login dengan error
+        // Jika NIM atau password salah, kembalikan ke halaman login dengan error berbasis field 'nim'
         return back()->withErrors([
-            'email' => 'Email atau password yang Anda masukkan salah.',
-        ])->onlyInput('email');
+            'nim' => 'NIM atau password yang Anda masukkan salah.',
+        ])->onlyInput('nim');
     }
 
     // 3. PROSES LOGOUT

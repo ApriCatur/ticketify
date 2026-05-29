@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('nim')->unique(); // Menggantikan email dengan NIM yang bersifat unik
             $table->string('phone_number');
             $table->string('password');
             $table->enum('role', ['pembeli', 'panitia', 'admin'])->default('pembeli');
@@ -24,7 +24,7 @@ return new class extends Migration
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary(); 
+            $table->string('nim')->primary(); // Menggantikan email sebagai primary key untuk reset password
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
