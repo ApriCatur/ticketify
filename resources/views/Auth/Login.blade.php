@@ -65,7 +65,7 @@
                         @csrf
                         <div>
                             <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Email</label>
-                            <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition @error('email') border-red-500 focus-within:border-red-500 @enderror">
+                            <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent transition @error('email') border-red-500 focus-within:border-red-500 @enderror">
                                 <i class="fa-solid fa-envelope text-blue-500 text-sm"></i>
                                 <input type="email" name="email" value="{{ old('email') }}" placeholder="AlamatEmail@gmail.com"
                                     class="bg-transparent w-full outline-none text-sm text-gray-200 placeholder:text-gray-700">

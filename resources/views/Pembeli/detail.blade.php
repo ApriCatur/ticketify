@@ -79,7 +79,9 @@
                     @endphp
 
                     @foreach($tickets as $ticket)
-                        <div class="bg-[#18181b] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
+                        <div class="bg-[#18181b] p-6 rounded-2xl border border-white/5 flex items-center justify-between hover:border-blue-500/30 transition-colors"
+                             @click="selectTicket({{ $event->id }}, '{{ $ticket['name'] }}', {{ $ticket['price'] }}, '{{ $event->name }}')"
+                             :class="selectedTicket?.name === '{{ $ticket['name'] }}' ? 'border-blue-500' : ''">
                             <div>
                                 <h3 class="font-bold"><i class="fa-solid fa-ticket text-blue-500 mr-2"></i>{{ $ticket['name'] }}</h3>
                                 <p class="text-[10px] text-gray-500 ml-6">Event Entry</p>
@@ -89,10 +91,10 @@
                                     <span class="text-[10px] text-gray-600 block">Stok: {{ $ticket['stock'] ?? '-' }}</span>
                                     <span class="font-black text-blue-400">IDR {{ number_format($ticket['price'] ?? 0, 0, ',', '.') }}</span>
                                 </div>
-                                <div class="flex items-center gap-3 bg-[#09090b] px-3 py-1 rounded-lg border border-white/10 font-bold">
-                                    <button class="text-gray-500 hover:text-white">-</button>
-                                    <span class="text-sm">0</span>
-                                    <button class="text-gray-500 hover:text-white">+</button>
+                                <div class="flex items-center gap-3 bg-[#09090b] px-3 py-2 rounded-lg border border-white/10 font-bold">
+                                    <button @click.stop="decrementQuantity()" class="text-gray-500 hover:text-white w-6 text-center">−</button>
+                                    <span class="text-sm min-w-[30px] text-center" x-text="quantity"></span>
+                                    <button @click.stop="incrementQuantity()" class="text-gray-500 hover:text-white w-6 text-center">+</button>
                                 </div>
                             </div>
                         </div>
@@ -100,9 +102,16 @@
                 </div>
 
                 <div class="mt-10 text-center">
-                    <button class="w-full md:w-auto px-16 py-4 bg-white text-black font-black rounded-full hover:bg-blue-600 hover:text-white transition-all shadow-xl">
-                        Buy Ticket Now
-                    </button>
+                    @if(Auth::check())
+                        <button @click="openPaymentModal()" :disabled="quantity === 0" class="w-full md:w-auto px-16 py-4 bg-white text-black font-black rounded-full hover:bg-blue-600 hover:text-white transition-all shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mx-auto">
+                            <i class="fa-solid fa-shopping-cart"></i>
+                            <span>Beli Tiket</span>
+                        </button>
+                    @else
+                        <a href="{{ route('login') }}" class="inline-block w-full md:w-auto px-16 py-4 bg-white text-black font-black rounded-full hover:bg-blue-600 hover:text-white transition-all shadow-xl text-center">
+                            Login untuk Membeli
+                        </a>
+                    @endif
                 </div>
             </div>
 
@@ -149,6 +158,104 @@
 
         </div>
     </div>
+
+    <script>
+        function paymentData() {
+            return {
+                tab: 'ticket',
+                showModal: false,
+                isLoading: false,
+                quantity: 0,
+                selectedTicket: null,
+                selectedEvent: null,
+                totalPrice: 0,
+
+                selectTicket(eventId, ticketName, price, eventName) {
+                    this.selectedTicket = { name: ticketName, price: price };
+                    this.selectedEvent = { id: eventId, name: eventName };
+                    this.quantity = 1;
+                    this.updateTotal();
+                },
+
+                incrementQuantity() {
+                    if (this.selectedTicket && this.quantity < 100) {
+                        this.quantity++;
+                        this.updateTotal();
+                    }
+                },
+
+                decrementQuantity() {
+                    if (this.quantity > 0) {
+                        this.quantity--;
+                        this.updateTotal();
+                    }
+                },
+
+                updateTotal() {
+                    if (this.selectedTicket) {
+                        this.totalPrice = this.selectedTicket.price * this.quantity;
+                    }
+                },
+
+                openPaymentModal() {
+                    if (this.quantity === 0 || !this.selectedTicket) {
+                        alert('Silakan pilih tiket dan jumlah');
+                        return;
+                    }
+                    this.showModal = true;
+                },
+
+                async processPayment() {
+                    this.isLoading = true;
+                    try {
+                        const response = await fetch('{{ route("payment.initiate") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                event_id: this.selectedEvent.id,
+                                ticket_type: this.selectedTicket.name,
+                                quantity: this.quantity
+                            })
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            this.showModal = false;
+                            // Open Midtrans Snap
+                            snap.pay(data.snap_token, {
+                                onSuccess: (result) => {
+                                    console.log('Payment successful:', result);
+                                    window.location.href = '{{ route("payment.finish") }}';
+                                },
+                                onPending: (result) => {
+                                    console.log('Payment pending:', result);
+                                    window.location.href = '{{ route("payment.pending") }}';
+                                },
+                                onError: (result) => {
+                                    console.log('Payment error:', result);
+                                    window.location.href = '{{ route("payment.error") }}';
+                                },
+                                onClose: () => {
+                                    console.log('Payment dialog closed');
+                                }
+                            });
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan: ' + error.message);
+                    } finally {
+                        this.isLoading = false;
+                    }
+                }
+            }
+        }
+    </script>
 
 </body>
 </html>
