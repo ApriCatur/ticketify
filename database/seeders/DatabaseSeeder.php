@@ -15,12 +15,16 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+        // Diubah menggunakan NIM agar sinkron dengan perubahan model User sebelumnya
         User::factory()->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
+            'nim' => '3312501066',
         ]);
 
-        // Seed role settings
-        $this->call(RoleSettingsSeeder::class);
+        // Panggil seeder untuk data master UKM dan pengaturan role
+        $this->call([
+            UkmSeeder::class,          // Tambahan seeder baru kita
+            RoleSettingsSeeder::class,  // Bawaan proyekmu sebelumnya
+        ]);
     }
 }

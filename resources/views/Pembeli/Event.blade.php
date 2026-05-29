@@ -26,10 +26,13 @@
 
     <div class="flex max-w-[1600px] mx-auto min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
 
+        {{-- Sidebar Kiri --}}
         @include('layouts.sidebar-pembeli')
 
+        {{-- Konten Utama Eksternal --}}
         <div class="flex-1 flex flex-col xl:flex-row min-w-0">
 
+            {{-- Sisi Kiri: Daftar Event --}}
             <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
                 <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
                     <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
@@ -44,14 +47,14 @@
                 <div class="flex-1 p-8 space-y-8">
                     @include('components.event')
                 </div>
-
-
             </div>
 
+            {{-- Sisi Kanan: Widget Sidebar (Upcoming & Promo Card) --}}
             <aside class="w-full xl:w-80 flex flex-col sticky top-0 h-auto xl:h-screen p-8 space-y-8 bg-[#121212] overflow-y-auto border-t xl:border-t-0 border-white/5">
 
-                <div>
-                    <div class="flex justify-between items-center mb-6">
+                {{-- Bagian Upcoming Events --}}
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center">
                         <h2 class="text-xl font-black italic tracking-tighter text-white">Upcoming</h2>
                         <i class="fa-solid fa-calendar-check text-blue-500"></i>
                     </div>
@@ -84,21 +87,23 @@
                                     </div>
                                 </div>
                             @endforeach
-                          @else
-                        <div class="text-center py-8 bg-[#1e1e1e] border border-dashed border-white/5 rounded-2xl">
-                            <i class="fa-solid fa-calendar-xmark text-gray-700 text-xl mb-2 block"></i>
-                            <p class="text-[11px] text-gray-500 font-medium">Belum ada event terdekat</p>
-                        </div>
-                    @endif
+                        @else
+                            <div class="text-center py-8 bg-[#1e1e1e] border border-dashed border-white/5 rounded-2xl">
+                                <i class="fa-solid fa-calendar-xmark text-gray-700 text-xl mb-2 block"></i>
+                                <p class="text-[11px] text-gray-500 font-medium">Belum ada event terdekat</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
+                {{-- Banner Card Buka Event --}}
                 <div class="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-6 shadow-xl relative overflow-hidden mt-auto">
                     <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-white/5 rounded-full blur-xl"></div>
                     <div class="relative z-10 space-y-4">
                         <h3 class="text-white font-black text-lg tracking-tight">Buka Event?</h3>
                         <p class="text-blue-100 text-xs leading-relaxed">Kelola tiket organisasimu di sini.</p>
-                        <a href="#" class="w-full bg-white text-blue-700 font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider hover:bg-gray-100 transition shadow-lg block text-center">
+
+                        <a href="{{ route('pembeli.buatevent') }}" class="w-full bg-white text-blue-700 font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider hover:bg-gray-100 transition shadow-lg block text-center active:scale-95">
                             BUAT SEKARANG
                         </a>
                     </div>
@@ -106,7 +111,8 @@
 
             </aside>
 
-        </div> </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
