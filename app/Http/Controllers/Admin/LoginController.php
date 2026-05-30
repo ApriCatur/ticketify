@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Pembeli;
+namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -8,6 +8,6 @@ class LoginController extends Controller
 {
     public function index()
     {
-        return view('Pembeli.login');
+        return view('Admin.login');
     }
 }

@@ -68,21 +68,31 @@ class ManageUserController extends Controller
     {
         $request->validate([
             'name'         => 'nullable|string|max:255',
-            'email'        => 'nullable|email|unique:users,email,' . $user->id,
+            'nim'          => 'nullable|string|max:255|unique:users,nim,' . $user->id,
             'phone_number' => 'nullable|string|max:20',
             'role'         => 'nullable|in:pembeli,panitia,admin',
             'password'     => 'nullable|string|min:8',
         ]);
 
-        if ($request->filled('name'))         $user->name         = $request->name;
-        if ($request->filled('email'))        $user->email        = $request->email;
-        if ($request->filled('phone_number')) $user->phone_number = $request->phone_number;
-        if ($request->filled('role'))         $user->role         = $request->role;
-        if ($request->filled('password'))     $user->password     = Hash::make($request->password);
+        if ($request->filled('name'))
+            $user->name = $request->name;
+
+        if ($request->filled('nim'))
+            $user->nim = $request->nim;
+
+        if ($request->filled('phone_number'))
+            $user->phone_number = $request->phone_number;
+
+        if ($request->filled('role'))
+            $user->role = $request->role;
+
+        if ($request->filled('password'))
+            $user->password = Hash::make($request->password);
 
         $user->save();
 
-        return redirect()->route('admin.users')->with('success', 'User berhasil diupdate!');
+        return redirect()->route('admin.users')
+            ->with('success', 'User berhasil diupdate!');
     }
 
     // Soft delete — data tidak hilang, hanya ditandai deleted_at
