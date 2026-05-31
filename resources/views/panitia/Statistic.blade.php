@@ -47,14 +47,11 @@
     <div class="bg-[#121212] rounded-[2rem] overflow-hidden border border-white/5 flex flex-col group hover:border-white/10 transition-all duration-300">
 
         <div class="relative aspect-video overflow-hidden">
-            @if($item->banner)
-                <img src="{{ asset('storage/' . $item->banner) }}"
-                     alt="Poster {{ $item->name }}"
-                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+           @if($item->banner)
+                <img src="{{ asset('images/events/' . $item->banner) }}"
+                alt="Poster {{ $item->name }}"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
             @else
-                <img src="{{ asset('images/kmipn.jpeg') }}"
-                     alt="Default Poster"
-                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
             @endif
             <div class="absolute inset-0 bg-gradient-to-t from-[#121212]/80 via-[#121212]/20 to-transparent"></div>
 

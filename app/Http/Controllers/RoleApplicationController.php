@@ -2,73 +2,136 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Ukm;
 use App\Models\RoleApplication;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RoleApplicationController extends Controller
 {
     /**
-     * Tampilkan daftar semua pengajuan role
+     * =========================================================
+     * PEMBELI - HALAMAN AJUKAN PANITIA
+     * =========================================================
      */
-    public function index()
-    {
-        $applications = RoleApplication::with('user')->get();
 
-        return view('Admin.ManageRoleApplications', compact('applications'));
+    // Menampilkan halaman pengajuan
+    public function create()
+    {
+        // Ambil semua data UKM
+        $ukms = Ukm::all();
+
+        // Cek apakah user sudah pernah mengajukan
+        $application = RoleApplication::where('user_id', Auth::id())
+            ->where('status', 'pending')
+            ->first();
+
+        // Tampilkan halaman Blade
+        return view('Pembeli.BuatEvent', compact('ukms', 'application'));
     }
 
-    /**
-     * User mengajukan permohonan untuk menjadi panitia
-     */
+    // Menyimpan pengajuan panitia
     public function store(Request $request)
     {
-        $userId = Auth::id();
-
-        // 1. Cek apakah user ini sudah pernah mengajukan dan statusnya masih pending
-        $existingApp = RoleApplication::where('user_id', $userId)
-                                      ->where('status', 'pending')
-                                      ->first();
-
-        if ($existingApp) {
-            return redirect()->back()->with('error', 'Kamu sudah memiliki pengajuan yang sedang diproses!');
-        }
-
-        // 2. Simpan pengajuan baru ke database
-        RoleApplication::create([
-            'user_id' => $userId,
-            'organization_name' => Auth::user()->name, // Sementara disamakan dengan nama user
-            'reason' => 'Menyetujui syarat dan ketentuan menjadi organiser.', // Sesuai centang di UI
-            'status' => 'pending'
+        // Validasi input
+        $request->validate([
+            'ukm_id' => 'required|exists:ukms,id',
+            'nomor_rekening' => 'required|string|max:50',
         ]);
 
-        // 3. Redirect balik dengan membawa session success untuk memicu alert
-        return redirect()->back()->with('success', 'Pengajuan berhasil dikirim!');
+        // Cek apakah sudah pernah mengajukan
+        $check = RoleApplication::where('user_id', Auth::id())
+            ->where('status', 'pending')
+            ->first();
+
+        if ($check) {
+            return redirect()->back()->with(
+                'error',
+                'Kamu sudah pernah mengajukan.'
+            );
+        }
+
+        // Simpan pengajuan
+        RoleApplication::create([
+            'user_id' => Auth::id(),
+            'ukm_id' => $request->ukm_id,
+            'nomor_rekening' => $request->nomor_rekening,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->back()->with(
+            'success',
+            'Pengajuan berhasil dikirim!'
+        );
     }
 
     /**
-     * Admin menyetujui pengajuan role application
+     * =========================================================
+     * ADMIN - MELIHAT PENGAJUAN
+     * =========================================================
      */
-    public function approve(RoleApplication $application)
+
+    // Menampilkan semua pengajuan pending
+    public function index()
     {
-        // Update status pengajuan menjadi 'approved'
-        $application->update(['status' => 'approved']);
+        $applications = RoleApplication::with(['user', 'ukm'])
+            ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        // Update role user menjadi 'panitia'
-        $application->user->update(['role' => 'panitia']);
-
-        return redirect()->back()->with('success', 'Pengajuan berhasil disetujui! User sekarang menjadi Panitia.');
+        return view('Admin.RoleApplication', compact('applications'));
     }
 
     /**
-     * Admin menolak pengajuan role application
+     * =========================================================
+     * ADMIN - APPROVE PENGAJUAN
+     * =========================================================
      */
-    public function reject(RoleApplication $application)
-    {
-        // Update status pengajuan menjadi 'rejected'
-        $application->update(['status' => 'rejected']);
 
-        return redirect()->back()->with('success', 'Pengajuan ditolak.');
+    public function approve($application)
+    {
+        // Cari data pengajuan
+        $roleApp = RoleApplication::findOrFail($application);
+
+        // Update status
+        $roleApp->update([
+            'status' => 'approved'
+        ]);
+
+        // Cari user
+        $user = User::findOrFail($roleApp->user_id);
+
+        // Ubah role jadi organiser
+        $user->update([
+            'role' => 'panitia'
+        ]);
+
+        return redirect()->back()->with(
+            'success',
+            'Pengajuan berhasil disetujui!'
+        );
+    }
+
+    /**
+     * =========================================================
+     * ADMIN - REJECT PENGAJUAN
+     * =========================================================
+     */
+
+    public function reject($application)
+    {
+        // Cari data pengajuan
+        $roleApp = RoleApplication::findOrFail($application);
+
+        // Update status
+        $roleApp->update([
+            'status' => 'rejected'
+        ]);
+
+        return redirect()->back()->with(
+            'error',
+            'Pengajuan panitia ditolak.'
+        );
     }
 }

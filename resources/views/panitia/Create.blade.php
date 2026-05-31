@@ -168,10 +168,6 @@
                     <textarea name="description" rows="6" class="w-full bg-[#121212] border border-white/5 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none" placeholder="Ceritakan detail acaramu..." required>{{ old('description') }}</textarea>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Link Google Maps</label>
-                    <input type="text" name="maps_link" value="{{ old('maps_link') }}" placeholder="Paste link lokasi dari Google Maps" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none">
-                </div>
-                <div class="space-y-2">
                     <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Syarat & Ketentuan</label>
                     <textarea name="terms" rows="4" class="w-full bg-[#121212] border border-white/5 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none" placeholder="1. Peserta wajib..." required>{{ old('terms') }}</textarea>
                 </div>

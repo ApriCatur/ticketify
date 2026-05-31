@@ -8,19 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Traits\HasRoleSettings;
 
-/**
- * @method mixed getPermission(string $key, mixed $default = false)
- * @method bool hasRolePermission(string $action)
- * @method \Illuminate\Support\Collection getRoleSettings()
- * @method bool hasFeature(string $feature)
- */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoleSettings, SoftDeletes;
 
     protected $fillable = [
         'name',
-        'nim', // Menggantikan email agar bisa mass-assignment saat registrasi
+        'nim',
         'phone_number',
         'password',
         'role',
@@ -33,7 +27,7 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'password' => 'hashed', // Tetap mempertahankan hashing otomatis bawaan Laravel
+        'password' => 'hashed',
     ];
 
     public function events()
@@ -44,6 +38,12 @@ class User extends Authenticatable
     public function roleApplications()
     {
         return $this->hasMany(RoleApplication::class);
+    }
+
+    // TAMBAHKAN RELASI INI UNTUK MENGAMBIL DATA PENGAJUAN TERBARU / AKTIF
+    public function latestApplication()
+    {
+        return $this->hasOne(RoleApplication::class, 'user_id', 'id')->latestOfMany();
     }
 
     public function tickets()

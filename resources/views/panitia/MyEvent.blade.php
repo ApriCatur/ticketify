@@ -49,7 +49,7 @@
 
                         <div class="md:col-span-5 flex items-center gap-5">
                             <div class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-white/10">
-                                <img src="{{ $event->banner ? asset('storage/'.$event->banner) : asset('images/kmipn.jpeg') }}" class="w-full h-full object-cover">
+                                <img src="{{ $event->banner ? asset('images/events/'.$event->banner) : asset('images/kmipn.jpeg') }}" class="w-full h-full object-cover">
                             </div>
                             <div class="min-w-0">
                                 <h3 class="text-sm font-black text-white truncate uppercase tracking-tight">{{ $event->name }}</h3>

@@ -16,10 +16,12 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         // Diubah menggunakan NIM agar sinkron dengan perubahan model User sebelumnya
-        User::factory()->create([
+      User::factory()->create([
             'name' => 'Test User',
-            'nim' => '3312501066',
-        ]);
+            'nim' => '3312501066', // Gunakan NIM contoh milikmu
+            'password' => bcrypt('password'), // atau Hash::make()
+            // HAPUS BARIS 'email' => 'test@example.com' dari sini!
+]);
 
         // Panggil seeder untuk data master UKM dan pengaturan role
         $this->call([

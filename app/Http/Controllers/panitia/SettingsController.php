@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use App\Models\User;
 
 class SettingsController extends Controller
 {
@@ -16,29 +17,33 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        // PERBAIKAN: Mengambil data user yang sedang login dan mengirimkannya ke view
-        $user = Auth::user();
+        // Mengambil data user login beserta relasi application dan ukm-nya
+        $user = User::with('latestApplication.ukm')->find(Auth::id());
         return view('panitia.settings', compact('user'));
     }
 
     /**
-     * Mengupdate detail profil (Nama, Email, No HP, Foto)
+     * Mengupdate detail profil (Nama, NIM, Asal UKM, No HP, No Rekening, Foto)
      */
     public function updateProfile(Request $request)
     {
         /** @var \App\Models\User $user */
-        $user = Auth::user();
+        $user = User::find(Auth::id());
 
         // 1. Validasi Input Data
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'nim' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($user->id)],
             'phone_number' => ['nullable', 'string', 'max:15'],
+            'nomor_rekening' => ['required', 'string', 'max:50'],
             'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ], [
             'profile_picture.max' => 'Ukuran foto profil tidak boleh lebih dari 2MB.',
             'profile_picture.image' => 'File yang diupload harus berupa gambar.',
-            'email.unique' => 'Email ini sudah digunakan oleh akun lain.',
+            'name.required' => 'Nama lengkap wajib diisi.',
+            'nim.required' => 'NIM wajib diisi.',
+            'nim.unique' => 'NIM ini sudah terdaftar pada akun lain.',
+            'nomor_rekening.required' => 'Nomor rekening wajib diisi.',
         ]);
 
         // 2. Handle Upload Foto Profil
@@ -51,11 +56,18 @@ class SettingsController extends Controller
             $user->profile_picture = $path;
         }
 
-        // 3. Simpan Perubahan Teks ke Database
+        // 3. Simpan Perubahan ke Tabel Users
         $user->name = $request->name;
-        $user->email = $request->email;
+        $user->nim = $request->nim;
         $user->phone_number = $request->phone_number;
         $user->save();
+
+        // 4. Simpan Perubahan Nomor Rekening ke Tabel Role Applications
+        if ($user->latestApplication) {
+            $user->latestApplication->update([
+                'nomor_rekening' => $request->nomor_rekening
+            ]);
+        }
 
         Auth::setUser($user);
 

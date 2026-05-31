@@ -76,11 +76,27 @@
                         </div>
 
                         <div>
-                            <label class="block text-[10px] text-gray-500 font-black uppercase tracking-widest mb-2">Email Address</label>
-                            <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                                   placeholder="Enter your email address"
+                            <label class="block text-[10px] text-gray-500 font-black uppercase tracking-widest mb-2">NIM</label>
+                            <input type="text" name="nim" value="{{ old('nim', $user->nim) }}"
+                                   placeholder="Enter your NIM"
                                    class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition duration-200">
-                            @error('email') <span class="text-xs text-red-500 mt-1 block font-medium">{{ $message }}</span> @enderror
+                            @error('nim') <span class="text-xs text-red-500 mt-1 block font-medium">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-[10px] text-gray-400 font-black uppercase tracking-widest mb-2">Asal UKM (Locked)</label>
+                            <input type="text" value="{{ $user->latestApplication->ukm->nama_ukm ?? 'Tidak Terdaftar' }}" disabled
+                                   class="w-full bg-[#1c1c1e] border border-white/5 rounded-xl px-4 py-3 text-sm text-gray-400 cursor-not-allowed opacity-60">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] text-gray-500 font-black uppercase tracking-widest mb-2">Nomor Rekening</label>
+                            <input type="text" name="nomor_rekening" value="{{ old('nomor_rekening', $user->latestApplication->nomor_rekening ?? '') }}"
+                                   placeholder="Contoh: 1234567890 (Bank Mandiri)"
+                                   class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition duration-200">
+                            @error('nomor_rekening') <span class="text-xs text-red-500 mt-1 block font-medium">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
