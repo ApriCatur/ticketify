@@ -25,7 +25,6 @@ class Event extends Model
         'price',
         'stock',
         'description',
-        'maps_link',
         'terms',
         'organiser_description',
         'organiser_photo',

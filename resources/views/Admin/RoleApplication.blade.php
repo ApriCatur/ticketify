@@ -35,7 +35,7 @@
         {{-- Search --}}
         <div class="flex items-center gap-3 bg-white/5 border border-transparent rounded-xl px-4 w-full md:w-80 focus-within:border-blue-500 transition-colors mb-6">
             <i class="fa-solid fa-magnifying-glass text-blue-500 text-sm"></i>
-            <input type="text" id="searchInput" placeholder="Search applicant..."
+            <input type="text" id="searchInput" placeholder="Search applicant by name or NIM..."
                 class="w-full py-3 bg-transparent outline-none text-sm text-white placeholder-gray-500 border-none ring-0 focus:ring-0">
         </div>
 
@@ -46,8 +46,9 @@
                     <tr class="border-b border-white/5 text-left text-gray-500 text-sm">
                         <th class="py-4 font-semibold">No</th>
                         <th class="py-4 font-semibold">Applicant Name</th>
-                        <th class="py-4 font-semibold">Email</th>
-                        <th class="py-4 font-semibold">Organization</th>
+                        <th class="py-4 font-semibold">NIM</th>
+                        <th class="py-4 font-semibold">Organization / UKM</th>
+                        <th class="py-4 font-semibold">Bank Account</th>
                         <th class="py-4 font-semibold">Status</th>
                         <th class="py-4 font-semibold text-center">Actions</th>
                     </tr>
@@ -68,8 +69,12 @@
                             <td class="py-4">
                                 <span class="font-medium text-sm text-white">{{ $app->user->name }}</span>
                             </td>
-                            <td class="py-4 text-gray-400 text-sm">{{ $app->user->email }}</td>
-                            <td class="py-4 text-gray-400 text-sm">{{ $app->organization_name }}</td>
+                            {{-- Mengganti Email Menjadi NIM --}}
+                            <td class="py-4 text-gray-400 text-sm font-mono">{{ $app->user->nim }}</td>
+                            {{-- Mengambil Data Relasi Nama UKM --}}
+                            <td class="py-4 text-gray-400 text-sm font-medium text-blue-400">{{ $app->ukm->nama_ukm ?? 'N/A' }}</td>
+                            {{-- Menampilkan Nomor Rekening --}}
+                            <td class="py-4 text-gray-400 text-sm font-mono">{{ $app->nomor_rekening }}</td>
                             <td class="py-4">
                                 <span class="px-2.5 py-1 rounded-md text-xs font-bold {{ $badgeClass[$app->status] ?? 'bg-gray-500/10 text-gray-300' }}">
                                     {{ ucfirst($app->status) }}
@@ -89,7 +94,7 @@
                                             @csrf
                                             <button type="submit"
                                                 class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors text-xs font-semibold"
-                                                onclick="return confirm('Are you sure?')">
+                                                onclick="return confirm('Apakah Anda yakin ingin menolak pengajuan ini?')">
                                                 <i class="fa-solid fa-times text-[11px]"></i> Reject
                                             </button>
                                         </form>
@@ -101,7 +106,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-8 text-center text-gray-500">
+                            <td colspan="7" class="py-8 text-center text-gray-500">
                                 <i class="fa-solid fa-inbox text-4xl mb-4 block opacity-50"></i>
                                 No role applications found
                             </td>
@@ -114,7 +119,7 @@
 </div>
 
 <script>
-    // Simple search functionality
+    // Fitur pencarian data tabel real-time berdasarkan Nama atau NIM
     document.getElementById('searchInput').addEventListener('keyup', function(e) {
         const searchTerm = e.target.value.toLowerCase();
         const rows = document.querySelectorAll('.searchable-row');

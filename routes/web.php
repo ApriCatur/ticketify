@@ -68,31 +68,41 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/settings/update-password', [PembeliSettingsController::class, 'updatePassword'])->name('pembeli.settings.update-password');
         Route::get('/about', function () { return view('Pembeli.About'); })->name('pembeli.about');
         Route::get('/ticketdigital', function () { return view('Pembeli.TicketDigital'); })->name('pembeli.ticketdigital');
-        Route::get('/buatevent', function () { return view('Pembeli.BuatEvent'); })->name('pembeli.buatevent');
+        Route::get('/buatevent', [RoleApplicationController::class, 'create'])->name('pembeli.buatevent');
         Route::post('/ajukan-panitia', [RoleApplicationController::class, 'store'])->name('role.apply');
     });
 
-    /* ================= PANITIA ================= */
-    Route::middleware([RoleMiddleware::class . ':panitia'])->prefix('panitia')->group(function () {
-        Route::get('/event', [PanitiaEventController::class, 'index'])->name('panitia.event');
-        Route::get('/create', function () { return view('Panitia.create'); })->name('panitia.create');
-        Route::get('/store', function () { return redirect()->route('panitia.create'); });
-        Route::post('/store', [PanitiaEventController::class, 'store'])->name('panitia.store');
-        Route::get('/myevent', [MyEventController::class, 'index'])->name('panitia.myevent');
-        Route::get('/my-events/{id}', [PanitiaEventController::class, 'show'])->name('panitia.events.show');
-        Route::get('/my-events/{id}/edit', [PanitiaEventController::class, 'edit'])->name('panitia.events.edit');
-        Route::put('/my-events/{id}', [PanitiaEventController::class, 'update'])->name('panitia.events.update');
-        Route::get('/attendance', [AttendanceController::class, 'index'])->name('panitia.attendance');
-        Route::post('/attendance/verify', [AttendanceController::class, 'verifyTicket'])->name('panitia.verify-ticket');
-        Route::get('/attendance/statistics', [AttendanceController::class, 'getStatistics'])->name('panitia.attendance-stats');
-        Route::get('/myevent/{id}/attendees', [PanitiaEventController::class, 'attendees'])->name('panitia.customerdata');
-        Route::get('/statistic', [StatisticController::class, 'index'])->name('panitia.statistic');
-        Route::get('/statistic/{id}', [StatisticController::class, 'show'])->name('panitia.statistic.detail');
-        Route::get('/statistic2', function () { return view('Panitia.Statistic2'); })->name('panitia.statistic2');
-        Route::get('/settings', [PanitiaSettingsController::class, 'index'])->name('panitia.settings');
-        Route::put('/settings/profile', [PanitiaSettingsController::class, 'updateProfile'])->name('profile.update');
-        Route::put('/settings/password', [PanitiaSettingsController::class, 'updatePassword'])->name('password.update');
-    });
+  /* ================= PANITIA ================= */
+Route::middleware([RoleMiddleware::class . ':panitia'])->prefix('panitia')->group(function () {
+    Route::get('/event', [PanitiaEventController::class, 'index'])->name('panitia.event');
+    // FORM CREATE EVENT
+    Route::get('/create', function () {
+        return view('panitia.create');
+    })->name('panitia.create');
+    // SIMPAN EVENT
+    Route::post('/store', [PanitiaEventController::class, 'store'])->name('panitia.store');
+    // MY EVENT
+    Route::get('/myevent', [MyEventController::class, 'index'])->name('panitia.myevent');
+    Route::get('/my-events/{id}', [PanitiaEventController::class, 'show'])->name('panitia.events.show');
+    Route::get('/my-events/{id}/edit', [PanitiaEventController::class, 'edit'])->name('panitia.events.edit');
+    Route::put('/my-events/{id}', [PanitiaEventController::class, 'update'])->name('panitia.events.update');
+    Route::delete('/my-events/{id}', [PanitiaEventController::class, 'destroy'])->name('panitia.events.destroy');
+    // ATTENDANCE
+    Route::get('/attendance', [AttendanceController::class, 'index'])->name('panitia.attendance');
+    Route::post('/attendance/verify', [AttendanceController::class, 'verifyTicket'])->name('panitia.verify-ticket');
+    Route::get('/attendance/statistics', [AttendanceController::class, 'getStatistics'])->name('panitia.attendance-stats');
+    Route::get('/myevent/{id}/attendees', [PanitiaEventController::class, 'attendees'])->name('panitia.customerdata');
+    // STATISTIC
+    Route::get('/statistic', [StatisticController::class, 'index'])->name('panitia.statistic');
+    Route::get('/statistic/{id}', [StatisticController::class, 'show'])->name('panitia.statistic.detail');
+    Route::get('/statistic2', function () {
+        return view('Panitia.Statistic2');
+    })->name('panitia.statistic2');
+    // SETTINGS
+    Route::get('/settings', [PanitiaSettingsController::class, 'index'])->name('panitia.settings');
+    Route::put('/settings/profile', [PanitiaSettingsController::class, 'updateProfile'])->name('profile.update');
+    Route::put('/settings/password', [PanitiaSettingsController::class, 'updatePassword'])->name('password.update');
+});
 
     /* ================= ADMIN ================= */
     Route::middleware([RoleMiddleware::class . ':admin'])->prefix('admin')->group(function () {

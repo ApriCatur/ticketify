@@ -39,6 +39,12 @@ class User extends Authenticatable
         return $this->hasMany(RoleApplication::class);
     }
 
+    // TAMBAHKAN RELASI INI UNTUK MENGAMBIL DATA PENGAJUAN TERBARU / AKTIF
+    public function latestApplication()
+    {
+        return $this->hasOne(RoleApplication::class, 'user_id', 'id')->latestOfMany();
+    }
+
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
