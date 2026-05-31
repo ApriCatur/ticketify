@@ -98,7 +98,6 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware([RoleMiddleware::class . ':admin'])->prefix('admin')->group(function () {
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-        Route::get('/categories', [EventCategoriesController::class, 'index'])->name('admin.categories');
         Route::get('/Settings', function () { return view('Admin.Settings'); })->name('admin.Settings');
 
         // Approval Event
@@ -120,6 +119,14 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/users/{user}',            [ManageUserController::class, 'destroy'])->name('admin.users.destroy');
         Route::post('/users/{id}/restore',        [ManageUserController::class, 'restore'])->name('admin.users.restore');
         Route::delete('/users/{id}/force-delete', [ManageUserController::class, 'forceDelete'])->name('admin.users.force-delete');
+
+        // ── Event Categories CRUD & Soft Delete ──────────────────────
+        Route::get('/categories',                      [EventCategoriesController::class, 'index'])->name('admin.categories');
+        Route::post('/categories',                     [EventCategoriesController::class, 'store'])->name('admin.categories.store');
+        Route::put('/categories/{category}',           [EventCategoriesController::class, 'update'])->name('admin.categories.update');
+        Route::delete('/categories/{category}',        [EventCategoriesController::class, 'destroy'])->name('admin.categories.destroy');
+        Route::patch('/categories/{id}/restore',       [EventCategoriesController::class, 'restore'])->name('admin.categories.restore');
+        Route::delete('/categories/{id}/force-delete', [EventCategoriesController::class, 'forceDelete'])->name('admin.categories.forceDelete');
     });
 
 });

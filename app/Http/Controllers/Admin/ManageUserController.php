@@ -25,9 +25,9 @@ class ManageUserController extends Controller
             ->latest()->get();
 
         $panitia = User::where('role', 'panitia')
-            ->with('panitiaProfile')
             ->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
-            ->latest()->get();
+            ->latest()
+            ->get();
 
         $totalUsers      = User::count();
         $totalAdmins     = User::where('role', 'admin')->count();
@@ -39,28 +39,6 @@ class ManageUserController extends Controller
             'admins', 'pembeli', 'panitia',
             'totalUsers', 'totalAdmins', 'totalOrganizers', 'totalCustomers', 'deletedUsers'
         ));
-    }
-
-    // Tambah user baru
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name'         => 'required|string|max:255',
-            'email'        => 'required|email|unique:users,email',
-            'phone_number' => 'required|string|max:20',
-            'password'     => 'required|string|min:8',
-            'role'         => 'required|in:pembeli,panitia,admin',
-        ]);
-
-        User::create([
-            'name'         => $request->name,
-            'email'        => $request->email,
-            'phone_number' => $request->phone_number,
-            'password'     => Hash::make($request->password),
-            'role'         => $request->role,
-        ]);
-
-        return redirect()->route('admin.users')->with('success', 'User berhasil ditambahkan!');
     }
 
     // Update — hanya field yang diisi saja yang diupdate

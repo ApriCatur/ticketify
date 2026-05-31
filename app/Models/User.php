@@ -18,7 +18,6 @@ class User extends Authenticatable
         'phone_number',
         'password',
         'role',
-        'profile_picture',
     ];
 
     protected $hidden = [
@@ -45,8 +44,8 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class);
     }
 
-    public function panitiaProfile()
-    {
-        return $this->hasOne(PanitiaProfile::class);
-    }
+    // public function panitiaProfile()
+    // {
+    //     return $this->hasOne(PanitiaProfile::class);
+    // }
 }
