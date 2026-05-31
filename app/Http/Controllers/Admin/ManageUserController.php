@@ -14,17 +14,21 @@ class ManageUserController extends Controller
     // Tampilkan semua user aktif + user yang dihapus (soft deleted)
     public function index(Request $request)
     {
-        $query = User::query();
+        $search = $request->search;
 
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('email', 'like', '%' . $search . '%');
-            });
-        }
+        $admins = User::where('role', 'admin')
+            ->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
+            ->latest()->get();
 
-        $users           = $query->select('id', 'name', 'email', 'phone_number', 'role')->latest()->get();
+        $pembeli = User::where('role', 'pembeli')
+            ->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
+            ->latest()->get();
+
+        $panitia = User::where('role', 'panitia')
+            ->with('panitiaProfile')
+            ->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
+            ->latest()->get();
+
         $totalUsers      = User::count();
         $totalAdmins     = User::where('role', 'admin')->count();
         $totalOrganizers = User::where('role', 'panitia')->count();
@@ -32,7 +36,8 @@ class ManageUserController extends Controller
         $deletedUsers    = User::onlyTrashed()->get();
 
         return view('Admin.ManageUser', compact(
-            'users', 'totalUsers', 'totalAdmins', 'totalOrganizers', 'totalCustomers', 'deletedUsers'
+            'admins', 'pembeli', 'panitia',
+            'totalUsers', 'totalAdmins', 'totalOrganizers', 'totalCustomers', 'deletedUsers'
         ));
     }
 
@@ -63,21 +68,31 @@ class ManageUserController extends Controller
     {
         $request->validate([
             'name'         => 'nullable|string|max:255',
-            'email'        => 'nullable|email|unique:users,email,' . $user->id,
+            'nim'          => 'nullable|string|max:255|unique:users,nim,' . $user->id,
             'phone_number' => 'nullable|string|max:20',
             'role'         => 'nullable|in:pembeli,panitia,admin',
             'password'     => 'nullable|string|min:8',
         ]);
 
-        if ($request->filled('name'))         $user->name         = $request->name;
-        if ($request->filled('email'))        $user->email        = $request->email;
-        if ($request->filled('phone_number')) $user->phone_number = $request->phone_number;
-        if ($request->filled('role'))         $user->role         = $request->role;
-        if ($request->filled('password'))     $user->password     = Hash::make($request->password);
+        if ($request->filled('name'))
+            $user->name = $request->name;
+
+        if ($request->filled('nim'))
+            $user->nim = $request->nim;
+
+        if ($request->filled('phone_number'))
+            $user->phone_number = $request->phone_number;
+
+        if ($request->filled('role'))
+            $user->role = $request->role;
+
+        if ($request->filled('password'))
+            $user->password = Hash::make($request->password);
 
         $user->save();
 
-        return redirect()->route('admin.users')->with('success', 'User berhasil diupdate!');
+        return redirect()->route('admin.users')
+            ->with('success', 'User berhasil diupdate!');
     }
 
     // Soft delete — data tidak hilang, hanya ditandai deleted_at

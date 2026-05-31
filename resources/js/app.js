@@ -11,6 +11,8 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 
+import './pages/AdminManageUser';
+
 
 // ================= MODAL =================
 window.openDetail = function (title, location, date, time, desc) {

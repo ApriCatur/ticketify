@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Ticket::class);
     }
+
+    public function panitiaProfile()
+    {
+        return $this->hasOne(PanitiaProfile::class);
+    }
 }

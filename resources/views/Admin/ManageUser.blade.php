@@ -47,10 +47,18 @@
     </div>
 
     {{-- TABS --}}
-    <div class="flex gap-2 mb-6">
-        <button onclick="switchTab('active')" id="tab-active"
+    <div class="flex gap-2 mb-6 flex-wrap">
+        <button onclick="switchTab('admin')" id="tab-admin"
             class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-white text-black">
-            <i class="fa-solid fa-users mr-1.5"></i> Active Users
+            <i class="fa-solid fa-shield-halved mr-1.5"></i> Admin
+        </button>
+        <button onclick="switchTab('pembeli')" id="tab-pembeli"
+            class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-white/5 text-gray-400 hover:bg-white/10">
+            <i class="fa-solid fa-users mr-1.5"></i> Pembeli
+        </button>
+        <button onclick="switchTab('panitia')" id="tab-panitia"
+            class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-white/5 text-gray-400 hover:bg-white/10">
+            <i class="fa-solid fa-people-group mr-1.5"></i> Panitia
         </button>
         <button onclick="switchTab('deleted')" id="tab-deleted"
             class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-white/5 text-gray-400 hover:bg-white/10">
@@ -61,85 +69,60 @@
         </button>
     </div>
 
-    {{-- ═══════════════════════════════════════ --}}
-    {{-- TAB: ACTIVE USERS                       --}}
-    {{-- ═══════════════════════════════════════ --}}
-    <div id="panel-active">
-        <div class="bg-[#1e1e1e] rounded-2xl border border-white/5 p-6">
-
-            {{-- Search + Add --}}
-            <div class="flex flex-col md:flex-row justify-between gap-4 mb-6">
-                <form method="GET" action="{{ route('admin.users') }}" class="w-full md:w-80">
-                    <div class="flex items-center gap-3 bg-white/5 border border-transparent rounded-xl px-4 focus-within:border-blue-500 transition-colors">
-                        <i class="fa-solid fa-magnifying-glass text-blue-500 text-sm"></i>
-                        <input type="text" name="search" value="{{ request('search') }}"
-                            placeholder="Search user..."
-                            class="w-full py-3 bg-transparent outline-none text-sm text-white placeholder-gray-500 border-none ring-0 focus:ring-0">
-                    </div>
-                </form>
-                <button onclick="openModal('addModal')"
-                    class="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-xl font-bold hover:bg-blue-500 hover:text-white transition-all active:scale-95">
-                    <i class="fa-solid fa-plus text-sm"></i> Add User
-                </button>
+    {{-- Search + Add (shared) --}}
+    <div class="flex flex-col md:flex-row justify-between gap-4 mb-6" id="toolbar-search">
+        <form method="GET" action="{{ route('admin.users') }}" class="w-full md:w-80">
+            <div class="flex items-center gap-3 bg-white/5 border border-transparent rounded-xl px-4 focus-within:border-blue-500 transition-colors">
+                <i class="fa-solid fa-magnifying-glass text-blue-500 text-sm"></i>
+                <input type="text" name="search" value="{{ request('search') }}"
+                    placeholder="Search user..."
+                    class="w-full py-3 bg-transparent outline-none text-sm text-white placeholder-gray-500 border-none ring-0 focus:ring-0">
             </div>
+        </form>
+    </div>
 
-            {{-- Validasi Error --}}
-            @if($errors->any())
-                <div class="bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl px-5 py-4 mb-5 text-sm">
-                    <ul class="list-disc list-inside space-y-1">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+    {{-- Validasi Error --}}
+    @if($errors->any())
+        <div class="bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl px-5 py-4 mb-5 text-sm">
+            <ul class="list-disc list-inside space-y-1">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-            {{-- Tabel --}}
+    {{-- ═══════════════════════════════════════ --}}
+    {{-- TAB: ADMIN                              --}}
+    {{-- ═══════════════════════════════════════ --}}
+    <div id="panel-admin">
+        <div class="bg-[#1e1e1e] rounded-2xl border border-white/5 p-6">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
                         <tr class="border-b border-white/5 text-left text-gray-500 text-sm">
                             <th class="py-4 font-semibold">No</th>
                             <th class="py-4 font-semibold">Name</th>
-                            <th class="py-4 font-semibold">Email</th>
-                            <th class="py-4 font-semibold">Role</th>
+                            <th class="py-4 font-semibold">NIM</th>
+                            <th class="py-4 font-semibold">Phone Number</th>
                             <th class="py-4 font-semibold text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-white/5">
-                        @php
-                            $badgeClass = [
-                                'admin'   => 'bg-blue-500/10 text-blue-400',
-                                'panitia' => 'bg-indigo-500/10 text-indigo-400',
-                                'pembeli' => 'bg-gray-500/10 text-gray-300',
-                            ];
-                        @endphp
-
-                        @forelse ($users as $i => $user)
+                        @forelse ($admins as $i => $user)
                             <tr class="hover:bg-white/5 transition-colors">
                                 <td class="py-4 text-gray-500 text-sm">{{ $i + 1 }}</td>
                                 <td class="py-4 font-medium text-sm text-white">{{ $user->name }}</td>
-                                <td class="py-4 text-gray-400 text-sm">{{ $user->email }}</td>
-                                <td class="py-4">
-                                    <span class="px-2.5 py-1 rounded-md text-xs font-bold {{ $badgeClass[$user->role] ?? 'bg-gray-500/10 text-gray-300' }}">
-                                        {{ $user->role }}
-                                    </span>
-                                </td>
+                                <td class="py-4 text-gray-400 text-sm">{{ $user->nim }}</td>
+                                <td class="py-4 text-gray-400 text-sm">{{ $user->phone_number ?? '-' }}</td>
                                 <td class="py-4">
                                     <div class="flex justify-center gap-2">
-                                        <button onclick="openEditUser(
-                                            {{ $user->id }},
-                                            '{{ addslashes($user->name) }}',
-                                            '{{ $user->email }}',
-                                            '{{ $user->phone_number }}',
-                                            '{{ $user->role }}'
-                                        )" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors text-xs font-semibold">
+                                        <button onclick="openEditUser({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->nim }}', '{{ $user->phone_number }}', '{{ $user->role }}')"
+                                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors text-xs font-semibold">
                                             <i class="fa-solid fa-pen-to-square text-[11px]"></i> Edit
                                         </button>
-                                        <button onclick="openDeleteUser(
-                                            {{ $user->id }},
-                                            '{{ addslashes($user->name) }}'
-                                        )" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors text-xs font-semibold">
+                                        <button onclick="openDeleteUser({{ $user->id }}, '{{ addslashes($user->name) }}')"
+                                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors text-xs font-semibold">
                                             <i class="fa-solid fa-trash text-[11px]"></i> Delete
                                         </button>
                                     </div>
@@ -149,7 +132,111 @@
                             <tr>
                                 <td colspan="5" class="py-12 text-center text-gray-500 text-sm">
                                     <i class="fa-solid fa-users-slash text-2xl mb-3 block"></i>
-                                    Tidak ada user ditemukan.
+                                    Tidak ada admin ditemukan.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {{-- ═══════════════════════════════════════ --}}
+    {{-- TAB: PEMBELI                            --}}
+    {{-- ═══════════════════════════════════════ --}}
+    <div id="panel-pembeli" class="hidden">
+        <div class="bg-[#1e1e1e] rounded-2xl border border-white/5 p-6">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-white/5 text-left text-gray-500 text-sm">
+                            <th class="py-4 font-semibold">No</th>
+                            <th class="py-4 font-semibold">NIM</th>
+                            <th class="py-4 font-semibold">Nama</th>
+                            <th class="py-4 font-semibold">No Telepon</th>
+                            <th class="py-4 font-semibold text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        @forelse ($pembeli as $i => $user)
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="py-4 text-gray-500 text-sm">{{ $i + 1 }}</td>
+                                <td class="py-4 text-gray-400 text-sm">{{ $user->nim ?? '-' }}</td>
+                                <td class="py-4 font-medium text-sm text-white">{{ $user->name }}</td>
+                                <td class="py-4 text-gray-400 text-sm">{{ $user->phone_number ?? '-' }}</td>
+                                <td class="py-4">
+                                    <div class="flex justify-center gap-2">
+                                        <button onclick="openEditUser({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->nim }}', '{{ $user->phone_number }}', '{{ $user->role }}')"
+                                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors text-xs font-semibold">
+                                            <i class="fa-solid fa-pen-to-square text-[11px]"></i> Edit
+                                        </button>
+                                        <button onclick="openDeleteUser({{ $user->id }}, '{{ addslashes($user->name) }}')"
+                                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors text-xs font-semibold">
+                                            <i class="fa-solid fa-trash text-[11px]"></i> Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="py-12 text-center text-gray-500 text-sm">
+                                    <i class="fa-solid fa-users-slash text-2xl mb-3 block"></i>
+                                    Tidak ada pembeli ditemukan.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {{-- ═══════════════════════════════════════ --}}
+    {{-- TAB: PANITIA                            --}}
+    {{-- ═══════════════════════════════════════ --}}
+    <div id="panel-panitia" class="hidden">
+        <div class="bg-[#1e1e1e] rounded-2xl border border-white/5 p-6">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-white/5 text-left text-gray-500 text-sm">
+                            <th class="py-4 font-semibold">No</th>
+                            <th class="py-4 font-semibold">NIM</th>
+                            <th class="py-4 font-semibold">Nama</th>
+                            <th class="py-4 font-semibold">Asal UKM</th>
+                            <th class="py-4 font-semibold">No Telepon</th>
+                            <th class="py-4 font-semibold">No Rekening</th>
+                            <th class="py-4 font-semibold text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        @forelse ($panitia as $i => $user)
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="py-4 text-gray-500 text-sm">{{ $i + 1 }}</td>
+                                <td class="py-4 text-gray-400 text-sm">{{ $user->nim ?? '-' }}</td>
+                                <td class="py-4 font-medium text-sm text-white">{{ $user->name }}</td>
+                                <td class="py-4 text-gray-400 text-sm">{{ $user->panitiaProfile->asal_ukm ?? '-' }}</td>
+                                <td class="py-4 text-gray-400 text-sm">{{ $user->phone_number ?? '-' }}</td>
+                                <td class="py-4 text-gray-400 text-sm">{{ $user->panitiaProfile->no_rekening ?? '-' }}</td>
+                                <td class="py-4">
+                                    <div class="flex justify-center gap-2">
+                                        <button onclick="openEditUser({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->nim }}', '{{ $user->phone_number }}', '{{ $user->role }}')"
+                                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors text-xs font-semibold">
+                                            <i class="fa-solid fa-pen-to-square text-[11px]"></i> Edit
+                                        </button>
+                                        <button onclick="openDeleteUser({{ $user->id }}, '{{ addslashes($user->name) }}')"
+                                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors text-xs font-semibold">
+                                            <i class="fa-solid fa-trash text-[11px]"></i> Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="py-12 text-center text-gray-500 text-sm">
+                                    <i class="fa-solid fa-users-slash text-2xl mb-3 block"></i>
+                                    Tidak ada panitia ditemukan.
                                 </td>
                             </tr>
                         @endforelse
@@ -174,7 +261,7 @@
                         <tr class="border-b border-white/5 text-left text-gray-500 text-sm">
                             <th class="py-4 font-semibold">No</th>
                             <th class="py-4 font-semibold">Name</th>
-                            <th class="py-4 font-semibold">Email</th>
+                            <th class="py-4 font-semibold">NIM</th>
                             <th class="py-4 font-semibold">Role</th>
                             <th class="py-4 font-semibold">Dihapus Pada</th>
                             <th class="py-4 font-semibold text-center">Actions</th>
@@ -185,7 +272,7 @@
                             <tr class="hover:bg-white/5 transition-colors opacity-70">
                                 <td class="py-4 text-gray-500 text-sm">{{ $i + 1 }}</td>
                                 <td class="py-4 font-medium text-sm text-white line-through decoration-red-400">{{ $user->name }}</td>
-                                <td class="py-4 text-gray-400 text-sm">{{ $user->email }}</td>
+                                <td class="py-4 text-gray-400 text-sm">{{ $user->nim }}</td>
                                 <td class="py-4">
                                     <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-gray-500/10 text-gray-500">
                                         {{ $user->role }}
@@ -228,63 +315,6 @@
             </div>
         </div>
     </div>
-
-</div>
-
-{{-- ═══════════════════════════════════════════ --}}
-{{-- MODAL ADD USER                              --}}
-{{-- ═══════════════════════════════════════════ --}}
-<div id="addModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-    <div class="bg-[#1e1e1e] border border-white/10 rounded-2xl p-8 w-full max-w-md mx-4">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="text-xl font-black">Add New User</h3>
-            <button onclick="closeModal('addModal')" class="text-gray-500 hover:text-white transition-colors">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-        </div>
-        <form action="{{ route('admin.users.store') }}" method="POST" class="space-y-4">
-            @csrf
-            <div>
-                <label class="text-sm text-gray-400 mb-1 block">Name <span class="text-red-400">*</span></label>
-                <input type="text" name="name" required placeholder="Nama lengkap"
-                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors placeholder-gray-600">
-            </div>
-            <div>
-                <label class="text-sm text-gray-400 mb-1 block">Email <span class="text-red-400">*</span></label>
-                <input type="email" name="email" required placeholder="contoh@email.com"
-                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors placeholder-gray-600">
-            </div>
-            <div>
-                <label class="text-sm text-gray-400 mb-1 block">Phone Number <span class="text-red-400">*</span></label>
-                <input type="text" name="phone_number" required placeholder="08xxxxxxxxxx"
-                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors placeholder-gray-600">
-            </div>
-            <div>
-                <label class="text-sm text-gray-400 mb-1 block">Password <span class="text-red-400">*</span></label>
-                <input type="password" name="password" required placeholder="Minimal 8 karakter"
-                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors placeholder-gray-600">
-            </div>
-            <div>
-                <label class="text-sm text-gray-400 mb-1 block">Role <span class="text-red-400">*</span></label>
-                <select name="role" required
-                    class="w-full bg-[#2a2a2a] border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors">
-                    <option value="pembeli">Pembeli</option>
-                    <option value="panitia">Panitia</option>
-                    <option value="admin">Admin</option>
-                </select>
-            </div>
-            <div class="flex gap-3 pt-2">
-                <button type="button" onclick="closeModal('addModal')"
-                    class="flex-1 py-3 rounded-xl border border-white/10 text-sm font-semibold hover:bg-white/5 transition-colors">
-                    Cancel
-                </button>
-                <button type="submit"
-                    class="flex-1 py-3 rounded-xl bg-white text-black text-sm font-bold hover:bg-blue-500 hover:text-white transition-all active:scale-95">
-                    Add User
-                </button>
-            </div>
-        </form>
-    </div>
 </div>
 
 {{-- ═══════════════════════════════════════════ --}}
@@ -308,8 +338,8 @@
                     class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors placeholder-gray-600">
             </div>
             <div>
-                <label class="text-sm text-gray-400 mb-1 block">Email <span class="text-gray-600 font-normal">(opsional)</span></label>
-                <input type="email" name="email" id="editEmail" placeholder="Kosongkan jika tidak ingin mengubah"
+                <label class="text-sm text-gray-400 mb-1 block">NIM <span class="text-gray-600 font-normal">(opsional)</span></label>
+                <input type="text" name="nim" id="editNim" placeholder="Kosongkan jika tidak ingin mengubah"
                     class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm outline-none focus:border-blue-500 transition-colors placeholder-gray-600">
             </div>
             <div>
@@ -375,73 +405,5 @@
         </form>
     </div>
 </div>
-
-{{-- ═══════════════════════════════════════════ --}}
-{{-- JAVASCRIPT                                  --}}
-{{-- ═══════════════════════════════════════════ --}}
-<script>
-    function openModal(id) {
-        document.getElementById(id).classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    }
-    function closeModal(id) {
-        document.getElementById(id).classList.add('hidden');
-        document.body.style.overflow = '';
-    }
-
-    // Klik luar modal = tutup
-    ['addModal', 'editModal', 'deleteModal'].forEach(function(id) {
-        document.getElementById(id).addEventListener('click', function(e) {
-            if (e.target === this) closeModal(id);
-        });
-    });
-
-    // Tekan Escape = tutup semua modal
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') ['addModal', 'editModal', 'deleteModal'].forEach(closeModal);
-    });
-
-    // Buka modal Edit — field kosong, user isi yang mau diubah saja
-    function openEditUser(id, name, email, phone, role) {
-        document.getElementById('editName').value  = '';
-        document.getElementById('editEmail').value = '';
-        document.getElementById('editPhone').value = '';
-        document.getElementById('editRole').value  = '';
-        document.getElementById('editForm').action =
-            '{{ route("admin.users.update", ":id") }}'.replace(':id', id);
-        openModal('editModal');
-    }
-
-    // Buka modal Delete
-    function openDeleteUser(id, name) {
-        document.getElementById('deleteUserName').textContent = name;
-        document.getElementById('deleteForm').action =
-            '{{ route("admin.users.destroy", ":id") }}'.replace(':id', id);
-        openModal('deleteModal');
-    }
-
-    // Switch tab Active / Deleted
-    function switchTab(tab) {
-        const isActive = tab === 'active';
-        document.getElementById('panel-active').classList.toggle('hidden', !isActive);
-        document.getElementById('panel-deleted').classList.toggle('hidden', isActive);
-        document.getElementById('tab-active').className = isActive
-            ? 'px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-white text-black'
-            : 'px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-white/5 text-gray-400 hover:bg-white/10';
-        document.getElementById('tab-deleted').className = !isActive
-            ? 'px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-white text-black'
-            : 'px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-white/5 text-gray-400 hover:bg-white/10';
-    }
-
-    // Auto-hide toast setelah 3 detik
-    const toast = document.getElementById('toast');
-    if (toast) {
-        setTimeout(function() {
-            toast.style.opacity = '0';
-            toast.style.transition = 'opacity 0.5s ease';
-            setTimeout(function() { toast.remove(); }, 500);
-        }, 3000);
-    }
-</script>
 
 @endsection

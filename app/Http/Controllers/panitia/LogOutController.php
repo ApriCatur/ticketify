@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\panitia;
+namespace App\Http\Controllers\Panitia;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class LogOut extends Controller
+class LogoutController extends Controller
 {
     //
 }
