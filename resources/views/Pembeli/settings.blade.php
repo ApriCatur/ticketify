@@ -51,38 +51,32 @@
                     <button onclick="switchTab('security')" id="tab-security" class="pb-4 text-sm font-bold text-gray-500 hover:text-white transition">Security</button>
                 </div>
 
-        @if(session('success'))
-            <div class="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl text-sm flex items-center gap-3 max-w-4xl">
-                <i class="fa-solid fa-circle-check text-base"></i>
-                <span>{{ session('success') }}</span>
-            </div>
-        @endif
-
-        <div class="bg-[#121212] p-8 rounded-[2.5rem] border border-white/5 max-w-4xl shadow-2xl">
-
-            <div x-show="activeTab === 'profile'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95">
-                <form action="{{ route('pembeli.settings.update-profile') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="flex items-center gap-6 mb-8">
-                        <div class="relative w-24 h-24 group">
-                            <img id="avatar-preview"
-                                 src="{{ auth()->user()->profile_picture ? \Illuminate\Support\Facades\Storage::url(auth()->user()->profile_picture) : 'https://cdn-icons-png.flaticon.com/512/149/149071.png' }}"
-                                 class="w-full h-full object-cover rounded-full border-2 border-white/10 group-hover:border-blue-500/50 transition-all duration-300"
-                                 alt="Profile Picture">
-
-                            <label for="pic-upload" class="absolute bottom-0 right-0 bg-blue-500 hover:bg-blue-600 p-2 rounded-full text-white text-xs cursor-pointer shadow-lg shadow-blue-500/20 transition-all duration-200">
-                                <i class="fa-solid fa-pen"></i>
-                            </label>
-                            <input type="file" id="pic-upload" name="profile_picture" class="hidden" accept="image/*" onchange="previewImage(event)">
+                <div id="content-profile" class="animate-in fade-in duration-500">
+                    <form action="#" method="POST" enctype="multipart/form-data" class="space-y-8">
+                        @csrf
+                        <div class="flex items-center gap-6 p-6 bg-white/5 rounded-2xl border border-white/5">
+                            <div class="w-20 h-20 rounded-full bg-gray-800 flex items-center justify-center border-2 border-blue-500 overflow-hidden">
+                                <img id="preview" src="https://ui-avatars.com/api/?name=Maverick+Ari&background=3b82f6&color=fff" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-black uppercase tracking-widest text-blue-400 mb-2">Change Avatar</label>
+                                <input type="file" name="photo" class="text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:bg-white file:text-black hover:file:bg-blue-500 hover:file:text-white cursor-pointer">
+                            </div>
                         </div>
-                        <div>
-                            <h4 class="text-sm font-bold text-gray-200">Profile Picture</h4>
-                            <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG. Max 2MB.</p>
-                            @error('profile_picture')
-                                <span class="text-xs text-red-500 mt-1 block font-medium">{{ $message }}</span>
-                            @enderror
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="md:col-span-2">
+                                <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Full Name</label>
+                                <input type="text" name="name" value="Maverick Ari" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Email Address</label>
+                                <input type="email" name="email" value="maverick@student.polibatam.ac.id" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Phone Number</label>
+                                <input type="tel" name="phone" value="08123456789" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition">
+                            </div>
                         </div>
                         <button type="submit" class="px-8 py-3 bg-blue-500 text-white rounded-xl font-black uppercase text-xs tracking-widest hover:scale-105 transition-all shadow-lg shadow-blue-500/20">Save Profile</button>
                     </form>
