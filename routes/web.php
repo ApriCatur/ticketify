@@ -26,6 +26,9 @@ use App\Http\Controllers\Admin\EventCategoriesController;
 use App\Http\Controllers\Admin\PendingEventController;
 use App\Http\Controllers\Admin\PublishedEventController;
 
+// Guest Controllers
+use App\Http\Controllers\Guest\EventController as GuestEventController;
+
 // Middleware
 use App\Http\Middleware\RoleMiddleware;
 
@@ -43,7 +46,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Preview Frontend Saja (Sebelum Login)
 Route::prefix('guest')->group(function () {
-    Route::get('/event', function () { return view('Guest.Event'); })->name('guest.event');
+    Route::get('/event', [GuestEventController::class, 'index'])->name('guest.event');
+    Route::get('/event/{id}', [GuestEventController::class, 'show'])->name('guest.event.detail');
     Route::get('/myticket', function () { return view('Guest.MyTicket'); })->name('guest.myticket');
     Route::get('/about', function () { return view('Guest.About'); })->name('guest.about');
     Route::get('/settings', function () { return view('Guest.Settings'); })->name('guest.settings');

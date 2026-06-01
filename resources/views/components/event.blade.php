@@ -2,7 +2,13 @@
     <div class="swiper myHeroSwiper rounded-3xl overflow-hidden shadow-2xl">
         <div class="swiper-wrapper">
             @forelse($events->take(5) as $carouselEvent)
-                <div class="swiper-slide relative h-[350px] group cursor-pointer" onclick="window.location='{{ route('pembeli.detail', $carouselEvent) }}'">
+                @php
+                    // Determine the correct route based on user authentication
+                    $detailRoute = auth()->check() && auth()->user()->hasRole('pembeli')
+                        ? route('pembeli.detail', $carouselEvent)
+                        : route('guest.event.detail', $carouselEvent->id);
+                @endphp
+                <div class="swiper-slide relative h-[350px] group cursor-pointer" onclick="window.location='{{ $detailRoute }}'">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10"></div>
 
                     <img src="{{ $carouselEvent->banner ? asset('images/events/' . $carouselEvent->banner) : asset('images/kmipn.jpeg') }}"
@@ -117,7 +123,12 @@
                     endTime="{{ isset($event->time_end) ? \Illuminate\Support\Carbon::parse($event->time_end)->format('H:i') : \Illuminate\Support\Carbon::parse($event->time_start)->addHour()->format('H:i') }}"
                     price="IDR {{ number_format($event->price, 0, ',', '.') }}"
                 >
-                    <a href="{{ route('pembeli.detail', $event) }}"
+                    @php
+                        $viewRoute = auth()->check() && auth()->user()->hasRole('pembeli')
+                            ? route('pembeli.detail', $event)
+                            : route('guest.event.detail', $event->id);
+                    @endphp
+                    <a href="{{ $viewRoute }}"
                        class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-white/5 transition">
                         View
                     </a>
