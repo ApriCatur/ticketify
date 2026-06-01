@@ -91,7 +91,7 @@ Route::middleware([RoleMiddleware::class . ':panitia'])->prefix('panitia')->grou
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('panitia.attendance');
     Route::post('/attendance/verify', [AttendanceController::class, 'verifyTicket'])->name('panitia.verify-ticket');
     Route::get('/attendance/statistics', [AttendanceController::class, 'getStatistics'])->name('panitia.attendance-stats');
-    Route::get('/myevent/{id}/attendees', [PanitiaEventController::class, 'attendees'])->name('panitia.customerdata');
+    Route::get('/myevent/{id}/attendees', [AttendanceController::class, 'showAttendees'])->name('panitia.customerdata');
     // STATISTIC
     Route::get('/statistic', [StatisticController::class, 'index'])->name('panitia.statistic');
     Route::get('/statistic/{id}', [StatisticController::class, 'show'])->name('panitia.statistic.detail');

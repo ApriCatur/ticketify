@@ -133,16 +133,7 @@
                     </p>
                 </div>
 
-                <div class="bg-[#18181b] p-8 rounded-3xl border border-white/5 mb-8">
-                    <h3 class="text-center font-bold text-blue-500 mb-6"><i class="fa-solid fa-location-dot text-red-500 mr-2"></i>Location</h3>
-                    @if($event->maps_link)
-                    <div class="h-64 bg-[#09090b] rounded-2xl border border-white/10 mb-4 overflow-hidden">
-                        <iframe src="{{ $event->maps_link }}" class="w-full h-full border-0" allowfullscreen="" loading="lazy"></iframe>
-                    </div>
-                    @endif
-                    <div class="text-center">
-                        <p class="font-bold text-sm">{{ $event->location }}</p>
-                    </div>
+                
                 </div>
 
                 <div class="bg-[#18181b] p-8 rounded-3xl border border-white/5">
