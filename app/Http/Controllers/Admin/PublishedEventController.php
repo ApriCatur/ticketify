@@ -11,6 +11,7 @@ class PublishedEventController extends Controller
     public function index()
     {
         $publishedEvents = Event::where('status', 'published')
+            ->with('tickets')   // ← load relasi tickets
             ->orderBy('date', 'asc')
             ->get();
 
@@ -25,6 +26,6 @@ class PublishedEventController extends Controller
 
         $event->update(['status' => 'pending']);
 
-        return redirect()->back()->with('success', 'Event berhasil dipindahkan kembali ke status pending.');
+        return redirect()->back()->with('success', 'Event "' . $event->name . '" berhasil dipindahkan kembali ke status pending.');
     }
 }
