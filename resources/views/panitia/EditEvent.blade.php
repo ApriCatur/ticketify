@@ -7,13 +7,47 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        [x-cloak] {
+            display: none;
+        }
+
+        img[x-show] {
+            max-height: 300px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body class="bg-[#09090b] text-white flex min-h-screen"
     x-data="{
         activeTab: 'ticket',
         bannerName: '{{ $event->banner ? $event->banner : '' }}',
+        bannerPreview: '{{ $event->banner ? asset("images/events/" . $event->banner) : "" }}',
         orgPhotoName: '{{ $event->organiser_photo ? $event->organiser_photo : '' }}',
-        ticketRows: {{ $event->ticket_types ? json_encode($event->ticket_types) : '[{ name: &quot;Reguler Pass&quot;, price: 0, stock: 100 }]' }}
+        orgPhotoPreview: '{{ $event->organiser_photo ? asset("images/organizers/" . $event->organiser_photo) : "" }}',
+        ticketRows: {{ $event->ticket_types ? json_encode($event->ticket_types) : '[{ name: &quot;Reguler Pass&quot;, price: 0, stock: 100 }]' }},
+        handleBannerChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.bannerName = file.name;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.bannerPreview = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        },
+        handleOrgPhotoChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.orgPhotoName = file.name;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.orgPhotoPreview = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
     }">
 
     @include('layouts.sidebar-panitia')
@@ -62,53 +96,66 @@
                 <div class="grid md:grid-cols-2 gap-8">
                     <div class="space-y-4">
                         <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Poster Event</label>
-                        <div class="border-2 border-dashed border-white/10 rounded-3xl p-[110px] text-center hover:border-blue-500/50 transition-colors bg-[#121212] group relative overflow-hidden">
-                            <i class="fa-solid fa-image text-4xl text-gray-700 group-hover:text-blue-500 transition-colors mb-4 block"></i>
-                            <p class="text-[11px] text-gray-500 font-medium" x-text="bannerName ? bannerName : 'Klik atau seret file poster di sini'"></p>
-                            <input type="file" name="banner" class="hidden" id="poster" accept="image/*" @change="bannerName = $event.target.files[0].name">
-                            <button type="button" onclick="document.getElementById('poster').click()" class="mt-4 px-6 py-2 bg-white/5 rounded-full text-[10px] font-bold hover:bg-white/10 transition-all border border-white/5">Pilih File Baru</button>
+                        <div class="border-2 border-dashed border-white/10 rounded-3xl p-[110px] text-center hover:border-blue-500/50 transition-colors bg-[#121212] group relative overflow-hidden" :class="bannerPreview ? 'p-4' : 'p-[110px]'">
+                            <template x-if="!bannerPreview">
+                                <div class="flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-image text-4xl text-gray-700 group-hover:text-blue-500 transition-colors mb-4 block"></i>
+                                    <p class="text-[11px] text-gray-500 font-medium">Klik atau seret file poster baru di sini</p>
+                                    <button type="button" onclick="document.getElementById('poster').click()" class="mt-4 px-6 py-2 bg-white/5 rounded-full text-[10px] font-bold hover:bg-white/10 transition-all border border-white/5">Pilih File Baru</button>
+                                </div>
+                            </template>
+                            <template x-if="bannerPreview">
+                                <div class="relative">
+                                    <img :src="bannerPreview" alt="Banner Preview" class="w-full h-64 object-cover rounded-2xl">
+                                    <button type="button" @click="bannerName = ''; bannerPreview = ''; document.getElementById('poster').value = '';" class="absolute top-2 right-2 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-xs hover:bg-red-600 transition">
+                                        <i class="fa-solid fa-times"></i>
+                                    </button>
+                                    <p class="text-[11px] text-gray-400 font-medium mt-2" x-text="'File: ' + bannerName"></p>
+                                </div>
+                            </template>
+                            <input type="file" name="banner" class="hidden" id="poster" accept="image/*" @change="handleBannerChange($event)">
                         </div>
                     </div>
 
                     <div class="space-y-6">
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Nama Event</label>
-                            <input type="text" name="nama_event" value="{{ old('nama_event', $event->name) }}" placeholder="Masukkan nama event" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
+                            <input type="text" name="name" value="{{ old('name', $event->name) }}" placeholder="Masukkan nama event" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Kategori Event</label>
-                            <select name="kategori" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all text-white" required>
+                            <select name="category" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all text-white" required>
                                 <option value="" disabled class="bg-[#121212]">Pilih kategori event</option>
-                                <option value="Music Concert" {{ old('kategori', $event->category) == 'Music Concert' ? 'selected' : '' }} class="bg-[#121212]">Music Concert</option>
-                                <option value="Seminar" {{ old('kategori', $event->category) == 'Seminar' ? 'selected' : '' }} class="bg-[#121212]">Seminar</option>
-                                <option value="Workshop" {{ old('kategori', $event->category) == 'Workshop' ? 'selected' : '' }} class="bg-[#121212]">Workshop</option>
-                                <option value="Festival" {{ old('kategori', $event->category) == 'Festival' ? 'selected' : '' }} class="bg-[#121212]">Festival</option>
+                                <option value="Music Concert" {{ old('category', $event->category) == 'Music Concert' ? 'selected' : '' }} class="bg-[#121212]">Music Concert</option>
+                                <option value="Seminar" {{ old('category', $event->category) == 'Seminar' ? 'selected' : '' }} class="bg-[#121212]">Seminar</option>
+                                <option value="Workshop" {{ old('category', $event->category) == 'Workshop' ? 'selected' : '' }} class="bg-[#121212]">Workshop</option>
+                                <option value="Festival" {{ old('category', $event->category) == 'Festival' ? 'selected' : '' }} class="bg-[#121212]">Festival</option>
                             </select>
                         </div>
 
                         <div class="space-y-2">
                              <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Event Location</label>
-                             <input type="text" name="lokasi" value="{{ old('lokasi', $event->location) }}" placeholder="Masukkan lokasi event" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
+                             <input type="text" name="location" value="{{ old('location', $event->location) }}" placeholder="Masukkan lokasi event" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
                         </div>
 
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Social Media Link</label>
-                            <input type="url" name="sosmed_link" value="{{ old('sosmed_link', $event->social_link) }}" placeholder="https://instagram.com/..." class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all">
+                            <input type="url" name="social_link" value="{{ old('social_link', $event->social_link) }}" placeholder="https://instagram.com/..." class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all">
                         </div>
 
                         <div class="grid grid-cols-3 gap-4">
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal</label>
-                                <input type="date" name="tanggal" value="{{ old('tanggal', $event->date) }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
+                                <input type="date" name="date" value="{{ old('date', $event->date) }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Waktu Mulai</label>
-                                <input type="time" name="waktu_mulai" value="{{ old('waktu_mulai', $event->time_start) }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
+                                <input type="time" name="time_start" value="{{ old('time_start', $event->time_start) }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Waktu Selesai</label>
-                                <input type="time" name="waktu_selesai" value="{{ old('waktu_selesai', $event->time_end) }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
+                                <input type="time" name="time_end" value="{{ old('time_end', $event->time_end) }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
                             </div>
                         </div>
                     </div>
@@ -127,15 +174,15 @@
                             <div class="grid md:grid-cols-12 gap-4 items-end bg-white/[0.02] p-4 rounded-2xl border border-white/5">
                                 <div class="md:col-span-4 space-y-2">
                                     <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Jenis Tiket</label>
-                                    <input type="text" :name="'tickets['+index+'][name]'" x-model="ticket.name" placeholder="Contoh: Reguler / VIP" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none" required>
+                                    <input type="text" :name="'ticket_types['+index+'][name]'" x-model="ticket.name" placeholder="Contoh: Reguler / VIP" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none" required>
                                 </div>
                                 <div class="md:col-span-4 space-y-2">
                                     <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Harga (IDR)</label>
-                                    <input type="number" :name="'tickets['+index+'][price]'" x-model="ticket.price" min="0" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none" required>
+                                    <input type="number" :name="'ticket_types['+index+'][price]'" x-model="ticket.price" min="0" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none" required>
                                 </div>
                                 <div class="md:col-span-3 space-y-2">
                                     <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Stok Tiket</label>
-                                    <input type="number" :name="'tickets['+index+'][stock]'" x-model="ticket.stock" min="0" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none" required>
+                                    <input type="number" :name="'ticket_types['+index+'][stock]'" x-model="ticket.stock" min="0" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none" required>
                                 </div>
                                 <div class="md:col-span-1 flex items-end justify-end">
                                     <button type="button" @click="ticketRows.splice(index, 1)" x-show="ticketRows.length > 1" class="w-full py-3 bg-red-500/10 text-red-400 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-red-500/20 transition">Hapus</button>
@@ -153,11 +200,11 @@
             <div x-show="activeTab === 'detail'" class="space-y-8" style="display: none;">
                 <div class="space-y-2">
                     <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Deskripsi Event</label>
-                    <textarea name="deskripsi" rows="6" class="w-full bg-[#121212] border border-white/5 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none" placeholder="Ceritakan detail acaramu..." required>{{ old('deskripsi', $event->description) }}</textarea>
+                    <textarea name="description" rows="6" class="w-full bg-[#121212] border border-white/5 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none" placeholder="Ceritakan detail acaramu..." required>{{ old('description', $event->description) }}</textarea>
                 </div>
                 <div class="space-y-2">
                     <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Syarat & Ketentuan</label>
-                    <textarea name="syarat_ketentuan" rows="4" class="w-full bg-[#121212] border border-white/5 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none" placeholder="1. Peserta wajib..." required>{{ old('syarat_ketentuan', $event->terms) }}</textarea>
+                    <textarea name="terms" rows="4" class="w-full bg-[#121212] border border-white/5 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none" placeholder="1. Peserta wajib..." required>{{ old('terms', $event->terms) }}</textarea>
                 </div>
 
                 <div class="flex justify-end gap-4">
@@ -170,15 +217,28 @@
                 <div class="grid md:grid-cols-2 gap-8">
                     <div class="space-y-2">
                         <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Deskripsi Organisasi</label>
-                        <textarea name="deskripsi_org" rows="8" class="w-full bg-[#121212] border border-white/5 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none" placeholder="Profil singkat penyelenggara...">{{ old('deskripsi_org', $event->organiser_description) }}</textarea>
+                        <textarea name="organiser_description" rows="8" class="w-full bg-[#121212] border border-white/5 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none" placeholder="Profil singkat penyelenggara...">{{ old('organiser_description', $event->organiser_description) }}</textarea>
                     </div>
                     <div class="space-y-4">
                         <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Foto Organisasi / Tim</label>
-                        <div class="border-2 border-dashed border-white/10 rounded-3xl p-10 text-center bg-[#121212] group">
-                            <i class="fa-solid fa-users text-4xl text-gray-700 group-hover:text-blue-500 transition-colors mb-4 block"></i>
-                            <p class="text-[11px] text-gray-500 font-medium mb-2" x-text="orgPhotoName ? orgPhotoName : 'Belum ada foto terpilih'"></p>
-                            <input type="file" name="org_photo" class="hidden" id="org_photo" accept="image/*" @change="orgPhotoName = $event.target.files[0].name">
-                            <button type="button" onclick="document.getElementById('org_photo').click()" class="px-6 py-2 bg-white/5 rounded-full text-[10px] font-bold hover:bg-white/10 transition-all border border-white/5">Upload Photo Baru</button>
+                        <div class="border-2 border-dashed border-white/10 rounded-3xl p-10 text-center bg-[#121212] group" :class="orgPhotoPreview ? 'p-4' : 'p-10'">
+                            <template x-if="!orgPhotoPreview">
+                                <div class="flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-users text-4xl text-gray-700 group-hover:text-blue-500 transition-colors mb-4 block"></i>
+                                    <p class="text-[11px] text-gray-500 font-medium mb-2">Belum ada foto terpilih</p>
+                                    <button type="button" onclick="document.getElementById('organiser_photo').click()" class="px-6 py-2 bg-white/5 rounded-full text-[10px] font-bold hover:bg-white/10 transition-all border border-white/5">Upload Photo Baru</button>
+                                </div>
+                            </template>
+                            <template x-if="orgPhotoPreview">
+                                <div class="relative">
+                                    <img :src="orgPhotoPreview" alt="Organiser Photo Preview" class="w-full h-64 object-cover rounded-2xl">
+                                    <button type="button" @click="orgPhotoName = ''; orgPhotoPreview = ''; document.getElementById('organiser_photo').value = '';" class="absolute top-2 right-2 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-xs hover:bg-red-600 transition">
+                                        <i class="fa-solid fa-times"></i>
+                                    </button>
+                                    <p class="text-[11px] text-gray-400 font-medium mt-2" x-text="'File: ' + orgPhotoName"></p>
+                                </div>
+                            </template>
+                            <input type="file" name="organiser_photo" class="hidden" id="organiser_photo" accept="image/*" @change="handleOrgPhotoChange($event)">
                         </div>
                     </div>
                 </div>

@@ -15,10 +15,10 @@
     {{-- ===== HEADER ===== --}}
     <header class="flex items-center justify-between">
         <div class="flex items-center gap-4">
-            <a href="{{ route('panitia.myevent') }}"
-               class="bg-[#18181b] hover:bg-white hover:text-black transition-all px-4 py-2 rounded-lg text-xs font-bold border border-white/5 flex items-center gap-2">
+            <button onclick="window.history.back()"
+                class="bg-[#18181b] hover:bg-white hover:text-black transition-all px-4 py-2 rounded-lg text-xs font-bold border border-white/5 flex items-center gap-2 cursor-pointer">
                 <i class="fa-solid fa-arrow-left"></i> Back
-            </a>
+            </button>
             <div>
                 <h1 class="text-2xl font-black uppercase">{{ $event->name }}</h1>
                 <p class="text-xs text-gray-500 mt-1">{{ $event->category }}</p>
@@ -38,37 +38,34 @@
     </header>
 
     {{-- ===== TAB NAVIGATION ===== --}}
-    {{-- ===== TAB NAVIGATION ===== --}}
-<nav class="border-b border-white/5 flex justify-center"> {{-- Tambahkan justify-center di sini --}}
-    <div class="flex gap-2">
-        @php
-            $tabs = [
-                'ticket'    => ['icon' => 'fa-ticket',       'label' => 'Ticket'],
-                'details'   => ['icon' => 'fa-circle-info', 'label' => 'Details'],
-                'organiser' => ['icon' => 'fa-users',       'label' => 'Organiser'],
-            ];
-        @endphp
+    <nav class="border-b border-white/5 flex justify-center">
+        <div class="flex gap-2">
+            @php
+                $tabs = [
+                    'ticket'    => ['icon' => 'fa-ticket',       'label' => 'Ticket'],
+                    'details'   => ['icon' => 'fa-circle-info', 'label' => 'Details'],
+                    'organiser' => ['icon' => 'fa-users',       'label' => 'Organiser'],
+                ];
+            @endphp
 
-        @foreach ($tabs as $key => $item)
-            <button @click="tab = '{{ $key }}'"
-                    :class="tab === '{{ $key }}'
-                        ? 'border-b-2 border-blue-500 text-blue-500'
-                        : 'text-gray-500 hover:text-gray-300'"
-                    class="pb-4 px-4 font-bold text-sm transition-all flex items-center gap-2">
-                <i class="fa-solid {{ $item['icon'] }}"></i>
-                {{ $item['label'] }}
-            </button>
-        @endforeach
-    </div>
-</nav>
+            @foreach ($tabs as $key => $item)
+                <button @click="tab = '{{ $key }}'"
+                        :class="tab === '{{ $key }}'
+                            ? 'border-b-2 border-blue-500 text-blue-500'
+                            : 'text-gray-500 hover:text-gray-300'"
+                        class="pb-4 px-4 font-bold text-sm transition-all flex items-center gap-2">
+                    <i class="fa-solid {{ $item['icon'] }}"></i>
+                    {{ $item['label'] }}
+                </button>
+            @endforeach
+        </div>
+    </nav>
 
     {{-- ===== TAB CONTENT ===== --}}
     <main class="bg-[#121212] rounded-3xl p-8 border border-white/5 shadow-2xl">
 
         {{-- TAB: TICKET --}}
         <div x-show="tab === 'ticket'" x-transition>
-
-            {{-- Event overview --}}
             <div class="grid md:grid-cols-2 gap-10 mb-10 pb-10 border-b border-white/5">
                 <div class="rounded-2xl overflow-hidden border border-white/10 shadow-lg aspect-video">
                     <img src="{{ $event->banner ? asset('images/events/' . $event->banner) : asset('images/kmipn.jpeg') }}"
@@ -77,7 +74,6 @@
                 </div>
 
                 <div class="space-y-4">
-                    {{-- Social link --}}
                     <div class="bg-[#18181b] p-4 rounded-xl border border-white/5 flex items-center gap-3">
                         <i class="fa-solid fa-qrcode text-blue-500"></i>
                         @if ($event->social_link)
@@ -90,7 +86,6 @@
                         @endif
                     </div>
 
-                    {{-- Location --}}
                     <div class="bg-[#18181b] p-5 rounded-2xl border border-white/5">
                         <h4 class="text-blue-500 font-bold text-sm mb-2">
                             <i class="fa-solid fa-location-dot text-red-500 mr-2"></i>Location
@@ -98,7 +93,6 @@
                         <p class="text-xs text-gray-300 font-bold leading-relaxed">{{ $event->location }}</p>
                     </div>
 
-                    {{-- Date & time --}}
                     <p class="text-sm font-bold text-gray-400">
                         <i class="fa-solid fa-calendar-days mr-2 text-blue-500"></i>
                         {{ \Carbon\Carbon::parse($event->date)->format('d F Y') }},
@@ -107,7 +101,6 @@
                 </div>
             </div>
 
-            {{-- Ticket types --}}
             <div class="space-y-4 max-w-4xl mx-auto">
                 @forelse ($event->ticket_types ?? [] as $ticket)
                     <div class="bg-[#18181b] p-6 rounded-2xl border border-white/5 flex items-center justify-between">

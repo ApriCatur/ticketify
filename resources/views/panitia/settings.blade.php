@@ -77,9 +77,9 @@
 
                         <div>
                             <label class="block text-[10px] text-gray-400 font-black uppercase tracking-widest mb-2">NIM</label>
-                            <input type="text" name="nim" value="{{ old('nim', $user->nim) }}" disabled
+                            <input type="text" name="nim" value="{{ old('nim', $user->nim) }}"
                                    placeholder="Enter your NIM"
-                                   class="w-full bg-[#1c1c1e] border border-white/5 rounded-xl px-4 py-3 text-sm text-gray-400 cursor-not-allowed opacity-60">
+                                   class="w-full bg-[#1c1c1e] border border-white/5 rounded-xl px-4 py-3 text-sm text-white-400  opacity-60">
                             @error('nim') <span class="text-xs text-red-500 mt-1 block font-medium">{{ $message }}</span> @enderror
                         </div>
                     </div>

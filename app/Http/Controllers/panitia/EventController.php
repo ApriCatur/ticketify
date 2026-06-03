@@ -14,33 +14,40 @@ class EventController extends Controller
     /**
      * FUNGSI: Menampilkan daftar event di dashboard panitia
      */
-    public function index()
+public function index(Request $request)
 {
     $today = Carbon::today();
 
-    $events = Event::where('user_id', Auth::id())
-        ->orderByRaw("
-            FIELD(
-                LOWER(status),
-                'published',
-                'pending',
-                'rejected'
-            )
-        ")
-        ->orderBy('date', 'desc')
-        ->get();
+    // Kita mulai query dari Model Event
+    $query = Event::query();
 
-    $upcomingEvents = Event::where('user_id', Auth::id())
-        ->where('status', 'published')
+    // Jika user mengetik sesuatu di pencarian
+    if ($request->filled('search')) {
+        $query->where('name', 'like', '%' . $request->search . '%');
+    }
+
+    // Jika user memilih kategori
+    if ($request->filled('category')) {
+        $query->where('category', $request->category);
+    }
+
+    if ($request->filled('date')) {
+        $query->whereDate('date', $request->date);
+    }
+
+    // Ambil data yang sudah difilter
+    $publicEvents = $query->where('status', 'published')->get();
+
+    // Data untuk carousel (tetap ambil 5 teratas)
+    $events = Event::where('status', 'published')->take(5)->get();
+
+    // Upcoming untuk sidebar
+    $upcomingEvents = Event::where('status', 'published')
         ->whereDate('date', '>=', $today)
-        ->orderBy('date', 'asc')
         ->take(3)
         ->get();
 
-    return view('panitia.event', compact(
-        'events',
-        'upcomingEvents'
-    ));
+    return view('panitia.event', compact('publicEvents', 'events', 'upcomingEvents'));
 }
 
     /**
@@ -132,73 +139,76 @@ public function show($id)
     /**
      * FUNGSI: Menyimpan perubahan data pada event yang sudah ada
      */
-    public function update(Request $request, $id)
-    {
-       $event = Event::where('id', $id)
-    ->where('user_id', Auth::id())
-    ->firstOrFail();
+   public function update(Request $request, $id)
+{
+    $event = Event::where('id', $id)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
 
-        $request->validate([
-            'nama_event'       => 'required|string|max:255',
-            'kategori'         => 'required|string',
-            'lokasi'           => 'required|string',
-            'sosmed_link'      => 'nullable|url',
-            'tanggal'          => 'required|date',
-            'waktu_mulai'      => 'required',
-            'waktu_selesai'    => 'required',
-            'deskripsi'        => 'required|string',
-            'syarat_ketentuan' => 'required|string',
-            'deskripsi_org'    => 'nullable|string',
-            'banner'           => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'org_photo'        => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'tickets'          => 'required|array|min:1',
-        ]);
+    $request->validate([
+        'name'                  => 'required|string|max:255',
+        'category'              => 'required|string',
+        'location'              => 'required|string',
+        'social_link'           => 'nullable|url',
+        'date'                  => 'required|date',
+        'time_start'            => 'required',
+        'time_end'              => 'required',
+        'description'           => 'required|string',
+        'terms'                 => 'required|string',
+        'organiser_description' => 'nullable|string',
+        'banner'                => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        'organiser_photo'       => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        'ticket_types'          => 'required|array|min:1',
+    ]);
 
-        $isCriticalChanged = ($event->name !== $request->nama_event || $event->date !== $request->tanggal || $event->location !== $request->lokasi || json_encode($event->ticket_types) !== json_encode($request->tickets));
+    // Logika perubahan status jika ada data krusial yang berubah
+    $isCriticalChanged = ($event->name !== $request->name || $event->date !== $request->date || $event->location !== $request->location);
 
-        $bannerName = $event->banner;
-        if ($request->hasFile('banner')) {
-            if ($event->banner && File::exists(public_path('images/events/' . $event->banner))) {
-                File::delete(public_path('images/events/' . $event->banner));
-            }
-            $bannerFile = $request->file('banner');
-            $bannerName = 'banner_' . time() . '.' . $bannerFile->getClientOriginalExtension();
-            $bannerFile->move(public_path('images/events'), $bannerName);
+    // Proses Upload Banner
+    $bannerName = $event->banner;
+    if ($request->hasFile('banner')) {
+        if ($event->banner && File::exists(public_path('images/events/' . $event->banner))) {
+            File::delete(public_path('images/events/' . $event->banner));
         }
-
-        $organiserPhotoName = $event->organiser_photo;
-        if ($request->hasFile('org_photo')) {
-            if ($event->organiser_photo && File::exists(public_path('images/organizers/' . $event->organiser_photo))) {
-                File::delete(public_path('images/organizers/' . $event->organiser_photo));
-            }
-            $orgFile = $request->file('org_photo');
-            $organiserPhotoName = 'organiser_' . time() . '.' . $orgFile->getClientOriginalExtension();
-            $orgFile->move(public_path('images/organizers'), $organiserPhotoName);
-        }
-
-        $event->update([
-            'name'                  => $request->nama_event,
-            'category'              => $request->kategori,
-            'location'              => $request->lokasi,
-            'social_link'           => $request->sosmed_link,
-            'date'                  => $request->tanggal,
-            'time_start'            => $request->waktu_mulai,
-            'time_end'              => $request->waktu_selesai,
-            'description'           => $request->deskripsi,
-            'terms'                 => $request->syarat_ketentuan,
-            'organiser_description' => $request->deskripsi_org,
-            'ticket_types'          => $request->tickets,
-            'stock'                 => array_sum(array_column($request->tickets, 'stock')),
-            'price'                 => min(array_column($request->tickets, 'price')),
-            'banner'                => $bannerName,
-            'organiser_photo'       => $organiserPhotoName,
-            'status'                => $isCriticalChanged ? 'pending' : $event->status,
-        ]);
-
-        return redirect()->route('panitia.myevent')->with('success', 'Perubahan berhasil disimpan!');
+        $bannerFile = $request->file('banner');
+        $bannerName = 'banner_' . time() . '.' . $bannerFile->getClientOriginalExtension();
+        $bannerFile->move(public_path('images/events'), $bannerName);
     }
 
-    public function destroy($id)
+    // Proses Upload Organiser Photo
+    $organiserPhotoName = $event->organiser_photo;
+    if ($request->hasFile('organiser_photo')) {
+        if ($event->organiser_photo && File::exists(public_path('images/organizers/' . $event->organiser_photo))) {
+            File::delete(public_path('images/organizers/' . $event->organiser_photo));
+        }
+        $orgFile = $request->file('organiser_photo');
+        $organiserPhotoName = 'organiser_' . time() . '.' . $orgFile->getClientOriginalExtension();
+        $orgFile->move(public_path('images/organizers'), $organiserPhotoName);
+    }
+
+    // Update Database
+    $event->update([
+        'name'                  => $request->name,
+        'category'              => $request->category,
+        'location'              => $request->location,
+        'social_link'           => $request->social_link,
+        'date'                  => $request->date,
+        'time_start'            => $request->time_start,    
+        'time_end'              => $request->time_end,
+        'description'           => $request->description,
+        'terms'                 => $request->terms,
+        'organiser_description' => $request->organiser_description,
+        'ticket_types'          => $request->ticket_types,
+        'stock'                 => array_sum(array_column($request->ticket_types, 'stock')),
+        'price'                 => min(array_column($request->ticket_types, 'price')),
+        'banner'                => $bannerName,
+        'organiser_photo'       => $organiserPhotoName,
+        'status'                => $isCriticalChanged ? 'pending' : $event->status,
+    ]);
+
+    return redirect()->route('panitia.myevent')->with('success', 'Perubahan berhasil disimpan!');
+}
+ public function destroy($id)
 {
     $event = Event::where('id', $id)
         ->where('user_id', Auth::id())
@@ -231,5 +241,7 @@ public function show($id)
             'Event berhasil dihapus.'
         );
 }
+
+
 
 }

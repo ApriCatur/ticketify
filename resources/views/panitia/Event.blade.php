@@ -39,7 +39,47 @@
                 </div>
             </nav>
 
-            @include('components.event')
+
+
+        @include('components.event-carousel')
+
+        <div class="px-8 mt-6">
+            <x-event-filter />
+        </div>
+
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-8 pb-8">
+    @forelse($publicEvents as $event)
+        <x-event-card
+            :image="asset('images/events/' . $event->banner)"
+            :day="\Carbon\Carbon::parse($event->date)->format('d')"
+            :month="\Carbon\Carbon::parse($event->date)->translatedFormat('M')"
+            :year="\Carbon\Carbon::parse($event->date)->format('Y')"
+            :category="$event->category"
+            :title="$event->name"
+            :location="$event->location"
+            :startTime="\Carbon\Carbon::parse($event->time_start)->format('H:i')"
+            :endTime="\Carbon\Carbon::parse($event->time_end)->format('H:i')"
+            :price="'Rp ' . number_format($event->price, 0, ',', '.')"
+        >
+            {{-- Tombol sesuai Role --}}
+           @if(auth()->user()->role === 'panitia')
+    <a href="{{ route('panitia.events.show', $event->id) }}"
+       class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all">
+       Detail
+    </a>
+@elseif(auth()->user()->role === 'admin')
+    <a href="{{ route('admin.events.show', $event->id) }}"
+       class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all">
+       Kelola
+    </a>
+@endif
+        </x-event-card>
+    @empty
+        <div class="text-gray-500 text-sm">Belum ada event yang dipublikasikan.</div>
+    @endforelse
+</div>
+
         </div>
 
         <aside class="w-80 hidden xl:flex flex-col sticky top-0 h-screen p-8 space-y-8 bg-[#121212] overflow-y-auto">

@@ -53,6 +53,8 @@ Route::prefix('guest')->group(function () {
     Route::get('/settings', function () { return view('Guest.Settings'); })->name('guest.settings');
     Route::get('/buatevent', function () { return view('Guest.BuatEvent'); })->name('guest.buatevent');
     Route::get('/detail', function () { return view('Guest.Detail'); })->name('guest.detail');
+    
+
 });
 
 /*

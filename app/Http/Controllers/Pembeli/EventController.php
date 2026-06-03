@@ -7,51 +7,45 @@ use App\Models\Event;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class EventController extends Controller
+class EventController extends Controller // Pastikan class dibuka di sini
 {
     public function index(Request $request)
     {
-        // Ambil data hari ini
         $today = Carbon::today();
 
-        // Query dasar: Hanya event yang sudah disetujui admin dan dipublikasikan
+        // 1. Query untuk event utama (dengan filter)
         $query = Event::where('status', 'published');
 
-        // Filter berdasarkan Search (Nama Event)
         if ($request->filled('search')) {
-            $searchTerm = $request->input('search');
-            $query->where('name', 'like', '%' . $searchTerm . '%');
+            $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        // Filter berdasarkan Kategori
         if ($request->filled('category')) {
-            $query->where('category', $request->input('category'));
+            $query->where('category', $request->category);
         }
 
-        // Filter berdasarkan Tanggal
         if ($request->filled('date')) {
-            $selectedDate = $request->input('date');
-            $query->whereDate('date', '=', $selectedDate);
+            $query->whereDate('date', $request->date);
         }
 
-        // Ambil hasil dengan pengurutan
-        $events = $query->orderBy('date', 'asc')->get();
+        $publicEvents = $query->orderBy('date', 'asc')->get();
 
-        // Ambil 3 event terdekat dari tanggal sekarang (Upcoming Events)
+        // 2. Query untuk carousel
+        $events = Event::where('status', 'published')->take(5)->get();
+
+        // 3. Query untuk sidebar
         $upcomingEvents = Event::where('status', 'published')
             ->whereDate('date', '>=', $today)
             ->orderBy('date', 'asc')
             ->take(3)
             ->get();
 
-        return view('Pembeli.event', compact('events', 'upcomingEvents'));
+        // KIRIM SEMUA VARIABEL KE VIEW
+        return view('pembeli.event', compact('publicEvents', 'events', 'upcomingEvents'));
     }
 
-    /**
-     * Show the event detail.
-     */
     public function show(Event $event)
     {
-        return view('Pembeli.detail', compact('event'));
+        return view('pembeli.detail', compact('event'));
     }
-}
+} // Pastikan class ditutup di sini
