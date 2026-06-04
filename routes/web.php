@@ -31,6 +31,9 @@ use App\Http\Controllers\Guest\EventController as GuestEventController;
 
 // Middleware
 use App\Http\Middleware\RoleMiddleware;
+// midtrans
+use App\Http\Controllers\PaymentController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -53,7 +56,7 @@ Route::prefix('guest')->group(function () {
     Route::get('/settings', function () { return view('Guest.Settings'); })->name('guest.settings');
     Route::get('/buatevent', function () { return view('Guest.BuatEvent'); })->name('guest.buatevent');
     Route::get('/detail', function () { return view('Guest.Detail'); })->name('guest.detail');
-    
+
 
 });
 
@@ -155,3 +158,28 @@ Route::prefix('pages')->group(function () {
     Route::get('/product', [ProdukController::class, 'index']);
 });
 
+
+// ─── Payment Routes (butuh login) ────────────────────────────────────────────
+Route::middleware(['auth'])->group(function () {
+
+    // Halaman checkout (pilih jumlah tiket)
+    Route::get('/events/{event}/checkout', [PaymentController::class, 'checkout'])
+         ->name('payment.checkout');
+
+    // Proses checkout → buat order → tampilkan tombol bayar
+    Route::post('/events/{event}/checkout', [PaymentController::class, 'process'])
+         ->name('payment.process');
+
+    // Redirect dari Midtrans setelah bayar sukses
+    Route::get('/payment/success', [PaymentController::class, 'success'])
+         ->name('payment.success');
+
+    // Redirect dari Midtrans jika gagal/cancel
+    Route::get('/payment/failed', [PaymentController::class, 'failed'])
+         ->name('payment.failed');
+});
+
+// ─── Webhook Midtrans (TANPA auth, dari server Midtrans) ─────────────────────
+// PENTING: Tambahkan URL ini ke pengecualian CSRF di App\Http\Middleware\VerifyCsrfToken.php
+Route::post('/payment/notification', [PaymentController::class, 'notification'])
+     ->name('payment.notification');
