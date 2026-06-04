@@ -319,32 +319,55 @@
     </div>
 </div>
 
-<!-- UNPUBLISH MODAL -->
+<!-- UNPUBLISH MODAL WITH REASON -->
 <div id="unpublishModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
-    <div class="bg-[#1e1e1e] rounded-2xl p-6 w-[400px] border border-white/10 text-center">
-        <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-red-500/20 flex items-center justify-center">
-            <i class="fa-solid fa-xmark text-red-400"></i>
+    <div class="bg-[#1e1e1e] rounded-2xl p-6 w-[460px] border border-white/10">
+
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                <i class="fa-solid fa-triangle-exclamation text-red-400"></i>
+            </div>
+            <div>
+                <h2 class="text-base font-bold">Unpublish Event</h2>
+                <p class="text-xs text-gray-400">Event akan dipindahkan ke status
+                    <span class="text-red-400 font-bold">Rejected</span>
+                </p>
+            </div>
         </div>
 
-        <h2 class="text-lg font-bold mb-2">Unpublish Event</h2>
-        <p class="text-sm text-gray-400 mb-6">
-            Are you sure you want to unpublish this event?
-        </p>
+        <form id="unpublishForm" method="POST">
+            @csrf
+            <div class="mb-4">
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">
+                    Alasan Unpublish <span class="text-red-400">*</span>
+                </label>
+                <textarea name="reason" id="unpublishReason" rows="4"
+                    placeholder="Jelaskan alasan mengapa event ini di-unpublish... (min. 10 karakter)"
+                    class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-gray-200 outline-none focus:border-red-500/50 transition resize-none placeholder:text-gray-600"
+                    maxlength="500"></textarea>
+                <div class="flex justify-between mt-1">
+                    <p id="unpublishReasonError" class="text-xs text-red-400 hidden">
+                        Alasan minimal 10 karakter.
+                    </p>
+                    <p class="text-xs text-gray-600 ml-auto">
+                        <span id="reasonCount">0</span>/500
+                    </p>
+                </div>
+            </div>
 
-        <div class="flex gap-3">
-            <button onclick="closeUnpublish()"
-                class="flex-1 py-2 border border-white/10 rounded-xl">
-                Cancel
-            </button>
-
-            <button onclick="closeUnpublish()"
-                class="flex-1 py-2 bg-red-500/20 text-red-400 rounded-xl">
-                Unpublish
-            </button>
-        </div>
+            <div class="flex gap-3">
+                <button type="button" onclick="closeUnpublishModal()"
+                    class="flex-1 py-2.5 border border-white/10 rounded-xl text-sm hover:bg-white/5 transition">
+                    Batal
+                </button>
+                <button type="submit"
+                    class="flex-1 py-2.5 bg-red-500 text-white rounded-xl text-sm font-bold hover:bg-red-600 transition">
+                    <i class="fa-solid fa-xmark mr-1"></i> Unpublish
+                </button>
+            </div>
+        </form>
     </div>
 </div>
-</div>
 
-
+<script src="{{ asset('js/unpublish.js') }}"></script>
 @endsection

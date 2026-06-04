@@ -59,33 +59,47 @@
                             </div>
                         </div>
 
+                        {{-- ============ STATUS BADGE ============ --}}
                         <div class="md:col-span-2 flex justify-start md:justify-center">
                             @php
                                 $displayStatus = $event->getDisplayStatus();
                             @endphp
+
                             @if($displayStatus === 'published')
                                 <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
                                     <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
                                     Active
                                 </div>
+
                             @elseif($displayStatus === 'completed')
                                 <div class="flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 text-blue-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
                                     <i class="fa-solid fa-circle-check"></i> Completed
                                 </div>
+
                             @elseif($displayStatus === 'pending')
                                 <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
                                     <i class="fa-solid fa-clock-rotate-left"></i> Pending
                                 </div>
+
                             @elseif($displayStatus === 'rejected')
-                                <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
+                                {{-- ✅ PERUBAHAN: Badge rejected sekarang bisa diklik untuk lihat alasan --}}
+                                <button type="button"
+                                    onclick="showRejectReason(
+                                        '{{ addslashes($event->unpublish_reason ?? '') }}',
+                                        '{{ $event->unpublished_at ? \Carbon\Carbon::parse($event->unpublished_at)->format('d M Y, H:i') : '-' }}'
+                                    )"
+                                    class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-500 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-red-500/20 transition cursor-pointer">
                                     <i class="fa-solid fa-circle-xmark"></i> Rejected
-                                </div>
+                                    <i class="fa-solid fa-circle-info text-[8px]"></i>
+                                </button>
+
                             @else
                                 <div class="flex items-center gap-2 bg-gray-500/10 border border-gray-500/30 text-gray-400 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
                                     {{ ucfirst($displayStatus) }}
                                 </div>
                             @endif
                         </div>
+                        {{-- ============ END STATUS BADGE ============ --}}
 
                         <div class="md:col-span-3 space-y-2">
                             <div class="flex justify-between text-[9px] font-black uppercase tracking-widest text-gray-500">
@@ -101,39 +115,33 @@
                             @php
                                 $canEdit = $event->status !== 'rejected' && $displayStatus !== 'completed';
                             @endphp
-                           @if($canEdit)
 
-                            {{-- DETAIL EVENT --}}
-                            <a href="{{ route('panitia.events.show', $event->id) }}" class="flex flex-col items-center gap-1">
-                                <div class="flex items-center justify-center w-11 h-11 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 rounded-xl transition-colors border border-emerald-500/10">
-                                    <i class="fa-solid fa-eye text-sm"></i>
-                                </div>
-                                <span class="text-[9px] font-bold uppercase text-emerald-500">
-                                    Detail
-                                </span>
-                            </a>
+                            @if($canEdit)
+                                {{-- DETAIL EVENT --}}
+                                <a href="{{ route('panitia.events.show', $event->id) }}" class="flex flex-col items-center gap-1">
+                                    <div class="flex items-center justify-center w-11 h-11 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 rounded-xl transition-colors border border-emerald-500/10">
+                                        <i class="fa-solid fa-eye text-sm"></i>
+                                    </div>
+                                    <span class="text-[9px] font-bold uppercase text-emerald-500">Detail</span>
+                                </a>
 
-                            {{-- EDIT --}}
-                            <a href="{{ route('panitia.events.edit', $event->id) }}" class="flex flex-col items-center gap-1">
-                                <div class="flex items-center justify-center w-11 h-11 bg-white/5 hover:bg-white/10 text-yellow-500 hover:text-yellow-600 rounded-xl transition-colors border border-white/5">
-                                    <i class="fa-solid fa-pen-to-square text-sm"></i>
-                                </div>
-                                <span class="text-[9px] font-bold uppercase text-yellow-500">
-                                    Edit
-                                </span>
-                            </a>
+                                {{-- EDIT --}}
+                                <a href="{{ route('panitia.events.edit', $event->id) }}" class="flex flex-col items-center gap-1">
+                                    <div class="flex items-center justify-center w-11 h-11 bg-white/5 hover:bg-white/10 text-yellow-500 hover:text-yellow-600 rounded-xl transition-colors border border-white/5">
+                                        <i class="fa-solid fa-pen-to-square text-sm"></i>
+                                    </div>
+                                    <span class="text-[9px] font-bold uppercase text-yellow-500">Edit</span>
+                                </a>
 
-                            {{-- PESERTA --}}
-                            <a href="{{ route('panitia.customerdata', $event->id) }}" class="flex flex-col items-center gap-1">
-                                <div class="flex items-center justify-center w-11 h-11 bg-blue-600/10 hover:bg-blue-600/20 text-blue-500 hover:text-blue-400 rounded-xl transition-colors border border-blue-500/10">
-                                    <i class="fa-solid fa-table text-sm"></i>
-                                </div>
-                                <span class="text-[9px] font-bold uppercase text-blue-500/80">
-                                    Peserta
-                                </span>
-                            </a>
+                                {{-- PESERTA --}}
+                                <a href="{{ route('panitia.customerdata', $event->id) }}" class="flex flex-col items-center gap-1">
+                                    <div class="flex items-center justify-center w-11 h-11 bg-blue-600/10 hover:bg-blue-600/20 text-blue-500 hover:text-blue-400 rounded-xl transition-colors border border-blue-500/10">
+                                        <i class="fa-solid fa-table text-sm"></i>
+                                    </div>
+                                    <span class="text-[9px] font-bold uppercase text-blue-500/80">Peserta</span>
+                                </a>
 
-                        @else
+                            @else
                                 <div class="flex items-center gap-1.5 text-[10px] text-zinc-600 font-bold uppercase tracking-wider bg-zinc-900/50 border border-zinc-800/50 px-3 py-2 rounded-xl">
                                     <i class="fa-solid fa-lock text-[9px]"></i> Locked
                                 </div>
@@ -149,7 +157,59 @@
         </div>
     </main>
 
+
+    {{-- ✅ TAMBAHAN: Modal Alasan Rejected --}}
+    <div id="rejectReasonModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+        <div class="bg-[#1e1e1e] rounded-2xl w-[440px] border border-red-500/20 overflow-hidden shadow-2xl">
+
+            {{-- Header --}}
+            <div class="bg-red-500/10 border-b border-red-500/20 px-6 py-4 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-red-500/20 flex items-center justify-center">
+                    <i class="fa-solid fa-ban text-red-400 text-sm"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">Event Ditolak / Unpublished</h3>
+                    <p class="text-xs text-gray-400">Alasan dari Admin</p>
+                </div>
+                <button onclick="closeRejectModal()" class="ml-auto text-gray-400 hover:text-white transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            {{-- Body --}}
+            <div class="px-6 py-5 space-y-4">
+                <div class="bg-red-500/5 border border-red-500/20 rounded-xl p-4">
+                    <p class="text-[10px] font-black text-red-400 uppercase tracking-widest mb-2">Alasan</p>
+                    <p id="rejectReasonText" class="text-sm text-gray-200 leading-relaxed">-</p>
+                </div>
+
+                <div class="flex items-center gap-2 text-xs text-gray-500">
+                    <i class="fa-regular fa-clock"></i>
+                    Unpublished pada:
+                    <span id="rejectReasonDate" class="text-gray-300 font-medium">-</span>
+                </div>
+
+                <p class="text-xs text-gray-500 bg-white/5 rounded-xl p-3 border border-white/5">
+                    <i class="fa-solid fa-lightbulb text-yellow-400 mr-1"></i>
+                    Silakan perbaiki event sesuai alasan di atas, lalu hubungi admin untuk penerbitan ulang.
+                </p>
+            </div>
+
+            {{-- Footer --}}
+            <div class="px-6 pb-5">
+                <button onclick="closeRejectModal()"
+                    class="w-full py-2.5 border border-white/10 rounded-xl text-sm hover:bg-white/5 transition">
+                    Tutup
+                </button>
+            </div>
+
+        </div>
+    </div>
+    {{-- ✅ END Modal --}}
+
+
     <script>
+        // Sidebar toggle
         const openBtn = document.getElementById('open-sidebar');
         const closeBtn = document.getElementById('close-sidebar');
         const sidebar = document.getElementById('main-sidebar');
@@ -158,17 +218,17 @@
         if (openBtn && sidebar) {
             function toggleSidebar() {
                 sidebar.classList.toggle('-translate-x-full');
-                if (overlay) {
-                    overlay.classList.toggle('hidden');
-                }
+                if (overlay) overlay.classList.toggle('hidden');
                 document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
             }
-
             openBtn.addEventListener('click', toggleSidebar);
             if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
             if (overlay) overlay.addEventListener('click', toggleSidebar);
         }
     </script>
+
+    {{-- ✅ Load JS unpublish terpisah --}}
+    <script src="{{ asset('js/unpublish.js') }}"></script>
 
 </body>
 </html>

@@ -29,6 +29,8 @@ class Event extends Model
         'organiser_description',
         'organiser_photo',
         'status',
+        'unpublish_reason',
+        'unpublished_at',
     ];
 
     protected $casts = [
@@ -66,4 +68,6 @@ class Event extends Model
 
         return $this->status;
     }
+
+
 }

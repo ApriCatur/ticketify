@@ -148,3 +148,4 @@ Route::get('/event-detail', function () { return view('components.event-detail')
 Route::prefix('pages')->group(function () {
     Route::get('/product', [ProdukController::class, 'index']);
 });
+
