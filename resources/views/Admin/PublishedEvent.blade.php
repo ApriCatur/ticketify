@@ -12,6 +12,7 @@
 {{-- 🔥 HERO CAROUSEL --}}
 <header class="px-8 pt-6 pb-12">
     <div class="swiper myHeroSwiper rounded-3xl overflow-hidden shadow-2xl h-[420px] relative">
+        <div class="swiper-wrapper">
 
         <div class="swiper-wrapper h-full">
 
@@ -19,7 +20,7 @@
             <div class="swiper-slide relative h-full">
 
                 <!-- IMAGE -->
-                <img src="{{ asset('images/kmipn.jpeg') }}"
+                <img src="{{ asset('images/events/banner_1779635248.jpg') }}"
                     class="w-full h-full object-cover">
 
                 <!-- OVERLAY -->
@@ -39,7 +40,7 @@
 
             <!-- DUPLICATE SLIDE -->
             <div class="swiper-slide relative h-full">
-                <img src="{{ asset('images/festival musik.jpg') }}"
+                <img src="{{ asset('images/events/banner_1780050795.jpg') }}"
                     class="w-full h-full object-cover">
 
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
@@ -120,7 +121,9 @@
                 <div class="group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/40 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
 
                     <div class="relative h-48 overflow-hidden">
-                        <img src="{{ $event->banner ? asset('storage/' . $event->banner) : asset('images/kmipn.jpeg') }}"
+                        <img src="{{ $event->banner
+                            ? asset('images/events/' . $event->banner)
+                            : asset('images/events/banner_1779635248.jpg') }}"
                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
 
                         <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-2 rounded-xl text-center border border-white/10">
@@ -196,18 +199,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="p-6 bg-gradient-to-br from-blue-600 to-blue-900 rounded-2xl">
-                <h4 class="font-black mb-2">Need New Event?</h4>
-                <p class="text-xs text-blue-100 mb-4">
-                    Create and publish your next event here.
-                </p>
-
-                <button class="w-full py-3 bg-white text-blue-600 rounded-xl text-sm font-bold hover:bg-blue-50 transition">
-                    Create Event
-                </button>
-            </div>
-
         </div>
     </aside>
 
@@ -368,6 +359,5 @@
         </form>
     </div>
 </div>
-
-<script src="{{ asset('js/unpublish.js') }}"></script>
+git add .
 @endsection

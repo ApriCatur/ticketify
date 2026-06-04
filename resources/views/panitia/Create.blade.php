@@ -7,6 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        [x-cloak] {
+            display: none;
+        }
+
+        img[x-show] {
+            max-height: 300px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 @php
     $ticketRows = old('ticket_types', [['name' => 'Reguler', 'price' => 0, 'stock' => 100]]);
@@ -14,8 +24,32 @@
 <body class="bg-[#09090b] text-white flex" x-data='{
         activeTab: "ticket",
         bannerName: "",
+        bannerPreview: "",
         orgPhotoName: "",
-        ticketRows: @json($ticketRows)
+        orgPhotoPreview: "",
+        ticketRows: @json($ticketRows),
+        handleBannerChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.bannerName = file.name;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.bannerPreview = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        },
+        handleOrgPhotoChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.orgPhotoName = file.name;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.orgPhotoPreview = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
     }'>
 
     @include('layouts.sidebar-panitia')
@@ -65,11 +99,24 @@
                     {{-- Input Poster --}}
                     <div class="space-y-4">
                         <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Poster Event</label>
-                        <div class="border-2 border-dashed border-white/10 rounded-3xl p-[110px] text-center hover:border-blue-500/50 transition-colors bg-[#121212] group relative overflow-hidden">
-                            <i class="fa-solid fa-image text-4xl text-gray-700 group-hover:text-blue-500 transition-colors mb-4 block"></i>
-                            <p class="text-[11px] text-gray-500 font-medium" x-text="bannerName ? bannerName : 'Klik atau seret file poster di sini'"></p>
-                            <input type="file" name="banner" class="hidden" id="poster" accept="image/*" @change="bannerName = $event.target.files[0].name">
-                            <button type="button" onclick="document.getElementById('poster').click()" class="mt-4 px-6 py-2 bg-white/5 rounded-full text-[10px] font-bold hover:bg-white/10 transition-all border border-white/5">Pilih File</button>
+                        <div class="border-2 border-dashed border-white/10 rounded-3xl p-[110px] text-center hover:border-blue-500/50 transition-colors bg-[#121212] group relative overflow-hidden" :class="bannerPreview ? 'p-4' : 'p-[110px]'">
+                            <template x-if="!bannerPreview">
+                                <div class="flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-image text-4xl text-gray-700 group-hover:text-blue-500 transition-colors mb-4 block"></i>
+                                    <p class="text-[11px] text-gray-500 font-medium">Klik atau seret file poster di sini</p>
+                                    <button type="button" onclick="document.getElementById('poster').click()" class="mt-4 px-6 py-2 bg-white/5 rounded-full text-[10px] font-bold hover:bg-white/10 transition-all border border-white/5">Pilih File</button>
+                                </div>
+                            </template>
+                            <template x-if="bannerPreview">
+                                <div class="relative">
+                                    <img :src="bannerPreview" alt="Banner Preview" class="w-full h-64 object-cover rounded-2xl">
+                                    <button type="button" @click="bannerName = ''; bannerPreview = ''; document.getElementById('poster').value = '';" class="absolute top-2 right-2 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-xs hover:bg-red-600 transition">
+                                        <i class="fa-solid fa-times"></i>
+                                    </button>
+                                    <p class="text-[11px] text-gray-400 font-medium mt-2" x-text="'File: ' + bannerName"></p>
+                                </div>
+                            </template>
+                            <input type="file" name="banner" class="hidden" id="poster" accept="image/*" @change="handleBannerChange($event)">
                         </div>
                     </div>
 
@@ -162,7 +209,7 @@
             {{-- ========================================================================= --}}
             {{-- STEP 2: EVENT DETAIL --}}
             {{-- ========================================================================= --}}
-            <div x-show="activeTab === 'detail'" class="space-y-8" style="display: none;">
+            <div x-show="activeTab === 'detail'" class="space-y-8">
                 <div class="space-y-2">
                     <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Deskripsi Event</label>
                     <textarea name="description" rows="6" class="w-full bg-[#121212] border border-white/5 rounded-2xl p-4 text-sm focus:border-blue-500 outline-none" placeholder="Ceritakan detail acaramu..." required>{{ old('description') }}</textarea>
@@ -181,7 +228,7 @@
             {{-- ========================================================================= --}}
             {{-- STEP 3: ORGANISER (FINAL TAB) --}}
             {{-- ========================================================================= --}}
-            <div x-show="activeTab === 'organiser'" class="space-y-8" style="display: none;">
+            <div x-show="activeTab === 'organiser'" class="space-y-8">
                 <div class="grid md:grid-cols-2 gap-8">
                     <div class="space-y-2">
                         <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Deskripsi Organisasi</label>
@@ -189,21 +236,34 @@
                     </div>
                     <div class="space-y-4">
                         <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Foto Organisasi / Tim</label>
-                        <div class="border-2 border-dashed border-white/10 rounded-3xl p-10 text-center bg-[#121212] group">
-                            <i class="fa-solid fa-users text-4xl text-gray-700 group-hover:text-blue-500 transition-colors mb-4 block"></i>
-                            <p class="text-[11px] text-gray-500 font-medium mb-2" x-text="orgPhotoName ? orgPhotoName : 'Belum ada foto terpilih'"></p>
-                            <input type="file" name="organiser_photo" class="hidden" id="org_photo" accept="image/*" @change="orgPhotoName = $event.target.files[0].name">
-                            <button type="button" onclick="document.getElementById('org_photo').click()" class="px-6 py-2 bg-white/5 rounded-full text-[10px] font-bold hover:bg-white/10 transition-all border border-white/5">Upload Photo</button>
+                        <div class="border-2 border-dashed border-white/10 rounded-3xl p-10 text-center bg-[#121212] group" :class="orgPhotoPreview ? 'p-4' : 'p-10'">
+                            <template x-if="!orgPhotoPreview">
+                                <div class="flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-users text-4xl text-gray-700 group-hover:text-blue-500 transition-colors mb-4 block"></i>
+                                    <p class="text-[11px] text-gray-500 font-medium mb-2">Belum ada foto terpilih</p>
+                                    <button type="button" onclick="document.getElementById('org_photo').click()" class="px-6 py-2 bg-white/5 rounded-full text-[10px] font-bold hover:bg-white/10 transition-all border border-white/5">Upload Photo</button>
+                                </div>
+                            </template>
+                            <template x-if="orgPhotoPreview">
+                                <div class="relative">
+                                    <img :src="orgPhotoPreview" alt="Organiser Photo Preview" class="w-full h-64 object-cover rounded-2xl">
+                                    <button type="button" @click="orgPhotoName = ''; orgPhotoPreview = ''; document.getElementById('org_photo').value = '';" class="absolute top-2 right-2 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-xs hover:bg-red-600 transition">
+                                        <i class="fa-solid fa-times"></i>
+                                    </button>
+                                    <p class="text-[11px] text-gray-400 font-medium mt-2" x-text="'File: ' + orgPhotoName"></p>
+                                </div>
+                            </template>
+                            <input type="file" name="organiser_photo" class="hidden" id="org_photo" accept="image/*" @change="handleOrgPhotoChange($event)">
                         </div>
                     </div>
                 </div>
 
-                {{-- Action Akhir Tombol Submit --}}
+        {{-- Action Akhir Tombol Submit --}}
                 <div class="pt-10 flex justify-end gap-4 border-t border-white/5">
                     <button type="button" @click="activeTab = 'detail'" class="px-8 py-4 rounded-2xl bg-white/5 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all text-gray-300">
                         Kembali
                     </button>
-                    <button type="submit" class="px-10 py-4 rounded-2xl bg-blue-600 text-white text-xs font-black uppercase tracking-widest hover:bg-blue-700 shadow-lg shadow-blue-600/20 active:scale-95 transition-all">
+                    <button type="submit" id="submit-event-btn" class="px-10 py-4 rounded-2xl bg-blue-600 text-white text-xs font-black uppercase tracking-widest hover:bg-blue-700 shadow-lg shadow-blue-600/20 active:scale-95 transition-all">
                         Ajukan Event Sekarang
                     </button>
                 </div>
@@ -214,24 +274,97 @@
 
     {{-- Script Handler Sidebar Responsif --}}
     <script>
-        const openBtn = document.getElementById('open-sidebar');
-        const closeBtn = document.getElementById('close-sidebar');
-        const sidebar = document.getElementById('main-sidebar');
-        const overlay = document.getElementById('sidebar-overlay');
+        // Debug Alpine.js state
+        window.addEventListener('alpine:initialized', () => {
+            console.log('✅ Alpine.js initialized');
+        });
 
-        if (openBtn && sidebar) {
-            function toggleSidebar() {
-                sidebar.classList.toggle('-translate-x-full');
-                if (overlay) {
-                    overlay.classList.toggle('hidden');
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 DOM Content Loaded');
+
+            const openBtn = document.getElementById('open-sidebar');
+            const closeBtn = document.getElementById('close-sidebar');
+            const sidebar = document.getElementById('main-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            if (openBtn && sidebar) {
+                function toggleSidebar() {
+                    sidebar.classList.toggle('-translate-x-full');
+                    if (overlay) {
+                        overlay.classList.toggle('hidden');
+                    }
+                    document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
                 }
-                document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
+
+                openBtn.addEventListener('click', toggleSidebar);
+                if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+                if (overlay) overlay.addEventListener('click', toggleSidebar);
             }
 
-            openBtn.addEventListener('click', toggleSidebar);
-            if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
-            if (overlay) overlay.addEventListener('click', toggleSidebar);
-        }
+            // Monitor form and Alpine state
+            const form = document.querySelector('form');
+            const submitBtn = document.getElementById('submit-event-btn');
+
+            console.log('📋 Form element:', form);
+            console.log('🔘 Submit button:', submitBtn);
+
+            if (form) {
+                // Log when form tab changes
+                const ticketTab = document.querySelector('[\\@click="activeTab = \'ticket\'"]');
+                const detailTab = document.querySelector('[\\@click="activeTab = \'detail\'"]');
+                const organiserTab = document.querySelector('[\\@click="activeTab = \'organiser\'"]');
+
+                console.log('📑 Tab elements found:', {
+                    ticket: !!ticketTab,
+                    detail: !!detailTab,
+                    organiser: !!organiserTab
+                });
+
+                form.addEventListener('submit', function(e) {
+                    console.log('📤 Form submit event triggered');
+
+                    // Get all input fields
+                    const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+                    let isValid = true;
+                    const emptyFields = [];
+
+                    inputs.forEach(input => {
+                        if (!input.value || input.value.trim() === '') {
+                            isValid = false;
+                            emptyFields.push(input.name || input.id || input.type);
+                        }
+                    });
+
+                    // Check if at least one ticket exists
+                    const ticketNameInputs = form.querySelectorAll('input[name*="ticket_types"][name*="name"]');
+                    console.log('🎫 Ticket inputs found:', ticketNameInputs.length);
+
+                    if (ticketNameInputs.length === 0) {
+                        isValid = false;
+                        emptyFields.push('Minimal 1 jenis tiket harus ditambahkan');
+                    }
+
+                    if (!isValid) {
+                        e.preventDefault();
+                        console.warn('❌ Form validation failed. Empty fields:', emptyFields);
+                        alert('❌ Mohon isi semua field yang diperlukan:\n\n' + emptyFields.join('\n'));
+                        return false;
+                    }
+
+                    console.log('✅ Form validation passed, submitting...');
+                    return true;
+                });
+
+                // Monitor submit button click
+                if (submitBtn) {
+                    submitBtn.addEventListener('click', function(e) {
+                        console.log('🖱️ Submit button clicked directly');
+                        console.log('Button disabled:', this.disabled);
+                        console.log('Button visible:', this.offsetParent !== null);
+                    });
+                }
+            }
+        });
     </script>
 </body>
 </html>

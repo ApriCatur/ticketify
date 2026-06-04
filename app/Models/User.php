@@ -29,6 +29,12 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function hasRole($role)
+{
+    return $this->role === $role;
+}
+
+
     public function events()
     {
         return $this->hasMany(Event::class);

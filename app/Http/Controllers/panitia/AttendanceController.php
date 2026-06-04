@@ -35,6 +35,20 @@ class AttendanceController extends Controller
         return view('Panitia.Attendance', compact('userEvents', 'recentAttendances'));
     }
 
+    public function showAttendees($id)
+{
+    // Mengambil event dan memverifikasi bahwa event ini milik panitia yang sedang login
+    $event = Auth::user()->events()->findOrFail($id);
+
+    // Mengambil daftar tiket yang sudah terjual untuk event ini
+    $attendees = \App\Models\Ticket::where('event_id', $id)
+        ->with('user:id,name,nim,')
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
+
+    return view('panitia.customerdata', compact('event', 'attendees'));
+}
+
     /**
      * Verify ticket by ticket ID (manual input atau scan)
      */

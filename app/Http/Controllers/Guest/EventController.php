@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Pembeli;
+namespace App\Http\Controllers\Guest;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
@@ -41,11 +41,14 @@ class EventController extends Controller // Pastikan class dibuka di sini
             ->get();
 
         // KIRIM SEMUA VARIABEL KE VIEW
-        return view('pembeli.event', compact('publicEvents', 'events', 'upcomingEvents'));
+        return view('guest.event', compact('publicEvents', 'events', 'upcomingEvents'));
     }
 
-    public function show(Event $event)
-    {
-        return view('pembeli.detail', compact('event'));
-    }
+ public function show($id)
+{
+    // Mengambil data berdasarkan ID secara manual agar lebih fleksibel
+    $event = \App\Models\Event::findOrFail($id);
+
+    return view('guest.detail', compact('event'));
+}
 } // Pastikan class ditutup di sini

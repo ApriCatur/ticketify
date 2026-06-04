@@ -26,6 +26,9 @@ use App\Http\Controllers\Admin\EventCategoriesController;
 use App\Http\Controllers\Admin\PendingEventController;
 use App\Http\Controllers\Admin\PublishedEventController;
 
+// Guest Controllers
+use App\Http\Controllers\Guest\EventController as GuestEventController;
+
 // Middleware
 use App\Http\Middleware\RoleMiddleware;
 
@@ -43,12 +46,15 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Preview Frontend Saja (Sebelum Login)
 Route::prefix('guest')->group(function () {
-    Route::get('/event', function () { return view('Guest.Event'); })->name('guest.event');
+    Route::get('/event', [GuestEventController::class, 'index'])->name('guest.event');
+    Route::get('/event/{id}', [GuestEventController::class, 'show'])->name('guest.event.detail');
     Route::get('/myticket', function () { return view('Guest.MyTicket'); })->name('guest.myticket');
     Route::get('/about', function () { return view('Guest.About'); })->name('guest.about');
     Route::get('/settings', function () { return view('Guest.Settings'); })->name('guest.settings');
     Route::get('/buatevent', function () { return view('Guest.BuatEvent'); })->name('guest.buatevent');
     Route::get('/detail', function () { return view('Guest.Detail'); })->name('guest.detail');
+    
+
 });
 
 /*
@@ -91,7 +97,7 @@ Route::middleware([RoleMiddleware::class . ':panitia'])->prefix('panitia')->grou
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('panitia.attendance');
     Route::post('/attendance/verify', [AttendanceController::class, 'verifyTicket'])->name('panitia.verify-ticket');
     Route::get('/attendance/statistics', [AttendanceController::class, 'getStatistics'])->name('panitia.attendance-stats');
-    Route::get('/myevent/{id}/attendees', [PanitiaEventController::class, 'attendees'])->name('panitia.customerdata');
+    Route::get('/myevent/{id}/attendees', [AttendanceController::class, 'showAttendees'])->name('panitia.customerdata');
     // STATISTIC
     Route::get('/statistic', [StatisticController::class, 'index'])->name('panitia.statistic');
     Route::get('/statistic/{id}', [StatisticController::class, 'show'])->name('panitia.statistic.detail');

@@ -11,6 +11,7 @@ class PublishedEventController extends Controller
     public function index()
     {
         $publishedEvents = Event::where('status', 'published')
+            ->with('tickets')   // ← load relasi tickets
             ->orderBy('date', 'asc')
             ->get();
 
@@ -29,6 +30,5 @@ class PublishedEventController extends Controller
             'unpublished_at'   => now(),
         ]);
 
-        return back()->with('success', 'Event berhasil di-unpublish.');
     }
 }

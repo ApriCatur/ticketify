@@ -339,3 +339,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.openEditCategory   = openEditCategory;
     window.openDeleteCategory = openDeleteCategory;
 });
+
+function openDetailFromElement(el) {
+    let event = JSON.parse(el.dataset.event);
+
+    console.log(event); //
+
+    document.getElementById('detailPoster').src =
+        event.banner && event.banner !== ''
+            ? `/images/events/${event.banner}`
+            : `/images/events/banner_1779635248.jpg`;
+}

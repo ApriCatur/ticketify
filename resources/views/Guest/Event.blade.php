@@ -18,316 +18,155 @@
         ::-webkit-scrollbar-track { background: #0f0f0f; }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 
-        /* Custom Swiper Pagination */
         .swiper-pagination-bullet { background: #fff; opacity: 0.5; }
         .swiper-pagination-bullet-active { background: #3b82f6; opacity: 1; width: 20px; border-radius: 5px; transition: all 0.3s; }
     </style>
 </head>
 <body class="bg-[#0f0f0f] text-white antialiased">
 
-    <div class="flex max-w-[1600px] mx-auto min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
+<div class="flex w-full min-h-screen border-x border-gray-800 bg-[#121212] relative">
 
-    @include('layouts.sidebar-guest')
 
-        <!-- ini bagian navbar -->
-        <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
+    {{-- OVERLAY UNTUK MOBILE --}}
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/70 z-40 hidden lg:hidden"></div>
+
+    {{-- KONTEN UTAMA --}}
+    <div class="flex-1 flex flex-col min-w-0">
+        <!-- Navbar -->
         <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
-
-         <!-- TOMBOL HAMBURGER: Sekarang muncul di mobile (lg:hidden) -->
             <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
                 <i class="fa-solid fa-bars-staggered text-2xl"></i>
             </button>
 
-    <div class="hidden lg:flex items-center gap-3">
-        <div class="w-2 h-2 bg-[#1DB954] rounded-full animate-pulse"></div> <span class="text-[11px] text-gray-400 font-bold uppercase tracking-widest italic">
-            Welcome To Ticketify! <span class="text-white/50 font-medium normal-case tracking-normal ml-1">— Discover something new today.</span>
-        </span>
+            <div class="hidden lg:flex items-center gap-2 mr-8">
+                <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center font-bold text-white">T</div>
+                <span class="font-extrabold text-xl tracking-tight uppercase">Ticketify</span>
+            </div>
+
+            <div class="hidden lg:flex items-center gap-3 flex-grow">
+                <div class="w-2 h-2 bg-[#1DB954] rounded-full animate-pulse"></div>
+                <span class="text-[11px] text-gray-400 font-bold uppercase tracking-widest italic whitespace-nowrap">
+                    Welcome To Ticketify!
+                    <span class="text-white/50 font-medium normal-case tracking-normal ml-1">— Discover something new today.</span>
+                </span>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <a href="{{ route('login') }}" class="group relative px-6 py-2">
+                    <span class="text-sm font-bold text-gray-400 group-hover:text-white transition-colors duration-300">Sign In</span>
+                </a>
+                <a href="{{ route('register') }}">
+                    <button class="px-8 py-2.5 text-sm font-black bg-white text-black rounded-full hover:scale-105 transition-all">
+                        REGISTER
+                    </button>
+                </a>
+            </div>
+        </nav>
+
+        {{-- Carousel --}}
+        @include('components.event-carousel')
+
+        {{-- Filter --}}
+        <div class="px-8 mt-6">
+            <x-event-filter />
+        </div>
+
+       {{-- Grid Event --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-8 pb-8 mt-6">
+            @forelse($publicEvents as $event)
+                <x-event-card
+                    :image="asset('images/events/' . $event->banner)"
+                    :day="\Carbon\Carbon::parse($event->date)->format('d')"
+                    :month="\Carbon\Carbon::parse($event->date)->translatedFormat('M')"
+                    :year="\Carbon\Carbon::parse($event->date)->format('Y')"
+                    :category="$event->category"
+                    :title="$event->name"
+                    :location="$event->location"
+                    :startTime="\Carbon\Carbon::parse($event->time_start)->format('H:i')"
+                    :endTime="\Carbon\Carbon::parse($event->time_end)->format('H:i')"
+                    :price="'Rp ' . number_format($event->price, 0, ',', '.')"
+                >
+                    {{-- Tombol Detail tampil untuk SEMUA pengunjung --}}
+                    <a href="{{ route('guest.event.detail', $event->id) }}"
+                       class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all text-center">
+                       Detail
+                    </a>
+                </x-event-card>
+            @empty
+                <div class="col-span-full text-center py-10">
+                    <p class="text-gray-500 text-sm">Belum ada event yang dipublikasikan.</p>
+                </div>
+            @endforelse
+        </div>
     </div>
 
-    <div class="flex items-center gap-2">
-        <a href="{{ route('login') }}" class="group relative px-6 py-2">
-            <span class="text-sm font-bold text-gray-400 group-hover:text-white transition-colors duration-300">Sign In</span>
-            <span class="absolute bottom-1 left-6 right-6 h-[2px] bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
-        </a>
+    {{-- Sidebar Kanan (Upcoming) --}}
+    <aside class="w-80 hidden xl:flex flex-col sticky top-0 h-screen p-8 space-y-8 bg-[#121212] overflow-y-auto border-l border-white/5">
+        <div>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-black italic tracking-tighter text-white">Upcoming</h2>
+                <i class="fa-solid fa-calendar-check text-blue-500"></i>
+            </div>
 
-        <a href="{{ route('register') }}">
-            <button class="relative overflow-hidden px-8 py-2.5 text-sm font-black bg-white text-black rounded-full hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[#1DB954]/20">
-                <span class="relative z-10">REGISTER</span>
-            </button>
-        </a>
-    </div>
-</nav>
-
-            <!-- ini bagian poster slider -->
-            <!-- Poster 1 -->
-            <header class="p-8">
-                <div class="swiper myHeroSwiper rounded-3xl overflow-hidden shadow-2xl">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide relative h-[350px] group">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
-                            <img src="{{ asset('images/kmipn.jpeg') }}" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" alt="Hero">
-                            <div class="absolute inset-0 flex flex-col items-start justify-end p-8 z-20">
-                                <h2 class="text-4xl font-extrabold mb-2 leading-tight italic tracking-tighter">Seminar KMIPN 2026</h2>
-                                <p class="text-blue-100 max-w-lg mb-6 text-sm">Sharing bersama para juara nasional untuk persiapan kompetisi informatika terbesar.</p>
+            <div class="space-y-4">
+                @if(isset($upcomingEvents) && $upcomingEvents->count() > 0)
+                    @foreach($upcomingEvents as $upEvent)
+                        @php
+                            $eventDate = \Carbon\Carbon::parse($upEvent->date);
+                        @endphp
+                        <div class="group p-4 bg-[#1e1e1e] border border-white/5 rounded-2xl hover:border-blue-500/30 transition-all cursor-pointer">
+                            <div class="flex gap-4 items-center">
+                                <div class="flex-shrink-0 w-12 h-12 bg-blue-500/10 rounded-xl flex flex-col items-center justify-center border border-blue-500/20">
+                                    <span class="text-[10px] font-bold text-blue-400 uppercase leading-none">
+                                        {{ $eventDate->translatedFormat('M') }}
+                                    </span>
+                                    <span class="text-lg font-black text-white mt-0.5 leading-none">
+                                        {{ $eventDate->format('d') }}
+                                    </span>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-sm font-bold text-white tracking-tight truncate group-hover:text-blue-400 transition-colors">
+                                        {{ $upEvent->name }}
+                                    </h4>
+                                    <p class="text-[10px] text-gray-500 mt-1 uppercase flex items-center gap-1">
+                                        <i class="fa-regular fa-clock text-[9px]"></i>
+                                        {{ \Carbon\Carbon::parse($upEvent->time_start)->format('H:i') }} WIB
+                                    </p>
+                                </div>
                             </div>
                         </div>
-            <!-- Poster 2 -->
-                        <div class="swiper-slide relative h-[350px] group">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
-                            <img src="{{ asset('images/festival musik.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" alt="Tech">
-                            <div class="absolute inset-0 flex flex-col items-start justify-end p-8 z-20">
-                                <h2 class="text-4xl font-extrabold mb-2 leading-tight italic tracking-tighter">Pergelaran Vokasi 2026</h2>
-                                <p class="text-purple-100 max-w-lg mb-6 text-sm">Semarakkan perayaan vokasi tahun ini!</p>
-                            </div>
-                        </div>
-            <!-- Poster 3 -->
-                        <div class="swiper-slide relative h-[350px] group">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
-                            <img src="{{ asset('images/robotika1.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" alt="Tech">
-                            <div class="absolute inset-0 flex flex-col items-start justify-end p-8 z-20">
-                                <h2 class="text-4xl font-extrabold mb-2 leading-tight italic tracking-tighter">AI & Future Tech</h2>
-                                <p class="text-green-100 max-w-lg mb-6 text-sm">Jelajahi masa depan teknologi bersama para ahli di bidangnya.</p>
-                            </div>
-                        </div>
-            <!-- Poster 4 -->
-                        <div class="swiper-slide relative h-[350px] group">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
-                            <img src="{{ asset('images/seni.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" alt="Tech">
-                            <div class="absolute inset-0 flex flex-col items-start justify-end p-8 z-20">
-                                <h2 class="text-4xl font-extrabold mb-2 leading-tight italic tracking-tighter">Inovasi Teknologi 2026</h2>
-                                <p class="text-yellow-100 max-w-lg mb-6 text-sm">Temukan inovasi terbaru di dunia teknologi.</p>
-                            </div>
-                        </div>
-            <!-- Poster 5 -->
-                        <div class="swiper-slide relative h-[350px] group">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
-                            <img src="{{ asset('images/pec.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" alt="Tech">
-                            <div class="absolute inset-0 flex flex-col items-start justify-end p-8 z-20">
-                                <h2 class="text-4xl font-extrabold mb-2 leading-tight italic tracking-tighter">Pergelaran Vokasi 2026</h2>
-                                <p class="text-purple-100 max-w-lg mb-6 text-sm">Semarakkan perayaan vokasi tahun ini!</p>
-                            </div>
-                        </div>
-            <!-- Poster 6 -->
-                        <div class="swiper-slide relative h-[350px] group">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
-                            <img src="{{ asset('images/bisnis.jpg') }}" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" alt="Tech">
-                            <div class="absolute inset-0 flex flex-col items-start justify-end p-8 z-20">
-                                <h2 class="text-4xl font-extrabold mb-2 leading-tight italic tracking-tighter">AI & Future Tech</h2>
-                                <p class="text-green-100 max-w-lg mb-6 text-sm">Jelajahi masa depan teknologi bersama para ahli di bidangnya.</p>
-                            </div>
-                        </div>
-
+                    @endforeach
+                @else
+                    <div class="text-center py-8 bg-[#1e1e1e] border border-dashed border-white/5 rounded-2xl">
+                        <i class="fa-solid fa-calendar-xmark text-gray-700 text-xl mb-2 block"></i>
+                        <p class="text-[11px] text-gray-500 font-medium">Belum ada event terdekat</p>
                     </div>
-                    <div class="swiper-pagination"></div>
-                </div>
-            </header>
-
-            <!-- ini bagian search bar -->
-           <div class="px-8 -mt-10 relative z-30">
-    <div class="bg-[#1e1e1e] border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-wrap lg:flex-nowrap items-end gap-4">
-
-        <div class="flex-[2] min-w-[200px]">
-            <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2 block ml-1">Search Event Name</label>
-            <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
-                <i class="fa-solid fa-magnifying-glass text-blue-500"></i>
-                <input type="text" placeholder="Seminar, workshop, konser..." class="bg-transparent w-full outline-none text-sm text-gray-200">
+                @endif
             </div>
         </div>
-
-        <div class="flex-1 min-w-[150px]">
-            <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2 block ml-1">Category</label>
-            <div class="relative group">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <i class="fa-solid fa-tags text-blue-500 text-[12px]"></i>
-                </div>
-                <select class="w-full bg-white/5 border border-transparent rounded-xl py-3 pl-10 pr-8 text-xs font-bold text-gray-300 focus:border-blue-500 outline-none transition-all appearance-none cursor-pointer">
-                    <option value="" class="bg-[#1e1e1e]">Semua</option>
-                    <option value="edu" class="bg-[#1e1e1e]">Education</option>
-                    <option value="music" class="bg-[#1e1e1e]">Music</option>
-                    <option value="tech" class="bg-[#1e1e1e]">Technology</option>
-                    <option value="art" class="bg-[#1e1e1e]">Art & Theater</option>
-                </select>
-                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-500">
-                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex-1 min-w-[150px]">
-            <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2 block ml-1">Select Date</label>
-            <div class="relative group">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <i class="fa-solid fa-calendar-day text-blue-500 text-[12px]"></i>
-                </div>
-                <input type="date" class="w-full bg-white/5 border border-transparent rounded-xl py-3 pl-10 pr-4 text-xs font-bold text-gray-300 focus:border-blue-500 outline-none transition-all cursor-pointer [color-scheme:dark]">
-            </div>
-        </div>
-
-        <button class="w-full lg:w-auto px-8 py-3.5 bg-white text-black rounded-xl font-bold hover:bg-blue-500 hover:text-white transition-all active:scale-95 shadow-lg">
-            Cari Event
-        </button>
-    </div>
+    </aside>
 </div>
 
-            <!-- ini Judul Bagian Event Terpopuler -->
-                      <!-- ini Judul Bagian Event Terpopuler -->
-    <main class="p-8">
-    <div class="flex justify-between items-center mb-8">
-        <h2 class="text-2xl font-black italic tracking-tighter">Popular Event</h2>
-        <a href="#" class="text-sm text-blue-400 hover:underline">See All</a>
-    </div>
+ @include('layouts.about-us')
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
 
-        <!-- Contoh Panggil Event 1 -->
-       <x-event-card
-    image="{{ asset('images/kmipn.jpeg') }}"
-    month="Apr" day="25" year="2026"
-    category="Education"
-    title="Event Seminar KMIPN 2026"
-    location="Polibatam, Gedung Utama"
-    startTime="13:00"
-    endTime="16:00"
-    price="IDR 45.000"
->
-    <button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
-        Beli Tiket
-    </button>
-</x-event-card>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    const swiper = new Swiper('.myHeroSwiper', {
+        loop: true,
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        effect: 'fade',
+        fadeEffect: { crossFade: true },
+    });
+</script>
 
-        <!-- Contoh Panggil Event 2 (Tanpa nulis ulang CSS Card) -->
-      <x-event-card
-    image="{{ asset('images/festival musik.jpg') }}"
-    month="Mei" day="05" year="2026"
-    category="Music Event"
-    title="Pergelaran Vokasi 2026"
-    location="Depan Technopreneur"
-    startTime="18.00"
-    endTime="22.00"
-    price="IDR 45.000"
->
-    <button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
-        Beli Tiket
-    </button>
-</x-event-card>
-
-  <!-- Contoh Panggil Event 3 (Tanpa nulis ulang CSS Card) -->
-      <x-event-card
-    image="{{ asset('images/robotika1.jpg') }}"
-    month="Mei" day="12" year="2026"
-    category="Education"
-    title="Robotika OLeh Barelang FC"
-    location="Auditorium Polibatam"
-    startTime="13:00"
-    endTime="17:00"
-    price="IDR 45.000"
->
-    <button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
-        Beli Tiket
-    </button>
-</x-event-card>
-
-  <!-- Contoh Panggil Event 4 (Tanpa nulis ulang CSS Card) -->
-      <x-event-card
-    image="{{ asset('images/seni.jpg') }}"
-    month="1" day="June" year="2026"
-    category="Teater"
-    title="Polibatam Night  Festival"
-    location="Lapangan Parkir Polibatam"
-    startTime="19.00"
-    endTime="21.00"
-    price="IDR 45.000"
->
-    <button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
-        Beli Tiket
-    </button>
-</x-event-card>
-
-  <!-- Contoh Panggil Event 5 (Tanpa nulis ulang CSS Card) -->
-      <x-event-card
-    image="{{ asset('images/pec.jpg') }}"
-    month="June" day="10" year="2026"
-    category="Workshop"
-    title="How to be a confident speaker"
-    location="Polibatam, Gedung Utama"
-    startTime="13:00"
-    endTime="16:00"
-    price="IDR 45.000"
->
-    <button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
-        Beli Tiket
-    </button>
-</x-event-card>
-
-  <!-- Contoh Panggil Event 6 (Tanpa nulis ulang CSS Card) -->
-      <x-event-card
-    image="{{ asset('images/bisnis.jpg') }}"
-    month="Jul" day="20" year="2026"
-    category="Workshop"
-    title="How to Start Your Own Business"
-    location="Polibatam, Gedung Utama"
-    startTime="13:00"
-    endTime="16:00"
-    price="IDR 45.000"
->
-    <button class="px-4 py-2 bg-white text-black text-xs font-black rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
-        Beli Tiket
-    </button>
-</x-event-card>
-
-    </div>
-</main>
-            <footer class="mt-auto bg-black/20 border-t border-white/5 p-8 text-center">
-                <p class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em]">&copy; 2026 Informatics Engineering - Polibatam</p>
-            </footer>
-        </div>
-
-        <aside class="w-80 hidden xl:flex flex-col sticky top-0 h-screen p-8 space-y-8">
-            <div>
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-black italic tracking-tighter text-white">Upcoming</h2>
-                    <i class="fa-solid fa-calendar-check text-blue-500"></i>
-                </div>
-                <div class="space-y-4">
-                    <div class="group p-4 bg-[#1e1e1e] border border-white/5 rounded-2xl hover:border-blue-500/30 transition-all cursor-pointer">
-                        <div class="flex gap-4">
-                            <div class="flex-shrink-0 w-12 h-12 bg-blue-500/10 rounded-xl flex flex-col items-center justify-center border border-blue-500/20">
-                                <span class="text-[10px] font-bold text-blue-400 uppercase leading-none">Mei</span>
-                                <span class="text-lg font-black text-white">02</span>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-bold group-hover:text-blue-400 transition-colors">Workshop Laravel</h4>
-                                <p class="text-[10px] text-gray-500 mt-1 uppercase">09:00 WIB</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-8 p-6 bg-gradient-to-br from-blue-600 to-blue-900 rounded-2xl shadow-xl relative overflow-hidden group">
-                        <i class="fa-solid fa-ticket absolute -right-4 -bottom-4 text-white/10 text-8xl -rotate-12 group-hover:rotate-0 transition-all duration-500"></i>
-                        <h4 class="font-black text-white mb-2 relative z-10">Buka Event?</h4>
-                        <p class="text-xs text-blue-100 mb-4 relative z-10">Kelola tiket organisasimu di sini.</p>
-                        <a href="{{ route('guest.buatevent') }}" class="w-full py-4 px-6 bg-white text-blue-600 text-sm font-bold rounded-xl uppercase hover:bg-blue-50 hover:scale-[1.02] active:scale-95 transition-all duration-200 relative z-10 shadow-lg flex items-center justify-center tracking-wider">Buat Sekarang</a>
-            </div>
-        </aside>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        const swiper = new Swiper('.myHeroSwiper', {
-            loop: true,
-            autoplay: { delay: 5000, disableOnInteraction: false },
-            pagination: { el: '.swiper-pagination', clickable: true },
-            effect: 'fade',
-            fadeEffect: { crossFade: true },
-        });
-    </script>
-
-    <script>
+<script>
     const openBtn = document.getElementById('open-sidebar');
     const closeBtn = document.getElementById('close-sidebar');
     const sidebar = document.getElementById('main-sidebar');
     const overlay = document.getElementById('sidebar-overlay');
 
-    // Cek apakah elemen ada sebelum menjalankan fungsi
     if (openBtn && sidebar) {
         function toggleSidebar() {
             sidebar.classList.toggle('-translate-x-full');
@@ -336,13 +175,10 @@
             }
             document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
         }
-
         openBtn.addEventListener('click', toggleSidebar);
-
         if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
         if (overlay) overlay.addEventListener('click', toggleSidebar);
     }
 </script>
-
 </body>
 </html>

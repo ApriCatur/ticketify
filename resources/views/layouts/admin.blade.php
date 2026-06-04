@@ -31,7 +31,6 @@
 
         <div class="flex-1 space-y-6 overflow-y-auto custom-scrollbar pr-1">
             <div>
-                <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Main Menu</p>
                 <nav class="space-y-1">
                     <a href="{{ route('admin.dashboard') }}" class="{{ $base }} {{ request()->routeIs('admin.dashboard') ? $active : $inactive }}">
                         <i class="fa-solid fa-chart-line w-5"></i> Dashboard
