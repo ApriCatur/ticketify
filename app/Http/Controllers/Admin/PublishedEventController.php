@@ -18,14 +18,17 @@ class PublishedEventController extends Controller
         return view('Admin.PublishedEvent', compact('publishedEvents'));
     }
 
-    public function unpublish(Event $event)
+    public function unpublish(Request $request, Event $event)
     {
-        if ($event->status !== 'published') {
-            return redirect()->back()->with('error', 'Hanya event yang sudah dipublikasikan yang bisa diunpublish.');
-        }
+        $request->validate([
+            'reason' => 'required|string|min:10|max:500',
+        ]);
 
-        $event->update(['status' => 'pending']);
+        $event->update([
+            'status'           => 'rejected',
+            'unpublish_reason' => $request->reason,
+            'unpublished_at'   => now(),
+        ]);
 
-        return redirect()->back()->with('success', 'Event "' . $event->name . '" berhasil dipindahkan kembali ke status pending.');
     }
 }

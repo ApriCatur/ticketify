@@ -74,8 +74,13 @@
                                 <input type="email" name="email" value="maverick@student.polibatam.ac.id" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition">
                             </div>
                             <div>
+<<<<<<< HEAD
                                 <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Phone Number</label>
                                 <input type="tel" name="phone" value="08123456789" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition">
+=======
+                                <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1 mb-2 block">Phone Number</label>
+                                <input type="text" name="phone_number" value="{{ old('phone_number', auth()->user()->phone_number) }}" class="w-full bg-[#121212]/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition">
+>>>>>>> 596095b1399bb5e8ba86f46c06605a58401a90d4
                             </div>
                         </div>
                         <button type="submit" class="px-8 py-3 bg-blue-500 text-white rounded-xl font-black uppercase text-xs tracking-widest hover:scale-105 transition-all shadow-lg shadow-blue-500/20">Save Profile</button>

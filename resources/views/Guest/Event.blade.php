@@ -26,13 +26,11 @@
 
 <div class="flex w-full min-h-screen border-x border-gray-800 bg-[#121212] relative">
 
-
     {{-- OVERLAY UNTUK MOBILE --}}
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/70 z-40 hidden lg:hidden"></div>
 
     {{-- KONTEN UTAMA --}}
     <div class="flex-1 flex flex-col min-w-0">
-        <!-- Navbar -->
         <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
             <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
                 <i class="fa-solid fa-bars-staggered text-2xl"></i>
@@ -71,7 +69,7 @@
             <x-event-filter />
         </div>
 
-       {{-- Grid Event --}}
+        {{-- Grid Event --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-8 pb-8 mt-6">
             @forelse($publicEvents as $event)
                 <x-event-card
@@ -86,7 +84,6 @@
                     :endTime="\Carbon\Carbon::parse($event->time_end)->format('H:i')"
                     :price="'Rp ' . number_format($event->price, 0, ',', '.')"
                 >
-                    {{-- Tombol Detail tampil untuk SEMUA pengunjung --}}
                     <a href="{{ route('guest.event.detail', $event->id) }}"
                        class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all text-center">
                        Detail
@@ -98,17 +95,22 @@
                 </div>
             @endforelse
         </div>
+
+        {{-- PINDAH KE SINI: About Us dimasukkan agar sejajar sempurna dengan konten atas --}}
+        <div class="px-8 pb-12 mt-auto border-t border-white/5 pt-12">
+            @include('layouts.about-us')
+        </div>
     </div>
 
-    {{-- Sidebar Kanan (Upcoming) --}}
-    <aside class="w-80 hidden xl:flex flex-col sticky top-0 h-screen p-8 space-y-8 bg-[#121212] overflow-y-auto border-l border-white/5">
-        <div>
-            <div class="flex justify-between items-center mb-6">
+    {{-- Sidebar Kanan (Upcoming) - Tetap Stay/Sticky sempurna mengikuti container utama --}}
+    <aside class="w-80 hidden xl:flex flex-col sticky top-0 h-screen p-8 space-y-8 bg-[#121212] border-l border-white/5">
+        <div class="h-full flex flex-col">
+            <div class="flex justify-between items-center mb-6 flex-shrink-0">
                 <h2 class="text-xl font-black italic tracking-tighter text-white">Upcoming</h2>
                 <i class="fa-solid fa-calendar-check text-blue-500"></i>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-4 overflow-y-auto flex-1 pr-1 custom-scrollbar">
                 @if(isset($upcomingEvents) && $upcomingEvents->count() > 0)
                     @foreach($upcomingEvents as $upEvent)
                         @php
@@ -146,8 +148,6 @@
         </div>
     </aside>
 </div>
-
- @include('layouts.about-us')
 
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

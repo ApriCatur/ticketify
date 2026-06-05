@@ -41,8 +41,10 @@
 
         @include('components.event-carousel')
 
-        <div class="px-8 mt-6">
-            <x-event-filter />
+        <div class="px-8 mt-6 space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <x-event-filter />
+            </div>
         </div>
 
 
@@ -110,6 +112,12 @@
                                     </div>
                                 </div>
                             @endforeach
+
+                            @if(auth()->user() && auth()->user()->role === 'pembeli')
+                                    <a href="{{ route('pembeli.buatevent') }}" class="inline-flex items-center justify-center rounded-2xl border border-blue-500 bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500">
+                                        <i class="fa-solid fa-plus mr-2"></i> Ajukan Jadi Panitia
+                                    </a>
+                                @endif
                     @else
                         <div class="text-center py-8 bg-[#1e1e1e] border border-dashed border-white/5 rounded-2xl">
                             <i class="fa-solid fa-calendar-xmark text-gray-700 text-xl mb-2 block"></i>

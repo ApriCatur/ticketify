@@ -29,6 +29,8 @@ class Event extends Model
         'organiser_description',
         'organiser_photo',
         'status',
+        'unpublish_reason',
+        'unpublished_at',
     ];
 
     protected $casts = [
@@ -67,9 +69,13 @@ class Event extends Model
         return $this->status;
     }
 
+<<<<<<< HEAD
     // Relasi ke Category
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+=======
+
+>>>>>>> 596095b1399bb5e8ba86f46c06605a58401a90d4
 }
