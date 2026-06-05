@@ -1,172 +1,130 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticketify | About Us</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
-        .glass { background: rgba(18, 18, 18, 0.7); backdrop-filter: blur(15px); }
-        .team-card:hover { transform: translateY(-10px); border-color: #1DB954; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .spotify-gradient { background: linear-gradient(180deg, #121212 0%, #1db95420 100%); }
-        .text-glow { text-shadow: 0 0 15px rgba(29, 185, 84, 0.3); }
-    </style>
-</head>
-<body class="bg-[#0f0f0f] text-white antialiased">
+{{-- Gganti gradien hijau spotify menjadi tosca/biru tua cerah agar serasi --}}
+<div class="w-full border-t border-white/5 pt-16 bg-gradient-to-b from-transparent to-cyan-950/10">
+    <main class="p-0">
+        {{-- Section: More Than Just Code --}}
+        <section class="text-center max-w-4xl mx-auto mb-24">
+            <h1 class="text-4xl lg:text-7xl font-black italic tracking-tighter mb-8 uppercase text-shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+                More Than <br><span class="text-cyan-400">Just Code.</span>
+            </h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-left mt-12">
+                <div>
+                    <h2 class="text-cyan-400 font-bold uppercase tracking-widest text-xs mb-4">// The Genesis</h2>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Berawal dari keresahan kami terhadap sistem manajemen event kampus yang masih konvensional, <span class="text-white font-semibold">Ticketify</span> lahir sebagai jawaban digital. Kami melihat celah antara antusiasme mahasiswa dan hambatan birokrasi tiket fisik yang seringkali menghambat jalannya sebuah kreativitas organisasi.
+                    </p>
+                </div>
+                <div>
+                    <h2 class="text-cyan-400 font-bold uppercase tracking-widest text-xs mb-4">// The Vision</h2>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Melalui skema <span class="text-blue-400 font-bold">Project Based Learning (PBL)</span> di Politeknik Negeri Batam, kami mengintegrasikan keahlian teknis dengan solusi nyata. Fokus kami bukan sekadar membuat platform, tapi membangun ekosistem di mana setiap momen kampus bisa diakses hanya dengan satu sentuhan jari.
+                    </p>
+                </div>
+            </div>
+        </section>
 
-    <div class="flex max-w-[1600px] mx-auto min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
+        {{-- Section: Meet The Crew --}}
+        <section class="mb-24">
+            <div class="flex items-end justify-between mb-12 border-b border-white/10 pb-4">
+                <div>
+                    <h2 class="text-2xl font-black italic uppercase">Meet The Crew</h2>
+                    <p class="text-gray-500 text-[10px] mt-1 uppercase tracking-widest">Collaborators of Ticketify System</p>
+                </div>
+            </div>
 
-        <div class="flex-1 flex flex-col min-w-0 border-r border-white/5 spotify-gradient">
-            <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
-             <div class="flex items-center gap-4">
-                 <!-- TOMBOL HAMBURGER: Sekarang muncul di mobile (lg:hidden) -->
-            <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
-                <i class="fa-solid fa-bars-staggered text-2xl"></i>
-            </button>
-
-                <img src="{{ asset('images/polibatam.png') }}" alt="Polibatam" class="h-10 opacity-80 hover:opacity-100 transition duration-500">
-                <span class="text-[10px] font-black text-gray-500 uppercase tracking-[0.3em]">Technical Informatics Project</span>
-            </nav>
-
-            <main class="p-8 lg:p-16">
-                <section class="text-center max-w-4xl mx-auto mb-32">
-                    <h1 class="text-5xl lg:text-8xl font-black italic tracking-tighter mb-8 uppercase text-glow">
-                        More Than <br><span class="text-[#1a55cb]">Just Code.</span>
-                    </h1>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
-                        <div>
-                            <h2 class="text-[#1a55cb] font-bold uppercase tracking-widest text-xs mb-4">// The Genesis</h2>
-                            <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                                Berawal dari keresahan kami terhadap sistem manajemen event kampus yang masih konvensional, <span class="text-white font-semibold">Ticketify</span> lahir sebagai jawaban digital. Kami melihat celah antara antusiasme mahasiswa dan hambatan birokrasi tiket fisik yang seringkali menghambat jalannya sebuah kreativitas organisasi.
-                            </p>
-                        </div>
-                        <div>
-                            <h2 class="text-[#1a55cb] font-bold uppercase tracking-widest text-xs mb-4">// The Vision</h2>
-                            <p class="text-gray-400 text-sm leading-relaxed">
-                                Melalui skema <span class="text-blue-400 font-bold text-glow">Project Based Learning (PBL)</span> di Politeknik Negeri Batam, kami mengintegrasikan keahlian teknis dengan solusi nyata. Fokus kami bukan sekadar membuat platform, tapi membangun ekosistem di mana setiap momen kampus bisa diakses hanya dengan satu sentuhan jari.
-                            </p>
-                        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="group bg-[#181818] border border-white/5 rounded-3xl p-6 text-center transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:shadow-[0_20px_30px_rgba(6,182,212,0.1)]">
+                    <div class="w-24 h-24 mx-auto mb-4 relative">
+                        <div class="absolute inset-0 bg-cyan-500 rounded-full blur-xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                        <img src="https://ui-avatars.com/api/?name=Fauzi+A&background=06b6d4&color=fff" class="w-full h-full rounded-full object-cover border-2 border-white/10 relative z-10">
                     </div>
-                </section>
-
-                <section class="mb-32">
-                    <div class="flex items-end justify-between mb-12 border-b border-white/10 pb-4">
-                        <div>
-                            <h2 class="text-3xl font-black italic uppercase ">Meet The Crew</h2>
-                            <p class="text-gray-500 text-xs mt-2 uppercase tracking-widest">Collaborators of Ticketify System</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="team-card bg-[#181818] border border-white/5 rounded-3xl p-8 text-center transition-all duration-500 group">
-                            <div class="w-32 h-32 mx-auto mb-6 relative">
-                                <div class="absolute inset-0 bg-[#1DB954] rounded-full blur-2xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                                <img src="https://ui-avatars.com/api/?name=Fauzi+A&background=10b981&color=fff" class="w-full h-full rounded-full object-cover border-2 border-white/10 relative z-10">
-                            </div>
-                            <h3 class="font-black italic text-xl tracking-tight mb-1">M. Fauzi Azhari</h3>
-                            <p class="text-[10px] font-bold text-[#1DB954] uppercase tracking-widest mb-4">Lead Fullstack Developer</p>
-                            <p class="text-[11px] text-gray-500 mb-6 italic">"Turning complex logic into seamless experiences."</p>
-                            <div class="flex justify-center gap-4">
-                                <a href="#" class="text-gray-500 hover:text-white transition text-lg"><i class="fa-brands fa-github"></i></a>
-                                <a href="#" class="text-gray-500 hover:text-white transition text-lg"><i class="fa-brands fa-linkedin"></i></a>
-                            </div>
-                        </div>
-
-                        <div class="team-card bg-[#181818] border border-white/5 rounded-3xl p-8 text-center transition-all duration-500 group">
-                            <div class="w-32 h-32 mx-auto mb-6 relative">
-                                <div class="absolute inset-0 bg-[#8b5cf6] rounded-full blur-2xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                                <img src="https://ui-avatars.com/api/?name=Syarifah+B&background=8b5cf6&color=fff" class="w-full h-full rounded-full object-cover border-2 border-white/10 relative z-10">
-                            </div>
-                            <h3 class="font-black italic text-xl tracking-tight mb-1">Syarifah B. S.</h3>
-                            <p class="text-[10px] font-bold text-[#8b5cf6] uppercase tracking-widest mb-4">Fullstack Developer</p>
-                            <p class="text-[11px] text-gray-500 mb-6 italic">"Structuring data with precision and passion."</p>
-                            <div class="flex justify-center gap-4">
-                                <a href="#" class="text-gray-500 hover:text-white transition text-lg"><i class="fa-brands fa-github"></i></a>
-                                <a href="#" class="text-gray-500 hover:text-white transition text-lg"><i class="fa-brands fa-linkedin"></i></a>
-                            </div>
-                        </div>
-
-                        <div class="team-card bg-[#181818] border border-white/5 rounded-3xl p-8 text-center transition-all duration-500 group">
-                            <div class="w-32 h-32 mx-auto mb-6 relative">
-                                <div class="absolute inset-0 bg-[#f59e0b] rounded-full blur-2xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                                <img src="https://ui-avatars.com/api/?name=Apri+C&background=f59e0b&color=fff" class="w-full h-full rounded-full object-cover border-2 border-white/10 relative z-10">
-                            </div>
-                            <h3 class="font-black italic text-xl tracking-tight mb-1">Apri Catur P.</h3>
-                            <p class="text-[10px] font-bold text-[#f59e0b] uppercase tracking-widest mb-4">Fullstack Developer</p>
-                            <p class="text-[11px] text-gray-500 mb-6 italic">"Crafting interfaces that resonate with users."</p>
-                            <div class="flex justify-center gap-4">
-                                <a href="#" class="text-gray-500 hover:text-white transition text-lg"><i class="fa-brands fa-github"></i></a>
-                                <a href="#" class="text-gray-500 hover:text-white transition text-lg"><i class="fa-brands fa-linkedin"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                   <section class="glass rounded-3xl p-10 border border-white/5 flex flex-col md:flex-row items-center gap-8 lg:col-span-1">
-                    <div class="flex-shrink-0 group">
-                        <div class="relative w-32 h-32 lg:w-40 lg:h-40">
-                        <div class="absolute inset-0 bg-white rounded-full blur-2xl opacity-10 group-hover:opacity-20 transition-opacity"></div>
-                        <div class="relative w-full h-full rounded-full border-2 border-white/20 p-1 bg-[#121212]">
-                             <img src="https://ui-avatars.com/api/?name=Project+Manager&background=333&color=fff"
-                                        alt="Project Manager"
-                                        class="w-full h-full rounded-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
-                    </div>
-                        <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white text-black text-[8px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-xl">
-                            Mentor
+                    <h3 class="font-black italic text-lg tracking-tight mb-1">M. Fauzi Azhari</h3>
+                    <p class="text-[9px] font-bold text-cyan-400 uppercase tracking-widest mb-3">Lead Fullstack Developer</p>
+                    <p class="text-[11px] text-gray-500 mb-4 italic">"Turning complex logic into seamless experiences."</p>
+                    <div class="flex justify-center gap-4 text-gray-500">
+                        <a href="#" class="hover:text-white transition"><i class="fa-brands fa-github"></i></a>
+                        <a href="#" class="hover:text-white transition"><i class="fa-brands fa-linkedin"></i></a>
                     </div>
                 </div>
-             </div>
 
-                <div class="text-center md:text-left">
-                    <h4 class="text-[#1DB954] text-[10px] font-black uppercase tracking-[0.4em] mb-2">The Mentorship</h4>
-                    <h2 class="text-2xl font-black italic mb-4 leading-tight">GUIDED BY<br>EXCELLENCE</h2>
-                    <p class="text-gray-400 text-xs leading-relaxed mb-4">
-                        Keberhasilan pengembangan Ticketify tidak lepas dari arahan strategis <strong>Manajer Proyek</strong> kami. Beliau memastikan alur kerja kami tetap sejalan dengan standar industri, mulai dari arsitektur database hingga implementasi fungsionalitas Laravel.
-                    </p>
-                    <div class="flex items-center justify-center md:justify-start gap-3 text-gray-500">
-                        <div class="h-[1px] w-8 bg-gray-700"></div>
-                        <span class="text-[9px] font-bold uppercase tracking-[0.2em] text-white/50">Tech-Informatics Expert</span>
-                 </div>
+                <div class="group bg-[#181818] border border-white/5 rounded-3xl p-6 text-center transition-all duration-300 hover:-translate-y-2 hover:border-blue-500/50 hover:shadow-[0_20px_30px_rgba(59,130,246,0.1)]">
+                    <div class="w-24 h-24 mx-auto mb-4 relative">
+                        <div class="absolute inset-0 bg-blue-500 rounded-full blur-xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                        <img src="https://ui-avatars.com/api/?name=Syarifah+B&background=3b82f6&color=fff" class="w-full h-full rounded-full object-cover border-2 border-white/10 relative z-10">
+                    </div>
+                    <h3 class="font-black italic text-lg tracking-tight mb-1">Syarifah B. S.</h3>
+                    <p class="text-[9px] font-bold text-blue-400 uppercase tracking-widest mb-3">Fullstack Developer</p>
+                    <p class="text-[11px] text-gray-500 mb-4 italic">"Structuring data with precision and passion."</p>
+                    <div class="flex justify-center gap-4 text-gray-500">
+                        <a href="#" class="hover:text-white transition"><i class="fa-brands fa-github"></i></a>
+                        <a href="#" class="hover:text-white transition"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <div class="group bg-[#181818] border border-white/5 rounded-3xl p-6 text-center transition-all duration-300 hover:-translate-y-2 hover:border-cyan-500/50 hover:shadow-[0_20px_30px_rgba(6,182,212,0.1)]">
+                    <div class="w-24 h-24 mx-auto mb-4 relative">
+                        <div class="absolute inset-0 bg-cyan-500 rounded-full blur-xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                        <img src="https://ui-avatars.com/api/?name=Apri+C&background=06b6d4&color=fff" class="w-full h-full rounded-full object-cover border-2 border-white/10 relative z-10">
+                    </div>
+                    <h3 class="font-black italic text-lg tracking-tight mb-1">Apri Catur P.</h3>
+                    <p class="text-[9px] font-bold text-cyan-400 uppercase tracking-widest mb-3">Fullstack Developer</p>
+                    <p class="text-[11px] text-gray-500 mb-4 italic">"Crafting interfaces that resonate with users."</p>
+                    <div class="flex justify-center gap-4 text-gray-500">
+                        <a href="#" class="hover:text-white transition"><i class="fa-brands fa-github"></i></a>
+                        <a href="#" class="hover:text-white transition"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
             </div>
-                 </section>
+        </section>
 
-            <section class="bg-[#181818] rounded-3xl p-10 border border-white/5">
-                <h4 class="text-gray-500 text-[10px] font-black uppercase tracking-[0.4em] mb-8">Engineered With</h4>
-                <div class="grid grid-cols-2 gap-8">
-                    <!-- Laravel -->
-                    <div class="flex items-center gap-4">
-                        <i class="fa-brands fa-laravel text-4xl text-[#FF2D20]"></i>
+        {{-- Section: Mentorship & Tech --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <section class="bg-white/[0.02] backdrop-blur-md rounded-3xl p-8 border border-white/5 flex flex-col sm:flex-row items-center gap-6">
+                <div class="flex-shrink-0 group">
+                    <div class="relative w-28 h-28">
+                        <div class="absolute inset-0 bg-white rounded-full blur-xl opacity-5 group-hover:opacity-10 transition-opacity"></div>
+                        <div class="relative w-full h-full rounded-full border border-white/10 p-1 bg-[#121212]">
+                            <img src="https://ui-avatars.com/api/?name=Project+Manager&background=333&color=fff" alt="Project Manager" class="w-full h-full rounded-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
+                        </div>
+                        <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white text-black text-[7px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest shadow-xl">
+                            Mentor
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center sm:text-left">
+                    <h4 class="text-cyan-400 text-[9px] font-black uppercase tracking-[0.3em] mb-1">The Mentorship</h4>
+                    <h2 class="text-xl font-black italic mb-2 leading-tight">GUIDED BY EXCELLENCE</h2>
+                    <p class="text-gray-400 text-xs leading-relaxed">
+                        Keberhasilan pengembangan Ticketify tidak lepas dari arahan strategis <strong>Manajer Proyek</strong> kami. Beliau memastikan alur kerja kami tetap sejalan dengan standar industri kampus.
+                    </p>
+                </div>
+            </section>
+
+            <section class="bg-[#181818] rounded-3xl p-8 border border-white/5">
+                <h4 class="text-gray-500 text-[9px] font-black uppercase tracking-[0.3em] mb-6">Engineered With</h4>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-brands fa-laravel text-3xl text-[#FF2D20]"></i>
                         <div>
                             <p class="text-xs font-bold">Laravel</p>
                             <p class="text-[9px] text-gray-500 italic">Robust Backend</p>
                         </div>
                     </div>
-
-                    <!-- PHP -->
-                    <div class="flex items-center gap-4">
-                        <i class="fa-brands fa-php text-4xl text-[#777BB4]"></i>
+                    <div class="flex items-center gap-3">
+                        <i class="fa-brands fa-php text-3xl text-[#777BB4]"></i>
                         <div>
                             <p class="text-xs font-bold">PHP 8.x</p>
                             <p class="text-[9px] text-gray-500 italic">Modern Logic</p>
                         </div>
                     </div>
-
-                    <!-- Tailwind / JS -->
-                    <div class="flex items-center gap-4">
-                        <i class="fa-brands fa-js text-4xl text-[#F7DF1E]"></i>
+                    <div class="flex items-center gap-3">
+                        <i class="fa-brands fa-js text-3xl text-[#F7DF1E]"></i>
                         <div>
                             <p class="text-xs font-bold">Tailwind</p>
                             <p class="text-[9px] text-gray-500 italic">Reactive UI</p>
                         </div>
                     </div>
-
-                    <!-- MySQL -->
-                    <div class="flex items-center gap-4">
-                        <i class="fa-solid fa-database text-3xl text-[#4479A1]"></i>
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-database text-2xl text-[#4479A1]"></i>
                         <div>
                             <p class="text-xs font-bold">MySQL</p>
                             <p class="text-[9px] text-gray-500 italic">Solid Storage</p>
@@ -174,38 +132,10 @@
                     </div>
                 </div>
             </section>
-
-                </div>
-            </main>
-
-            <footer class="mt-20 bg-black/40 border-t border-white/5 p-8 text-center">
-                <p class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em]">&copy; 2026 Teknik Informatika - Politeknik Negeri Batam</p>
-            </footer>
         </div>
-    </div>
+    </main>
 
-    <script>
-    const openBtn = document.getElementById('open-sidebar');
-    const closeBtn = document.getElementById('close-sidebar');
-    const sidebar = document.getElementById('main-sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-
-    // Cek apakah elemen ada sebelum menjalankan fungsi
-    if (openBtn && sidebar) {
-        function toggleSidebar() {
-            sidebar.classList.toggle('-translate-x-full');
-            if (overlay) {
-                overlay.classList.toggle('hidden');
-            }
-            document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
-        }
-
-        openBtn.addEventListener('click', toggleSidebar);
-
-        if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
-        if (overlay) overlay.addEventListener('click', toggleSidebar);
-    }
-</script>
-
-</body>
-</html>
+    <footer class="mt-16 border-t border-white/5 py-6 text-center">
+        <p class="text-[9px] font-bold text-gray-600 uppercase tracking-[0.2em]">&copy; 2026 Teknik Informatika - Politeknik Negeri Batam</p>
+    </footer>
+</div>
