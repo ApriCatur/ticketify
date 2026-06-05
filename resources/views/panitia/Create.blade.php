@@ -127,21 +127,14 @@
                             <input type="text" name="name" value="{{ old('name') }}" placeholder="Masukkan nama event" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
                         </div>
 
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Kategori Event</label>
-                            <select name="category" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all text-white" required>
-                                <option value="" disabled selected class="bg-[#121212]">Pilih kategori event</option>
-                                <option class="bg-[#121212]" {{ old('category') == 'Music Concert' ? 'selected' : '' }}>Music Concert</option>
-                                <option class="bg-[#121212]" {{ old('category') == 'Seminar' ? 'selected' : '' }}>Seminar</option>
-                                <option class="bg-[#121212]" {{ old('category') == 'Workshop' ? 'selected' : '' }}>Workshop</option>
-                                <option class="bg-[#121212]" {{ old('category') == 'Festival' ? 'selected' : '' }}>Festival</option>
-                                <option class="bg-[#121212]" {{ old('category') == 'Sport' ? 'selected' : '' }}>Sport</option>
-                                <option class="bg-[#121212]" {{ old('category') == 'Competition' ? 'selected' : '' }}>Competition</option>
-                                <option class="bg-[#121212]" {{ old('category') == 'Exhibition' ? 'selected' : '' }}>Exhibition</option>
-                                <option class="bg-[#121212]" {{ old('category') == 'Community' ? 'selected' : '' }}>Community</option>
-                                <option class="bg-[#121212]" {{ old('category') == 'Education' ? 'selected' : '' }}>Education</option>
-                                <option class="bg-[#121212]" {{ old('category') == 'Entertainment' ? 'selected' : '' }}>Entertainment</option>
-                            </select>
+                       <div class="space-y-2">
+                    <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Kategori Event</label>
+                    <select name="category_id" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all text-white" required>
+                        <option value="" disabled selected>Pilih Kategori</option>
+                        @foreach(\App\Models\Category::all() as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
                         </div>
 
                         <div class="space-y-2">

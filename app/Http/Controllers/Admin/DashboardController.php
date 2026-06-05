@@ -22,14 +22,14 @@ class DashboardController extends Controller
 
         // Get events grouped by category for the chart
         $eventsByCategory = Event::where('status', 'approved')
-            ->select('category')
+            ->select('location')
             ->selectRaw('count(*) as count')
-            ->groupBy('category')
+            ->groupBy('location')
             ->orderByDesc('count')
             ->get();
 
         // Get category names and counts for the bar chart
-        $categories = $eventsByCategory->pluck('category')->take(4)->toArray();
+        $categories = $eventsByCategory->pluck('location')->take(4)->toArray();
         $categoryCounts = $eventsByCategory->pluck('count')->take(4)->toArray();
 
         // Calculate ratio for pie chart

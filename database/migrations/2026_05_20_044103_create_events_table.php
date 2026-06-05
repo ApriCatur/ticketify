@@ -18,7 +18,7 @@ return new class extends Migration
         // STEP 1: TICKET
         $table->string('banner')->nullable(); // Poster event
         $table->string('name'); // Nama event
-        $table->string('category'); // Kategori event
+        $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
         $table->string('location'); // Lokasi event
         $table->string('social_link')->nullable(); // Link instagram/sosmed
         $table->date('date'); // Tanggal pelaksanaan

@@ -28,7 +28,8 @@ class EventCategoriesController extends Controller
         $totalCategories   = Category::count();
         $totalDeleted      = Category::onlyTrashed()->count();
         $totalEventsTagged = Event::whereNotNull('category')->count();
-        $mostUsed          = $eventCountByCategory->sortDesc()->keys()->first() ?? '-';
+        $mostUsed = $categories->sortByDesc('events_count')->first()->name ?? '-';
+        $categories = Category::withCount('events')->get();
 
         return view('Admin.EventCategories', compact(
             'categories',
