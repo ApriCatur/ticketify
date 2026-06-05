@@ -142,7 +142,7 @@
 
                             <div>
                                 <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1 mb-2 block">Phone Number</label>
-                                <input type="text" name="phone" value="{{ old('phone', auth()->user()->phone) }}" class="w-full bg-[#121212]/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition">
+                                <input type="text" name="phone_number" value="{{ old('phone_number', auth()->user()->phone_number) }}" class="w-full bg-[#121212]/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition">
                             </div>
                         </div>
 
