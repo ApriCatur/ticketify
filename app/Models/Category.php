@@ -16,6 +16,11 @@ class Category extends Model
      */
     public function getEventCountAttribute(): int
     {
-        return \App\Models\Event::where('category', $this->name)->count();
+        return \App\Models\Event::where('category_id', $this->id)->count();
     }
+
+    public function events() {
+    return $this->hasMany(Event::class, 'category_id');
 }
+}
+

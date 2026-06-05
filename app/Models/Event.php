@@ -15,6 +15,7 @@ class Event extends Model
         'banner',
         'name',
         'category_id',
+        'location',
         'social_link',
         'date',
         'time_start',
@@ -64,5 +65,11 @@ class Event extends Model
         }
 
         return $this->status;
+    }
+
+    // Relasi ke Category
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }

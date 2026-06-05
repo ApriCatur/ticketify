@@ -21,7 +21,7 @@
             </button>
             <div>
                 <h1 class="text-2xl font-black uppercase">{{ $event->name }}</h1>
-                <p class="text-xs text-gray-500 mt-1">{{ $event->category }}</p>
+                <p class="text-xs text-gray-500 mt-1">{{ $event->category?->name }}</p>
             </div>
         </div>
 

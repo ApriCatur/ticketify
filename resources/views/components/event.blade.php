@@ -116,7 +116,7 @@
                     day="{{ \Illuminate\Support\Carbon::parse($event->date)->format('d') }}"
                     month="{{ \Illuminate\Support\Carbon::parse($event->date)->format('M') }}"
                     year="{{ \Illuminate\Support\Carbon::parse($event->date)->format('Y') }}"
-                    category="{{ $event->category }}"
+                    category="{{ $event->category?->name }}
                     title="{{ $event->name }}"
                     location="{{ $event->location }}"
                     startTime="{{ \Illuminate\Support\Carbon::parse($event->time_start)->format('H:i') }}"

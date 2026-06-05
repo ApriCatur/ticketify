@@ -9,40 +9,52 @@ use Illuminate\Http\Request;
 
 class EventCategoriesController extends Controller
 {
-    public function index(Request $request)
-    {
-        $tab    = $request->query('tab', 'active');
-        $search = $request->query('search', '');
+   public function index(Request $request)
+{
+    $tab = $request->query('tab', 'active');
+    $search = $request->query('search', '');
 
-        $query = Category::withTrashed()
-            ->when($search, fn($q) => $q->where('name', 'like', "%{$search}%"))
-            ->when($tab === 'active',  fn($q) => $q->whereNull('deleted_at'))
-            ->when($tab === 'deleted', fn($q) => $q->whereNotNull('deleted_at'));
+    $query = Category::withTrashed()
+        ->withCount('events')
+        ->when($search, function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%");
+        })
+        ->when($tab === 'active', function ($q) {
+            $q->whereNull('deleted_at');
+        })
+        ->when($tab === 'deleted', function ($q) {
+            $q->whereNotNull('deleted_at');
+        });
 
-        $categories = $query->orderBy('name')->get();
+    $categories = $query->orderBy('name')->get();
 
-        $eventCountByCategory = Event::selectRaw('category, COUNT(*) as total')
-            ->groupBy('category')
-            ->pluck('total', 'category');
+    $eventCountByCategory = Event::selectRaw('category_id, COUNT(*) as total')
+        ->groupBy('category_id')
+        ->pluck('total', 'category_id');
 
-        $totalCategories   = Category::count();
-        $totalDeleted      = Category::onlyTrashed()->count();
-        $totalEventsTagged = Event::whereNotNull('category')->count();
-        $mostUsed = $categories->sortByDesc('events_count')->first()->name ?? '-';
-        $categories = Category::withCount('events')->get();
+    $totalCategories = Category::count();
 
-        return view('Admin.EventCategories', compact(
-            'categories',
-            'eventCountByCategory',
-            'tab',
-            'search',
-            'totalCategories',
-            'totalDeleted',
-            'totalEventsTagged',
-            'mostUsed',
-        ));
+    $totalDeleted = Category::onlyTrashed()->count();
+
+    $totalEventsTagged = Event::whereNotNull('category_id')->count();
+
+    $mostUsed = '-';
+
+    if ($categories->count() > 0) {
+        $mostUsed = $categories->sortByDesc('events_count')->first()->name;
     }
 
+    return view('Admin.EventCategories', compact(
+        'categories',
+        'eventCountByCategory',
+        'tab',
+        'search',
+        'totalCategories',
+        'totalDeleted',
+        'totalEventsTagged',
+        'mostUsed'
+    ));
+}
     public function store(Request $request)
     {
         $request->validate([

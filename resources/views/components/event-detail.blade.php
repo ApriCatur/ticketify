@@ -84,7 +84,7 @@
                     @if(isset($event->category))
                         <div class="flex flex-wrap gap-2">
                             <span class="px-4 py-2 bg-[#18181b] rounded-full text-[10px] border border-white/5 font-bold uppercase text-blue-400">
-                                {{ $event->category }}
+                               {{ $event->category?->name }}
                             </span>
                         </div>
                     @endif

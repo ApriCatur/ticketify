@@ -27,9 +27,9 @@ public function index(Request $request)
     }
 
     // Jika user memilih kategori
-    if ($request->filled('category')) {
-        $query->where('category', $request->category);
-    }
+    if ($request->filled('category_id')) {
+    $query->where('category_id', $request->category_id);
+}
 
     if ($request->filled('date')) {
         $query->whereDate('date', $request->date);
@@ -78,7 +78,7 @@ public function show($id)
     {
         $request->validate([
             'name'                  => 'required|string|max:255',
-            'category'              => 'required|string',
+           'category_id'            => 'required|exists:categories,id',
             'location'              => 'required|string',
             'social_link'           => 'nullable|url',
             'date'                  => 'required|date',
@@ -115,7 +115,7 @@ public function show($id)
         Event::create([
             'user_id'               => Auth::id(),
             'name'                  => $request->name,
-            'category'              => $request->category,
+            'category_id'           => $request->category_id,
             'location'              => $request->location,
             'social_link'           => $request->social_link,
             'date'                  => $request->date,
@@ -147,7 +147,7 @@ public function show($id)
 
     $request->validate([
         'name'                  => 'required|string|max:255',
-        'category'              => 'required|string',
+        'category_id'           => 'required|exists:categories,id',
         'location'              => 'required|string',
         'social_link'           => 'nullable|url',
         'date'                  => 'required|date',
@@ -189,11 +189,11 @@ public function show($id)
     // Update Database
     $event->update([
         'name'                  => $request->name,
-        'category'              => $request->category,
+        'category_id'           => $request->category_id,
         'location'              => $request->location,
         'social_link'           => $request->social_link,
         'date'                  => $request->date,
-        'time_start'            => $request->time_start,    
+        'time_start'            => $request->time_start,
         'time_end'              => $request->time_end,
         'description'           => $request->description,
         'terms'                 => $request->terms,
