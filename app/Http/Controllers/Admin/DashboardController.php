@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index()
     {
         // Get published events count
-        $publishedEventsCount = Event::where('status', 'approved')->count();
+        $publishedEventsCount = Event::where('status', 'published')->count();
 
         // Get pending events count
         $pendingEventsCount = Event::where('status', 'pending')->count();
@@ -21,17 +21,16 @@ class DashboardController extends Controller
         $usersCount = User::count();
 
         // Get events grouped by category for the chart
-        $eventsByCategory = Event::where('status', 'approved')
-            ->select('location')
-            ->selectRaw('count(*) as count')
-            ->groupBy('location')
-            ->orderByDesc('count')
-            ->get();
+     $eventsByCategory = \App\Models\Category::withCount([
+        'events' => function ($query) {
+        $query->where('status', 'published');
+    }
+        ])
+        ->orderByDesc('events_count')
+        ->get();
 
-        // Get category names and counts for the bar chart
-        $categories = $eventsByCategory->pluck('location')->take(4)->toArray();
-        $categoryCounts = $eventsByCategory->pluck('count')->take(4)->toArray();
-
+        $categories = $eventsByCategory->pluck('name')->toArray();
+        $categoryCounts = $eventsByCategory->pluck('events_count')->toArray();
         // Calculate ratio for pie chart
         $totalEvents = $publishedEventsCount + $pendingEventsCount;
         $publishedPercentage = $totalEvents > 0 ? ($publishedEventsCount / $totalEvents) * 100 : 0;
@@ -44,7 +43,7 @@ class DashboardController extends Controller
             ->get();
 
         // Get recent published events
-        $recentPublishedEvents = Event::where('status', 'approved')
+        $recentPublishedEvents = Event::where('status', 'published')
             ->orderBy('date', 'desc')
             ->take(5)
             ->get();

@@ -125,7 +125,7 @@
                             <p class="text-[11px] text-gray-500 font-medium">Belum ada event terdekat</p>
                         </div>
                     @endif
-                </div>  
+                </div>
             </div>
         </aside>
 

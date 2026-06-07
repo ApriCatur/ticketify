@@ -56,8 +56,11 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class);
     }
 
-    // public function panitiaProfile()
-    // {
-    //     return $this->hasOne(PanitiaProfile::class);
-    // }
+    public function panitiaProfile()
+{
+    // Menghubungkan user ke data pendaftarannya di tabel role_applications
+    return $this->hasOne(RoleApplication::class, 'user_id')
+                ->where('status', 'approved');
+}
+
 }

@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Ukm extends Model
 {
-    use HasFactory;
-
-    protected $table = 'ukms';
+    // Tambahkan baris ini
     protected $fillable = ['nama_ukm'];
 }
