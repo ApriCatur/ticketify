@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\Category;
 
 class EventController extends Controller // Pastikan class dibuka di sini
 {
@@ -41,7 +42,8 @@ class EventController extends Controller // Pastikan class dibuka di sini
             ->get();
 
         // KIRIM SEMUA VARIABEL KE VIEW
-        return view('pembeli.event', compact('publicEvents', 'events', 'upcomingEvents'));
+        $categories = Category::all();
+        return view('pembeli.event', compact('publicEvents', 'events', 'upcomingEvents', 'categories'));
     }
 
     public function show(Event $event)

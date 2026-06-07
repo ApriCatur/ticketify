@@ -43,7 +43,7 @@
 
         <div class="px-8 mt-6 space-y-6">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <x-event-filter />
+                 <x-event-filter :categories="$categories" />
             </div>
         </div>
 
@@ -82,6 +82,7 @@
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-xl font-black italic tracking-tighter text-white">Upcoming</h2>
                     <i class="fa-solid fa-calendar-check text-blue-500"></i>
+
                 </div>
 
                      <div class="space-y-4">
@@ -124,7 +125,7 @@
                             <p class="text-[11px] text-gray-500 font-medium">Belum ada event terdekat</p>
                         </div>
                     @endif
-                </div>
+                </div>  
             </div>
         </aside>
 

@@ -44,7 +44,7 @@
         @include('components.event-carousel')
 
         <div class="px-8 mt-6">
-            <x-event-filter />
+           <x-event-filter :categories="$categories" />
         </div>
 
 

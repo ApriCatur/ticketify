@@ -36,7 +36,7 @@
             <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Total Pendapatan</p>
                 <h2 class="text-2xl font-black text-blue-500">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h2>
-                <p class="text-[10px] text-green-500 mt-2"><i class="fa-solid fa-arrow-up"></i> Real-time di MySQL</p>
+                <p class="text-[10px] text-green-500 mt-2"><i class="fa-solid fa-arrow-up"></i> Real-time</p>
             </div>
 
             <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">

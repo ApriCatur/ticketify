@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\Category;
 
 class EventController extends Controller // Pastikan class dibuka di sini
 {
@@ -20,8 +21,8 @@ class EventController extends Controller // Pastikan class dibuka di sini
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        if ($request->filled('category')) {
-            $query->where('category', $request->category);
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
         }
 
         if ($request->filled('date')) {
@@ -40,8 +41,11 @@ class EventController extends Controller // Pastikan class dibuka di sini
             ->take(3)
             ->get();
 
+        // 4. Query untuk kategori
+        $categories = Category::all();
+
         // KIRIM SEMUA VARIABEL KE VIEW
-        return view('guest.event', compact('publicEvents', 'events', 'upcomingEvents'));
+        return view('guest.event', compact('publicEvents', 'events', 'upcomingEvents', 'categories'));
     }
 
  public function show($id)

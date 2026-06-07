@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
+use App\Models\Category;
 
 class EventController extends Controller
 {
@@ -47,7 +48,9 @@ public function index(Request $request)
         ->take(3)
         ->get();
 
-    return view('panitia.event', compact('publicEvents', 'events', 'upcomingEvents'));
+    $categories = Category::all();
+
+    return view('panitia.event', compact('publicEvents', 'events', 'upcomingEvents', 'categories'));
 }
 
     /**
