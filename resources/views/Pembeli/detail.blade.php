@@ -7,6 +7,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    {{-- Midtrans Snap JS (Sandbox) --}}
+    <script type="text/javascript"
+        src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="{{ config('midtrans.client_key') }}">
+    </script>
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body class="bg-[#09090b] text-white min-h-screen p-6 md:p-10" x-data="{ tab: 'ticket' }">
@@ -96,13 +104,12 @@
                 </div>
             </div>
 
-            {{-- Form Pembelian Tiket --}}
-            <form action="#" method="POST" class="space-y-4 max-w-4xl mx-auto" x-data="{ tickets: {} }">
-                @csrf
+            {{-- ===== FORM PILIH TIKET ===== --}}
+            <div class="space-y-4 max-w-4xl mx-auto" x-data="ticketApp()">
                 <h3 class="font-bold text-lg mb-4">Pilih Tipe Tiket</h3>
+
                 @forelse ($event->ticket_types ?? [] as $index => $ticket)
-                    <div x-init="tickets[{{ $index }}] = 0"
-                         class="bg-[#18181b] p-6 rounded-2xl border border-white/5 flex items-center justify-between hover:border-blue-500/30 transition-all">
+                    <div class="bg-[#18181b] p-6 rounded-2xl border border-white/5 flex items-center justify-between hover:border-blue-500/30 transition-all">
                         <div>
                             <h3 class="font-bold"><i class="fa-solid fa-ticket text-blue-500 mr-2"></i> {{ $ticket['name'] }}</h3>
                             <span class="text-[10px] text-gray-500">Stock: {{ $ticket['stock'] }}</span>
@@ -112,26 +119,49 @@
 
                             {{-- Counter Plus/Minus --}}
                             <div class="flex items-center bg-[#09090b] rounded-lg border border-white/10">
-                                <button type="button" @click="if(tickets[{{ $index }}] > 0) tickets[{{ $index }}]--"
+                                <button type="button"
+                                        @click="decrement({{ $index }})"
                                         class="px-3 py-1 hover:text-blue-400">-</button>
-                                <span class="px-3 font-bold text-sm" x-text="tickets[{{ $index }}]">0</span>
-                                <input type="hidden" name="tickets[{{ $index }}][qty]" :value="tickets[{{ $index }}]">
-                                <input type="hidden" name="tickets[{{ $index }}][name]" value="{{ $ticket['name'] }}">
-                                <button type="button" @click="if(tickets[{{ $index }}] < {{ $ticket['stock'] }}) tickets[{{ $index }}]++"
+                                <span class="px-3 font-bold text-sm" x-text="quantities[{{ $index }}]">0</span>
+                                <button type="button"
+                                        @click="increment({{ $index }}, {{ $ticket['stock'] }})"
                                         class="px-3 py-1 hover:text-blue-400">+</button>
                             </div>
                         </div>
+
+                        {{-- Hidden data tiket untuk JS --}}
+                        <template x-if="false">
+                            <span
+                                data-ticket-index="{{ $index }}"
+                                data-ticket-name="{{ $ticket['name'] }}"
+                                data-ticket-price="{{ $ticket['price'] }}"
+                                data-ticket-stock="{{ $ticket['stock'] }}">
+                            </span>
+                        </template>
                     </div>
                 @empty
                     <p class="text-center text-gray-500 py-6">Tidak ada tipe tiket yang tersedia.</p>
                 @endforelse
 
+                {{-- Summary total --}}
+                <div class="bg-[#18181b] p-4 rounded-xl border border-white/5 flex justify-between items-center" x-show="totalQty > 0">
+                    <span class="text-sm text-gray-400">Total (<span x-text="totalQty"></span> tiket)</span>
+                    <span class="font-black text-blue-400 text-lg">IDR <span x-text="formatRupiah(totalAmount)"></span></span>
+                </div>
+
                 <div class="pt-6 border-t border-white/5 flex justify-center">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-xl font-bold transition flex items-center gap-2">
-                        <i class="fa-solid fa-cart-shopping"></i> Beli Tiket
+                    <button
+                        @click="bayar()"
+                        :disabled="totalQty === 0 || isLoading"
+                        :class="totalQty === 0 || isLoading
+                            ? 'bg-gray-700 cursor-not-allowed opacity-50'
+                            : 'bg-blue-600 hover:bg-blue-700 cursor-pointer'"
+                        class="px-8 py-3 rounded-xl font-bold transition flex items-center gap-2 text-white">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span x-text="isLoading ? 'Memproses...' : 'Beli Tiket'"></span>
                     </button>
                 </div>
-            </form>
+            </div>
         </div>
 
         {{-- TAB: DETAILS --}}
@@ -179,7 +209,200 @@
         </div>
 
     </main>
-
 </div>
+
+{{-- ===== MODAL PEMBAYARAN BERHASIL ===== --}}
+<div id="success-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm">
+    <div class="bg-[#121212] border border-white/10 rounded-3xl p-10 max-w-md w-full mx-4 text-center shadow-2xl">
+        {{-- Animasi centang --}}
+        <div class="w-20 h-20 rounded-full bg-green-500/10 border-2 border-green-500 flex items-center justify-center mx-auto mb-6">
+            <i class="fa-solid fa-check text-green-400 text-3xl"></i>
+        </div>
+
+        <h2 class="text-2xl font-black mb-2">Pembayaran Berhasil!</h2>
+        <p class="text-gray-400 text-sm mb-2">Tiket digital kamu sudah digenerate.</p>
+        <p class="text-blue-400 font-bold text-sm mb-6" id="modal-order-code"></p>
+
+        {{-- Info tiket --}}
+        <div class="bg-[#18181b] rounded-2xl p-4 mb-6 border border-white/5 text-left space-y-2">
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-500">Event</span>
+                <span class="font-bold text-right max-w-[180px]">{{ $event->name }}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-500">Tanggal</span>
+                <span class="font-bold">{{ \Carbon\Carbon::parse($event->date)->format('d F Y') }}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-500">Tipe Tiket</span>
+                <span class="font-bold" id="modal-ticket-type">-</span>
+            </div>
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-500">Jumlah</span>
+                <span class="font-bold" id="modal-quantity">-</span>
+            </div>
+        </div>
+
+        <div class="flex gap-3">
+            <a href="{{ route('pembeli.myticket') }}"
+               class="flex-1 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl font-bold text-sm transition">
+                <i class="fa-solid fa-ticket mr-2"></i>Lihat Tiket Saya
+            </a>
+            <button onclick="closeSuccessModal()"
+                    class="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-3 rounded-xl font-bold text-sm transition">
+                Tutup
+            </button>
+        </div>
+    </div>
+</div>
+
+{{-- ===== ALPINE.JS DATA + MIDTRANS LOGIC ===== --}}
+<script>
+    // Data tiket dari Blade (untuk Alpine)
+    const ticketTypes = @json($event->ticket_types ?? []);
+    const snapTokenUrl = "{{ route('payment.snap-token', $event->id) }}";
+    const handleSuccessUrl = "{{ route('payment.handle-success') }}";
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    function ticketApp() {
+        return {
+            quantities: ticketTypes.map(() => 0),
+            isLoading: false,
+
+            get totalQty() {
+                return this.quantities.reduce((sum, q) => sum + q, 0);
+            },
+
+            get totalAmount() {
+                return this.quantities.reduce((sum, q, i) => {
+                    return sum + (q * (ticketTypes[i]?.price ?? 0));
+                }, 0);
+            },
+
+            get selectedTicket() {
+                // Ambil tiket pertama yang qty > 0
+                const idx = this.quantities.findIndex(q => q > 0);
+                if (idx === -1) return null;
+                return {
+                    index: idx,
+                    name: ticketTypes[idx].name,
+                    price: ticketTypes[idx].price,
+                    qty: this.quantities[idx],
+                };
+            },
+
+            increment(index, stock) {
+                // Hanya boleh 1 tipe tiket aktif sekaligus (simple flow)
+                const current = this.quantities[index];
+                if (current < stock) {
+                    this.quantities = this.quantities.map((q, i) => i === index ? q + 1 : 0);
+                }
+            },
+
+            decrement(index) {
+                if (this.quantities[index] > 0) {
+                    this.quantities[index]--;
+                }
+            },
+
+            formatRupiah(num) {
+                return num.toLocaleString('id-ID');
+            },
+
+            async bayar() {
+                if (this.totalQty === 0 || this.isLoading) return;
+
+                const ticket = this.selectedTicket;
+                if (!ticket) return;
+
+                this.isLoading = true;
+
+                try {
+                    // 1. Minta snap token ke Laravel
+                    const res = await fetch(snapTokenUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                        body: JSON.stringify({
+                            ticket_type: ticket.name,
+                            quantity: ticket.qty,
+                            price: ticket.price,
+                        }),
+                    });
+
+                    const data = await res.json();
+
+                    if (!res.ok || data.error) {
+                        alert('Gagal membuat transaksi: ' + (data.error ?? 'Unknown error'));
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    const orderId   = data.order_id;
+                    const snapToken = data.snap_token;
+
+                    // 2. Buka Snap popup Midtrans
+                    window.snap.pay(snapToken, {
+                        onSuccess: async (result) => {
+                            // 3. Kirim ke Laravel untuk generate tiket
+                            const successRes = await fetch(handleSuccessUrl, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': csrfToken,
+                                },
+                                body: JSON.stringify({
+                                    order_id:       orderId,
+                                    transaction_id: result.transaction_id,
+                                    payment_type:   result.payment_type,
+                                }),
+                            });
+
+                            const successData = await successRes.json();
+
+                            if (successData.success) {
+                                // 4. Tampilkan modal sukses
+                                showSuccessModal(successData.order_code, ticket.name, ticket.qty);
+                            }
+                        },
+                        onPending: (result) => {
+                            alert('Pembayaran pending. Silakan selesaikan pembayaran kamu.');
+                        },
+                        onError: (result) => {
+                            alert('Pembayaran gagal. Silakan coba lagi.');
+                        },
+                        onClose: () => {
+                            // User menutup popup tanpa bayar
+                        },
+                    });
+
+                } catch (err) {
+                    alert('Terjadi kesalahan: ' + err.message);
+                } finally {
+                    this.isLoading = false;
+                }
+            },
+        };
+    }
+
+    function showSuccessModal(orderCode, ticketType, quantity) {
+        document.getElementById('modal-order-code').textContent = 'Order: ' + orderCode;
+        document.getElementById('modal-ticket-type').textContent = ticketType;
+        document.getElementById('modal-quantity').textContent = quantity + ' tiket';
+
+        const modal = document.getElementById('success-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeSuccessModal() {
+        const modal = document.getElementById('success-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+</script>
+
 </body>
 </html>
