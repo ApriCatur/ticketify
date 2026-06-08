@@ -108,14 +108,20 @@
             <div class="space-y-4 max-w-4xl mx-auto" x-data="ticketApp()">
                 <h3 class="font-bold text-lg mb-4">Pilih Tipe Tiket</h3>
 
-                @forelse ($event->ticket_types ?? [] as $index => $ticket)
+                @forelse ($event->tickets as $index => $ticket)
                     <div class="bg-[#18181b] p-6 rounded-2xl border border-white/5 flex items-center justify-between hover:border-blue-500/30 transition-all">
                         <div>
-                            <h3 class="font-bold"><i class="fa-solid fa-ticket text-blue-500 mr-2"></i> {{ $ticket['name'] }}</h3>
-                            <span class="text-[10px] text-gray-500">Stock: {{ $ticket['stock'] }}</span>
+                            <h3 class="font-bold"><i class="fa-solid fa-ticket text-blue-500 mr-2"></i> {{ $ticket->ticket_type }}</h3>
+                            <span class="text-[10px] text-gray-500">Stok tersedia: {{ $ticket->stock ?? 0 }}</span>
                         </div>
                         <div class="flex items-center gap-6">
-                            <span class="font-black text-blue-400">IDR {{ number_format($ticket['price'], 0, ',', '.') }}</span>
+                            <span class="font-black text-blue-400">
+                                @if(($ticket->price ?? 0) == 0)
+                                    GRATIS
+                                @else
+                                    IDR {{ number_format($ticket->price, 0, ',', '.') }}
+                                @endif
+                            </span>
 
                             {{-- Counter Plus/Minus --}}
                             <div class="flex items-center bg-[#09090b] rounded-lg border border-white/10">
@@ -124,20 +130,10 @@
                                         class="px-3 py-1 hover:text-blue-400">-</button>
                                 <span class="px-3 font-bold text-sm" x-text="quantities[{{ $index }}]">0</span>
                                 <button type="button"
-                                        @click="increment({{ $index }}, {{ $ticket['stock'] }})"
+                                        @click="increment({{ $index }}, {{ $ticket->stock ?? 0 }})"
                                         class="px-3 py-1 hover:text-blue-400">+</button>
                             </div>
                         </div>
-
-                        {{-- Hidden data tiket untuk JS --}}
-                        <template x-if="false">
-                            <span
-                                data-ticket-index="{{ $index }}"
-                                data-ticket-name="{{ $ticket['name'] }}"
-                                data-ticket-price="{{ $ticket['price'] }}"
-                                data-ticket-stock="{{ $ticket['stock'] }}">
-                            </span>
-                        </template>
                     </div>
                 @empty
                     <p class="text-center text-gray-500 py-6">Tidak ada tipe tiket yang tersedia.</p>
@@ -257,9 +253,19 @@
 </div>
 
 {{-- ===== ALPINE.JS DATA + MIDTRANS LOGIC ===== --}}
+@php
+    $ticketData = $event->tickets->map(function($t) {
+        return [
+            'id'    => $t->id,
+            'name'  => $t->ticket_type,
+            'price' => $t->price ?? 0,
+            'stock' => $t->stock ?? 0,
+        ];
+    })->values()->toArray();
+@endphp
 <script>
-    // Data tiket dari Blade (untuk Alpine)
-    const ticketTypes = @json($event->ticket_types ?? []);
+    // Data tiket dari relasi tickets (database baru)
+    const ticketTypes = @json($ticketData);
     const snapTokenUrl = "{{ route('payment.snap-token', $event->id) }}";
     const handleSuccessUrl = "{{ route('payment.handle-success') }}";
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
