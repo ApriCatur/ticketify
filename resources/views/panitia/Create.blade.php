@@ -19,7 +19,7 @@
     </style>
 </head>
 @php
-    $ticketRows = old('ticket_types', [['name' => 'Reguler', 'price' => 0, 'stock' => 100]]);
+    $ticketRows = old('ticket_type', [['ticket_type' => 'Reguler', 'price' => 0, 'stock' => 100]]);
 @endphp
 <body class="bg-[#09090b] text-white flex" x-data='{
         activeTab: "ticket",
@@ -142,10 +142,6 @@
                              <input type="text" name="location" value="{{ old('location') }}" placeholder="Masukkan lokasi event (contoh: Batam, Kepulauan Riau)" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
                         </div>
 
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Social Media Link</label>
-                            <input type="url" name="social_link" value="{{ old('social_link') }}" placeholder="https://instagram.com/..." class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all">
-                        </div>
 
                         <div class="grid grid-cols-3 gap-4">
                             <div class="space-y-2">
@@ -170,14 +166,14 @@
                         <h3 class="font-bold text-sm flex items-center gap-2">
                             <i class="fa-solid fa-ticket text-blue-500"></i> Ticket Pricing & Stock
                         </h3>
-                        <button type="button" @click="ticketRows.push({ name: 'Reguler', price: 0, stock: 100 })" class="px-4 py-2 bg-blue-600 text-white rounded-2xl text-xs font-black uppercase tracking-wide hover:bg-blue-500 transition">Tambah Jenis Tiket</button>
+                        <button type="button" @click="ticketRows.push({ ticket_type: 'Reguler', price: 0, stock: 100 })" class="px-4 py-2 bg-blue-600 text-white rounded-2xl text-xs font-black uppercase tracking-wide hover:bg-blue-500 transition">Tambah Jenis Tiket</button>
                     </div>
 
                     <template x-for="(ticket, index) in ticketRows" :key="index">
                         <div class="grid md:grid-cols-12 gap-4 items-end bg-white/[0.02] p-4 rounded-2xl border border-white/5 mb-4">
                             <div class="md:col-span-4 space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Jenis Tiket</label>
-                                <input :name="`ticket_types[${index}][name]`" type="text" x-model="ticket.name" placeholder="Contoh: Reguler / VIP" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none" required>
+                                <input :name="`ticket_types[${index}][ticket_type]`" type="text" x-model="ticket.ticket_type" placeholder="Contoh: Reguler / VIP" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none" required>
                             </div>
                             <div class="md:col-span-4 space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Harga (IDR)</label>
@@ -329,7 +325,7 @@
                     });
 
                     // Check if at least one ticket exists
-                    const ticketNameInputs = form.querySelectorAll('input[name*="ticket_types"][name*="name"]');
+                    const ticketNameInputs = form.querySelectorAll('input[name*="ticket_type"][name*="name"]');
                     console.log('🎫 Ticket inputs found:', ticketNameInputs.length);
 
                     if (ticketNameInputs.length === 0) {
