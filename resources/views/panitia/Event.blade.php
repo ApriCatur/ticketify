@@ -33,7 +33,7 @@
                 <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
                     <i class="fa-solid fa-bars-staggered text-2xl"></i>
                 </button>
-
+    
                 <div class="hidden lg:block">
                     <span class="text-sm text-gray-400 font-medium italic">Welcome To Ticketify! Discover something new today.</span>
                 </div>

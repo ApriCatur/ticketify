@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Order extends Model
 {
@@ -68,7 +69,7 @@ class Order extends Model
     public static function generateOrderCode(): string
     {
         do {
-            $code = 'ORD-' . now()->format('Ymd') . '-' . strtoupper(\Str::random(4));
+            $code = 'ORD-' . now()->format('Ymd') . '-' . strtoupper(Str::random(4));
         } while (self::where('order_code', $code)->exists());
 
         return $code;

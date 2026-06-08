@@ -162,13 +162,13 @@ Route::prefix('pages')->group(function () {
 // ─── Payment Routes (butuh login) ────────────────────────────────────────────
 Route::middleware(['auth'])->group(function () {
 
-    // Halaman checkout (pilih jumlah tiket)
-    Route::get('/events/{event}/checkout', [PaymentController::class, 'checkout'])
-         ->name('payment.checkout');
+    // AJAX: Buat snap token dari detail event
+    Route::post('/events/{event}/snap-token', [PaymentController::class, 'createSnapToken'])
+         ->name('payment.snap-token');
 
-    // Proses checkout → buat order → tampilkan tombol bayar
-    Route::post('/events/{event}/checkout', [PaymentController::class, 'process'])
-         ->name('payment.process');
+    // AJAX: Handle sukses dari Snap popup
+    Route::post('/payment/handle-success', [PaymentController::class, 'handleSuccess'])
+         ->name('payment.handle-success');
 
     // Redirect dari Midtrans setelah bayar sukses
     Route::get('/payment/success', [PaymentController::class, 'success'])
@@ -180,6 +180,5 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // ─── Webhook Midtrans (TANPA auth, dari server Midtrans) ─────────────────────
-// PENTING: Tambahkan URL ini ke pengecualian CSRF di App\Http\Middleware\VerifyCsrfToken.php
 Route::post('/payment/notification', [PaymentController::class, 'notification'])
      ->name('payment.notification');

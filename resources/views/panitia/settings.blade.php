@@ -30,7 +30,7 @@
                 Security
             </button>
         </div>
-
+                                                
         @if(session('success'))
             <div class="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl text-sm flex items-center gap-3 max-w-4xl">
                 <i class="fa-solid fa-circle-check text-base"></i>
