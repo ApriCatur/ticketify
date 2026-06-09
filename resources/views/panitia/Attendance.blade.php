@@ -19,7 +19,7 @@
                 <i class="fa-solid fa-bars-staggered text-2xl"></i>
             </button>
             <h1 class="text-3xl font-black tracking-tight">Attendance Verification</h1>
-            <p class="text-gray-500 text-sm mt-2">Masukkan Ticket ID untuk verifikasi kehadiran peserta.</p>
+            <p class="text-gray-500 text-sm mt-2">Masukkan kode tiket (QR Code) untuk verifikasi kehadiran peserta.</p>
         </header>
 
         {{-- Select Event --}}
@@ -46,9 +46,9 @@
             <div class="lg:col-span-5 space-y-6">
                 {{-- Manual Input --}}
                 <div class="bg-[#121212] p-8 rounded-3xl border border-white/5">
-                    <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1 mb-4 block">Input Ticket ID</label>
+                    <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1 mb-4 block">Input Kode Tiket (QR Code)</label>
                     <div class="flex gap-3">
-                        <input type="text" x-model="manualTicketId" placeholder="Masukkan Ticket ID"
+                        <input type="text" x-model="manualTicketId" placeholder="Masukkan Kode Tiket"
                                @keyup.enter="verifyManualTicket()"
                                class="flex-1 bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none">
                         <button @click="verifyManualTicket()"

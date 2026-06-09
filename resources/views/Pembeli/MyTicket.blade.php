@@ -71,7 +71,7 @@
                             <!-- Event Banner -->
                             <div class="w-full md:w-32 h-20 bg-blue-500/20 rounded-xl overflow-hidden border border-blue-500/30 {{ $ticket->status === 'Used' ? 'grayscale' : '' }}">
                                 @if($ticket->event && $ticket->event->banner)
-                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($ticket->event->banner) }}" class="w-full h-full object-cover {{ $ticket->status === 'Used' ? 'opacity-40' : 'opacity-60' }}" alt="Event">
+                                    <img src="{{ asset('images/events/' . $ticket->event->banner) }}" class="w-full h-full object-cover {{ $ticket->status === 'Used' ? 'opacity-40' : 'opacity-60' }}" alt="Event">
                                 @else
                                     <div class="w-full h-full bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
                                         <i class="fa-solid fa-ticket text-2xl text-white/50"></i>
@@ -88,7 +88,7 @@
 
                             <!-- Ticket Type -->
                             <div class="flex-1">
-                                <span class="px-2 py-0.5 bg-yellow-500 text-[9px] font-black rounded uppercase tracking-tighter"><i class="fa-solid fa-crown mr-2"></i>{{ $ticket->ticket_type }}</span>
+                                <span class="px-2 py-0.5 bg-blue-500 text-[9px] font-black rounded uppercase tracking-tighter"><i class="fa-solid mr-2"></i>{{ $ticket->ticket_type }}</span>
                                 <h3 class="text-lg font-black italic tracking-tight mt-1">Ticket Type</h3>
                                 <p class="text-xs text-gray-500 mt-1"></p>
                             </div>
@@ -96,12 +96,12 @@
                             <!-- Purchase Date -->
                             <div class="text-right">
                                 <p class="text-[10px] font-bold text-gray-500 uppercase">Date Purchased</p>
-                                <p class="text-xs font-black text-white">{{ $ticket->purchase_date->format('d/m/Y') }}</p>
+                                <p class="text-xs font-black text-white">{{ $ticket->created_at->format('d/m/Y H:i') }}</p>
                             </div>
 
                             <!-- Action Button -->
                             @if($ticket->status === 'Active')
-                                <a href="{{ route('pembeli.ticketdigital') }}" class="w-full md:w-auto px-6 py-2.5 bg-white text-black font-black rounded-xl text-[10px] uppercase hover:bg-blue-500 hover:text-white transition-all inline-block text-center">
+                                <a href="{{ route('pembeli.ticketdigital', $ticket->id) }}" class="w-full md:w-auto px-6 py-2.5 bg-white text-black font-black rounded-xl text-[10px] uppercase hover:bg-blue-500 hover:text-white transition-all inline-block text-center">
                                     View Ticket
                                 </a>
                             @else

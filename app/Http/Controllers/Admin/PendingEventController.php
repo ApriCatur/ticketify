@@ -4,17 +4,31 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\Category;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PendingEventController extends Controller
 {
     public function index()
     {
+        $today = Carbon::today();
+
         $pendingEvents = Event::with('tickets')->where('status', 'pending')
             ->orderBy('date', 'asc')
             ->get();
 
-        return view('Admin.PendingEvent', compact('pendingEvents'));
+        $events = Event::with('tickets')->where('status', 'pending')->take(5)->get();
+
+        $upcomingEvents = Event::with('tickets')->where('status', 'pending')
+            ->whereDate('date', '>=', $today)
+            ->orderBy('date', 'asc')
+            ->take(3)
+            ->get();
+
+        $categories = Category::all();
+
+        return view('Admin.PendingEvent', compact('pendingEvents', 'events', 'upcomingEvents', 'categories'));
     }
 
     public function approve(Event $event)
@@ -28,13 +42,20 @@ class PendingEventController extends Controller
         return redirect()->back()->with('success', 'Event berhasil disetujui dan dipublikasikan.');
     }
 
-    public function reject(Event $event)
+    public function reject(Request $request, Event $event)
     {
         if ($event->status !== 'pending') {
             return redirect()->back()->with('error', 'Hanya event dengan status pending yang bisa ditolak.');
         }
 
-        $event->update(['status' => 'rejected']);
+        $request->validate([
+            'reason' => 'required|string|min:10|max:500',
+        ]);
+
+        $event->update([
+            'status' => 'rejected',
+            'unpublish_reason' => $request->reason,
+        ]);
 
         return redirect()->back()->with('success', 'Event berhasil ditolak.');
     }

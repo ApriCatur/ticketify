@@ -14,7 +14,15 @@ class MyEventController extends Controller
      */
     public function index()
     {
-        $events = Event::where('user_id', Auth::id())->orderByDesc('date')->get();
+        $events = Event::where('user_id', Auth::id())
+            ->with(['tickets' => function ($q) {
+                $q->whereNull('order_id');
+            }])
+            ->withCount(['tickets as tickets_sold' => function ($q) {
+                $q->whereNotNull('order_id');
+            }])
+            ->orderByDesc('date')
+            ->get();
 
         return view('Panitia.MyEvent', compact('events'));
     }

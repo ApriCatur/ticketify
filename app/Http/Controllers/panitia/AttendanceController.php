@@ -3,25 +3,25 @@
 namespace App\Http\Controllers\Panitia;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\VerifyTicketRequest;
 use App\Models\Ticket;
+use App\Services\AttendanceService;
+use App\Services\StatisticsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
-    /**
-     * Display attendance page for panitia
-     */
+    public function __construct(
+        protected AttendanceService $attendanceService,
+        protected StatisticsService $statisticsService,
+    ) {}
+
     public function index()
     {
-        // Ambil panitia yang sedang login
         $panitia = Auth::user();
-
-        // Ambil event milik panitia ini
         $userEvents = $panitia->events()->where('status', 'published')->get() ?? collect();
 
-        // Ambil recent attendance scans (5 terakhir)
         $recentAttendances = collect();
         if ($userEvents->count() > 0) {
             $recentAttendances = Ticket::whereIn('event_id', $userEvents->pluck('id'))
@@ -35,106 +35,47 @@ class AttendanceController extends Controller
         return view('Panitia.Attendance', compact('userEvents', 'recentAttendances'));
     }
 
-    public function showAttendees($id)
-{
-    $event = Auth::user()->events()->findOrFail($id);
-
-    $attendees = Ticket::where('event_id', $id)
-        ->with(['user:id,name,email,no_telp', 'order:id,order_code'])
-        ->orderBy('created_at', 'desc')
-        ->paginate(10);
-
-    return view('panitia.customerdata', compact('event', 'attendees'));
-}
-
-    /**
-     * Verify ticket by ticket ID (manual input atau scan)
-     */
-    public function verifyTicket(Request $request)
+    public function verifyTicket(VerifyTicketRequest $request)
     {
         try {
-            // Validasi input
-            $validated = $request->validate([
-                'ticket_id' => 'required|string',
-                'event_id' => 'required|integer|exists:events,id'
-            ]);
+            $result = $this->attendanceService->verify(
+                $request->ticket_id,
+                $request->event_id
+            );
 
-            // Cari ticket berdasarkan ID
-            $ticket = Ticket::where('id', $validated['ticket_id'])
-                ->where('event_id', $validated['event_id'])
-                ->with(['user:id,name,email', 'event:id,name'])
-                ->first();
+            $statusCode = $result['success'] ? 200 : ($result['type'] === 'error' ? 404 : 200);
 
-            // Jika ticket tidak ditemukan
-            if (!$ticket) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Ticket tidak ditemukan atau invalid',
-                    'type' => 'error'
-                ], 404);
-            }
-
-            // Jika ticket sudah di-scan sebelumnya
-            if ($ticket->is_attended) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Peserta sudah melakukan checkin sebelumnya',
-                    'data' => [
-                        'name' => $ticket->user->name,
-                        'email' => $ticket->user->email,
-                        'event' => $ticket->event->name,
-                        'ticket_type' => $ticket->ticket_type,
-                        'attended_at' => $ticket->attended_at ? $ticket->attended_at->format('H:i:s') : 'N/A'
-                    ],
-                    'type' => 'warning'
-                ]);
-            }
-
-            // Update ticket sebagai sudah di-attend
-            $ticket->update([
-                'is_attended' => true,
-                'attended_at' => now()
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Checkin berhasil!',
-                'data' => [
-                    'name' => $ticket->user->name,
-                    'email' => $ticket->user->email,
-                    'event' => $ticket->event->name,
-                    'ticket_type' => $ticket->ticket_type,
-                    'attended_at' => now()->format('H:i:s')
-                ],
-                'type' => 'success'
-            ]);
+            return response()->json($result, $statusCode);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
-                'type' => 'error'
+                'type' => 'error',
             ], 500);
         }
     }
 
-    /**
-     * Get attendance statistics
-     */
     public function getStatistics(Request $request)
     {
         $panitia = Auth::user();
         $eventId = $request->query('event_id');
+        $panitia->events()->findOrFail($eventId);
 
-        $event = $panitia->events()->findOrFail($eventId);
+        $stats = $this->statisticsService->getAttendanceStats($eventId);
 
-        $totalTickets = $event->tickets()->count();
-        $attendedTickets = $event->tickets()->where('is_attended', true)->count();
-        $attendanceRate = $totalTickets > 0 ? round(($attendedTickets / $totalTickets) * 100, 1) : 0;
+        return response()->json($stats);
+    }
 
-        return response()->json([
-            'total_tickets' => $totalTickets,
-            'attended_tickets' => $attendedTickets,
-            'attendance_rate' => $attendanceRate
-        ]);
+    public function showAttendees($id)
+    {
+        $event = Auth::user()->events()->findOrFail($id);
+
+        $attendees = Ticket::where('event_id', $id)
+            ->whereNotNull('order_id')
+            ->with(['user:id,name,email,no_telp', 'order:id,order_code'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('panitia.customerdata', compact('event', 'attendees'));
     }
 }

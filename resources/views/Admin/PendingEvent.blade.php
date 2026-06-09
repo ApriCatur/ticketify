@@ -1,529 +1,426 @@
-@extends('layouts.admin')
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticketify | Pending Events</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(10px); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f0f0f; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        .swiper-pagination-bullet { background: #fff; opacity: 0.5; }
+        .swiper-pagination-bullet-active { background: #3b82f6; opacity: 1; width: 20px; border-radius: 5px; transition: all 0.3s; }
+    </style>
+</head>
+<body class="bg-[#0f0f0f] text-white antialiased">
 
-@section('title', 'Pending Event')
+    <div class="flex w-full min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
 
-{{-- Load Swiper CSS --}}
-@push('styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-@endpush
+        @include('layouts.sidebar-admin')
 
-@section('content')
+        <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
+            <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
+                <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
+                    <i class="fa-solid fa-bars-staggered text-2xl"></i>
+                </button>
 
-{{-- NAVBAR --}}
-<nav class="glass border-b border-white/5 px-8 py-4">
-    <h2 class="text-2xl font-black">Pending Event</h2>
-</nav>
-
-{{-- 🔥 HERO CAROUSEL --}}
-<header class="px-8 pt-6 pb-12">
-    <div class="swiper myHeroSwiper rounded-3xl overflow-hidden shadow-2xl h-[420px] relative">
-
-        <div class="swiper-wrapper h-full">
-
-            @forelse($pendingEvents as $slide)
-            <div class="swiper-slide relative h-full">
-                <img src="{{ $slide->banner ? asset('images/events/' . $slide->banner) : asset('images/kmipn.jpeg') }}"
-                    class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-                <div class="absolute bottom-0 left-0 w-full p-8 z-20">
-                    <span class="text-xs font-bold text-blue-400 uppercase tracking-widest bg-blue-500/20 px-3 py-1 rounded-full">
-                        {{ $slide->category }}
-                    </span>
-                    <h2 class="text-4xl font-extrabold italic text-white mt-3">
-                        {{ $slide->name }}
-                    </h2>
-                    <p class="text-gray-300 text-sm mt-2 max-w-lg">
-                        {{ Str::limit($slide->description, 100) }}
-                    </p>
+                <div class="hidden lg:block">
+                    <span class="text-sm text-gray-400 font-medium italic">Pending Events — Review event yang diajukan panitia</span>
                 </div>
+            </nav>
+
+            @include('components.event-carousel')
+
+            <div class="px-8 mt-6">
+                <x-event-filter :categories="$categories" />
             </div>
-            @empty
-            {{-- Fallback slide kalau belum ada event --}}
-            <div class="swiper-slide relative h-full">
-                <img src="{{ asset('images/kmipn.jpeg') }}" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-                <div class="absolute bottom-0 left-0 w-full p-8 z-20">
-                    <h2 class="text-4xl font-extrabold italic text-white">Belum ada event pending</h2>
-                    <p class="text-gray-300 text-sm mt-2">Event yang diajukan panitia akan muncul di sini.</p>
+
+            @if(session('success'))
+                <div class="mx-8 mt-6 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl text-sm flex items-center gap-3">
+                    <i class="fa-solid fa-circle-check text-base"></i>
+                    <span>{{ session('success') }}</span>
                 </div>
-            </div>
-            @endforelse
+            @endif
 
-        </div>
-
-        <!-- DOTS -->
-        <div class="swiper-pagination absolute bottom-4 left-0 right-0 z-50"></div>
-        <!-- ARROWS -->
-        <div class="swiper-button-prev !text-white !w-10 !h-10 !bg-black/40 !backdrop-blur !rounded-full after:!text-sm"></div>
-        <div class="swiper-button-next !text-white !w-10 !h-10 !bg-black/40 !backdrop-blur !rounded-full after:!text-sm"></div>
-    </div>
-</header>
-
-{{-- SEARCH BAR --}}
-<div class="px-8 -mt-10 relative z-30">
-    <div class="bg-[#1e1e1e] border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-wrap lg:flex-nowrap items-end gap-4">
-
-        {{-- Search by name --}}
-        <div class="flex-[2] min-w-[200px]">
-            <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2 block ml-1">Search Event Name</label>
-            <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
-                <i class="fa-solid fa-magnifying-glass text-blue-500"></i>
-                <input id="searchName" type="text" placeholder="Seminar, workshop, konser..."
-                    class="bg-transparent w-full outline-none border-none ring-0 focus:ring-0 text-sm text-gray-200">
-            </div>
-        </div>
-
-        {{-- Filter by category --}}
-        <div class="flex-1 min-w-[150px]">
-            <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2 block ml-1">Category</label>
-            <div class="relative group">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <i class="fa-solid fa-tags text-blue-500 text-[12px]"></i>
+            @if(session('error'))
+                <div class="mx-8 mt-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-2xl text-sm flex items-center gap-3">
+                    <i class="fa-solid fa-circle-exclamation text-base"></i>
+                    <span>{{ session('error') }}</span>
                 </div>
-                <select id="filterCategory" class="w-full bg-white/5 border border-transparent rounded-xl py-3 pl-10 pr-8 text-xs font-bold text-gray-300 focus:border-blue-500 outline-none transition-all appearance-none cursor-pointer">
-                    <option value="" class="bg-[#1e1e1e]">Semua</option>
-                    <option value="education" class="bg-[#1e1e1e]">Education</option>
-                    <option value="music" class="bg-[#1e1e1e]">Music</option>
-                    <option value="technology" class="bg-[#1e1e1e]">Technology</option>
-                    <option value="art" class="bg-[#1e1e1e]">Art & Theater</option>
-                    <option value="seminar" class="bg-[#1e1e1e]">Seminar</option>
-                    <option value="workshop" class="bg-[#1e1e1e]">Workshop</option>
-                </select>
-                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-500">
-                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
-                </div>
-            </div>
-        </div>
+            @endif
 
-        {{-- Filter by date --}}
-        <div class="flex-1 min-w-[150px]">
-            <label class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2 block ml-1">Select Date</label>
-            <div class="relative group">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <i class="fa-solid fa-calendar-day text-blue-500 text-[12px]"></i>
-                </div>
-                <input id="filterDate" type="date"
-                    class="w-full bg-white/5 border border-transparent rounded-xl py-3 pl-10 pr-4 text-xs font-bold text-gray-300 focus:border-blue-500 outline-none transition-all cursor-pointer [color-scheme:dark]">
-            </div>
-        </div>
-
-        <button id="btnReset" class="w-full lg:w-auto px-8 py-3.5 bg-white/10 text-white rounded-xl font-bold hover:bg-white/20 transition-all active:scale-95 hidden">
-            Reset
-        </button>
-
-        <button id="btnCari" class="w-full lg:w-auto px-8 py-3.5 bg-white text-black rounded-xl font-bold hover:bg-blue-500 hover:text-white transition-all active:scale-95 shadow-lg">
-            Cari Event
-        </button>
-    </div>
-</div>
-
-{{-- CONTENT --}}
-<div class="flex gap-8 px-8 py-8">
-
-    {{-- EVENT GRID --}}
-    <div class="flex-1">
-
-        {{-- Counter hasil search --}}
-        <div id="searchInfo" class="hidden mb-4 text-sm text-gray-400">
-            Menampilkan <span id="searchCount" class="text-white font-bold"></span> event
-        </div>
-
-        <div id="eventGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-            @forelse($pendingEvents as $event)
-                {{-- Data attribute untuk filter JS --}}
-                <div class="event-card group bg-[#1e1e1e] border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/40 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10"
-                    data-name="{{ strtolower($event->name) }}"
-                    data-category="{{ strtolower($event->category) }}"
-                    data-date="{{ $event->date }}">
-
-                    <div class="relative h-48 overflow-hidden">
-                        {{-- ✅ FIX: Path banner sekarang pakai images/events/ --}}
-                        <img src="{{ $event->banner ? asset('images/events/' . $event->banner) : asset('images/kmipn.jpeg') }}"
-                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                            onerror="this.src='{{ asset('images/kmipn.jpeg') }}'">
-
-                        <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-2 rounded-xl text-center border border-white/10">
-                            <span class="block text-[10px] font-bold text-blue-400 uppercase">{{ \Carbon\Carbon::parse($event->date)->format('M') }}</span>
-                            <span class="block text-lg font-black">{{ \Carbon\Carbon::parse($event->date)->format('d') }}</span>
-                            <span class="text-[10px] text-gray-500">{{ \Carbon\Carbon::parse($event->date)->format('Y') }}</span>
-                        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-8 pb-8 mt-6">
+                @forelse($pendingEvents as $event)
+                    <x-event-card
+                        :image="$event->banner ? asset('images/events/' . $event->banner) : asset('images/events/banner_1779635248.jpg')"
+                        :day="\Carbon\Carbon::parse($event->date)->format('d')"
+                        :month="\Carbon\Carbon::parse($event->date)->translatedFormat('M')"
+                        :year="\Carbon\Carbon::parse($event->date)->format('Y')"
+                        :category="$event->category?->name"
+                        :title="$event->name"
+                        :location="$event->location"
+                        :startTime="\Carbon\Carbon::parse($event->time_start)->format('H:i')"
+                        :endTime="\Carbon\Carbon::parse($event->time_end)->format('H:i')"
+                        :price="$event->tickets->whereNull('order_id')->min('price') ? 'Rp ' . number_format($event->tickets->whereNull('order_id')->min('price'), 0, ',', '.') : 'Gratis'"
+                    >
+                        <button type="button"
+                            class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold transition"
+                            data-event='@json($event->load('tickets'))'
+                            onclick="openDetailFromElement(this)">
+                            Detail
+                        </button>
+                        <button type="button"
+                            class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-bold transition"
+                            data-event='@json($event)'
+                            onclick="openApproveModal(this)">
+                            Approve
+                        </button>
+                        <button type="button"
+                            class="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs font-bold transition"
+                            data-event='@json($event)'
+                            onclick="openRejectModal(this)">
+                            Reject
+                        </button>
+                    </x-event-card>
+                @empty
+                    <div class="col-span-full text-center text-gray-400 py-20 bg-[#1e1e1e] border border-white/5 rounded-3xl">
+                        <i class="fa-solid fa-calendar-xmark text-3xl text-gray-600 mb-3 block"></i>
+                        Belum ada event pending.
                     </div>
-
-                    <div class="p-5">
-                        <span class="text-[10px] font-bold text-yellow-500 uppercase tracking-widest">⏳ Pending</span>
-
-                        <h3 class="font-bold text-lg mt-2 mb-3 group-hover:text-blue-400 transition">
-                            {{ $event->name }}
-                        </h3>
-
-                        <div class="space-y-2 text-xs text-gray-400 mb-5">
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-location-dot text-blue-500"></i>
-                                {{ $event->location }}
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <i class="fa-regular fa-clock text-blue-500"></i>
-                                {{ \Carbon\Carbon::parse($event->time_start)->format('H:i') }} – {{ \Carbon\Carbon::parse($event->time_end)->format('H:i') }} WIB
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-ticket text-blue-500"></i>
-                                @php $minPrice = $event->tickets->whereNull('order_id')->min('price'); @endphp
-                                From IDR {{ $minPrice ? number_format($minPrice, 0, ',', '.') : 'Gratis' }}
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2 pt-4 border-t border-white/5">
-                            <form action="{{ route('admin.events.approve', $event) }}" method="POST" class="flex-1">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-500 transition">
-                                    ✓ Approve
-                                </button>
-                            </form>
-
-                            <form action="{{ route('admin.events.reject', $event) }}" method="POST" class="flex-1">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full py-2 bg-red-500/10 text-red-400 rounded-xl text-xs hover:bg-red-500/20 transition">
-                                    ✕ Reject
-                                </button>
-                            </form>
-
-                            <button type="button"
-                                class="px-4 py-2 border border-white/10 rounded-xl text-xs hover:bg-white/5 transition"
-                                data-event='@json($event)'
-                                onclick="openDetailFromElement(this)">
-                                Detail
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            @empty
-                <div class="col-span-2 text-center text-gray-400 py-20 bg-[#1e1e1e] border border-white/5 rounded-3xl">
-                    <i class="fa-solid fa-calendar-xmark text-4xl mb-4 text-gray-600"></i>
-                    <p>Tidak ada event pending saat ini.</p>
-                </div>
-            @endforelse
-
-            {{-- Pesan tidak ditemukan saat filter --}}
-            <div id="noResult" class="col-span-2 text-center text-gray-400 py-20 bg-[#1e1e1e] border border-white/5 rounded-3xl hidden">
-                <i class="fa-solid fa-magnifying-glass text-4xl mb-4 text-gray-600"></i>
-                <p>Tidak ada event yang cocok dengan pencarian.</p>
+                @endforelse
             </div>
 
         </div>
-    </div>
 
-    {{-- RIGHT SIDEBAR --}}
-    <aside class="w-80 hidden xl:block">
-        <div class="space-y-6">
-
+        <aside class="w-80 hidden xl:flex flex-col sticky top-0 h-screen p-8 space-y-8 bg-[#121212] overflow-y-auto">
             <div>
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-black">Upcoming</h3>
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-black italic tracking-tighter text-white">Upcoming</h2>
                     <i class="fa-solid fa-calendar-check text-blue-500"></i>
                 </div>
 
                 <div class="space-y-4">
-                    @forelse($pendingEvents->take(3) as $upcoming)
-                    <div class="p-4 bg-[#1e1e1e] rounded-2xl border border-white/5 hover:border-blue-500/30 transition">
-                        <p class="font-bold text-sm truncate">{{ $upcoming->name }}</p>
-                        <p class="text-xs text-gray-500 mt-1">
-                            {{ \Carbon\Carbon::parse($upcoming->date)->format('d M Y') }} •
-                            {{ \Carbon\Carbon::parse($upcoming->time_start)->format('H:i') }}
-                        </p>
+                    @if(isset($upcomingEvents) && $upcomingEvents->count() > 0)
+                        @foreach($upcomingEvents as $upEvent)
+                            @php $eventDate = \Carbon\Carbon::parse($upEvent->date); @endphp
+                            <div class="group p-4 bg-[#1e1e1e] border border-white/5 rounded-2xl hover:border-blue-500/30 transition-all cursor-pointer">
+                                <div class="flex gap-4 items-center">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-blue-500/10 rounded-xl flex flex-col items-center justify-center border border-blue-500/20">
+                                        <span class="text-[10px] font-bold text-blue-400 uppercase leading-none">
+                                            {{ $eventDate->translatedFormat('M') }}
+                                        </span>
+                                        <span class="text-lg font-black text-white mt-0.5 leading-none">
+                                            {{ $eventDate->format('d') }}
+                                        </span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="text-sm font-bold text-white tracking-tight truncate group-hover:text-blue-400 transition-colors">
+                                            {{ $upEvent->name }}
+                                        </h4>
+                                        <p class="text-[10px] text-gray-500 mt-1 uppercase flex items-center gap-1">
+                                            <i class="fa-regular fa-clock text-[9px]"></i>
+                                            {{ \Carbon\Carbon::parse($upEvent->time_start)->format('H:i') }} WIB
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="text-center py-8 bg-[#1e1e1e] border border-dashed border-white/5 rounded-2xl">
+                            <i class="fa-solid fa-calendar-xmark text-gray-700 text-xl mb-2 block"></i>
+                            <p class="text-[11px] text-gray-500 font-medium">Belum ada event terdekat</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    {{-- ================= DETAIL MODAL ================= --}}
+    <div id="detailModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4">
+        <div class="bg-[#18181b] w-full max-w-5xl max-h-[90vh] rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+            <div class="bg-green-600 px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-eye text-white"></i>
+                    <h2 class="text-white font-bold text-lg">Detail Event</h2>
+                </div>
+                <button onclick="closeDetail()" class="text-white text-xl hover:opacity-70 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                    <div>
+                        <div class="rounded-2xl overflow-hidden border border-white/10">
+                            <img id="detailPoster" src="" alt="Poster Event" class="w-full h-[340px] object-cover">
+                        </div>
                     </div>
-                    @empty
-                    <p class="text-xs text-gray-500">Belum ada event.</p>
-                    @endforelse
+                    <div class="space-y-5">
+                        <div class="flex items-start gap-4">
+                            <div id="detailDateBox" class="bg-blue-500/20 text-blue-400 rounded-xl px-4 py-3 text-center">
+                                <p id="detailDay" class="text-xl font-bold">-</p>
+                                <p id="detailMonth" class="text-xs uppercase">-</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase">Waktu Pelaksanaan</p>
+                                <p id="detailTime" class="font-bold text-xl">-</p>
+                                <p id="detailDate" class="text-sm text-gray-400">-</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400 uppercase">Nama Event</p>
+                            <h3 id="detailTitle" class="text-blue-400 font-bold text-2xl">-</h3>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase">Lokasi</p>
+                                <p id="detailLocation" class="text-sm">-</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase">Kategori</p>
+                                <p id="detailCategory" class="text-sm">-</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400 uppercase">Deskripsi</p>
+                            <div class="bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-gray-300 leading-relaxed max-h-32 overflow-y-auto">
+                                <span id="detailDesc">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xl font-bold">Available Tickets</h3>
+                    <div id="detailTickets" class="space-y-3"></div>
                 </div>
             </div>
 
-            <div class="p-6 bg-gradient-to-br from-blue-600 to-blue-900 rounded-2xl">
-                <h4 class="font-black mb-2">Need Review?</h4>
-                <p class="text-xs text-blue-100 mb-4">
-                    Check all submitted events before publishing.
-                </p>
-                <div class="text-2xl font-black text-white">
-                    {{ $pendingEvents->count() }} <span class="text-sm font-normal text-blue-200">pending</span>
+            <div class="px-6 py-4 border-t border-white/10 text-right">
+                <button onclick="closeDetail()" class="px-6 py-2 bg-white/10 rounded-xl text-sm hover:bg-white/20 transition">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    {{-- ================= APPROVE MODAL ================= --}}
+    <div id="approveModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
+        <div class="bg-[#1e1e1e] rounded-2xl p-6 w-full max-w-md border border-white/10">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-check text-blue-400"></i>
                 </div>
-            </div>
-
-        </div>
-    </aside>
-
-</div>
-
-{{-- ================= MODAL DETAIL ================= --}}
-<div id="detailModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4">
-    <div class="bg-[#18181b] w-full max-w-5xl max-h-[90vh] rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
-
-        <div class="bg-green-600 px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-eye text-white"></i>
-                <h2 class="text-white font-bold text-lg">Detail Event</h2>
-            </div>
-            <button onclick="closeDetail()" class="text-white text-xl hover:opacity-70 transition">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-
-        <div class="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-140px)]">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-
                 <div>
-                    <div class="rounded-2xl overflow-hidden border border-white/10">
-                        <img id="detailPoster" src="" alt="Poster Event"
-                            class="w-full h-[340px] object-cover"
-                            onerror="this.src='{{ asset('images/kmipn.jpeg') }}'">
-                    </div>
-                </div>
-
-                <div class="space-y-5">
-                    <div class="flex items-start gap-4">
-                        <div class="bg-blue-500/20 text-blue-400 rounded-xl px-4 py-3 text-center min-w-[60px]">
-                            <p id="detailDay" class="text-xl font-bold">-</p>
-                            <p id="detailMonth" class="text-xs uppercase">-</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400 uppercase">Waktu Pelaksanaan</p>
-                            <p id="detailTime" class="font-bold text-xl">-</p>
-                            <p id="detailDate" class="text-sm text-gray-400">-</p>
-                        </div>
-                    </div>
-
-                    <div>
-                        <p class="text-xs text-gray-400 uppercase">Nama Event</p>
-                        <h3 id="detailTitle" class="text-blue-400 font-bold text-2xl">-</h3>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <p class="text-xs text-gray-400 uppercase">Lokasi</p>
-                            <p id="detailLocation" class="text-sm">-</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400 uppercase">Kategori</p>
-                            <p id="detailCategory" class="text-sm">-</p>
-                        </div>
-                    </div>
-
-                    <div>
-                        <p class="text-xs text-gray-400 uppercase">Deskripsi</p>
-                        <div class="bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-gray-300 leading-relaxed max-h-32 overflow-y-auto">
-                            <span id="detailDesc">-</span>
-                        </div>
-                    </div>
+                    <h2 class="text-base font-bold">Approve Event</h2>
+                    <p class="text-xs text-gray-400">Event akan langsung dipublikasikan</p>
                 </div>
             </div>
 
-            <div class="space-y-4">
-                <h3 class="text-xl font-bold">Available Tickets</h3>
-                <div id="detailTickets" class="space-y-3"></div>
+            <p class="text-sm text-gray-300 mb-6">
+                Yakin ingin menyetujui <span id="approveEventName" class="text-white font-bold">event ini</span>?
+            </p>
+
+            <form id="approveForm" method="POST">
+                @csrf
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeApproveModal()"
+                        class="flex-1 py-2.5 border border-white/10 rounded-xl text-sm hover:bg-white/5 transition">Batal</button>
+                    <button type="submit"
+                        class="flex-1 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-500 transition">
+                        <i class="fa-solid fa-check mr-1"></i> Approve
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- ================= REJECT MODAL ================= --}}
+    <div id="rejectModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
+        <div class="bg-[#1e1e1e] rounded-2xl p-6 w-full max-w-md border border-white/10">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-xmark text-red-400"></i>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold">Reject Event</h2>
+                    <p class="text-xs text-gray-400">Event akan dipindahkan ke status
+                        <span class="text-red-400 font-bold">Rejected</span>
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div class="px-6 py-4 border-t border-white/10 text-right">
-            <button onclick="closeDetail()"
-                class="px-6 py-2 bg-white/10 rounded-xl text-sm hover:bg-white/20 transition">
-                Tutup
-            </button>
-        </div>
-    </div>
-</div>
+            <p class="text-sm text-gray-300 mb-4">
+                Tolak <span id="rejectEventName" class="text-white font-bold">event ini</span>?
+            </p>
 
-{{-- ================= APPROVE MODAL ================= --}}
-<div id="approveModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
-    <div class="bg-[#1e1e1e] rounded-2xl p-6 w-[400px] border border-white/10 text-center">
-        <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-blue-500/20 flex items-center justify-center">
-            <i class="fa-solid fa-check text-blue-400 text-xl"></i>
-        </div>
-        <h2 class="text-lg font-bold mb-2">Approve Event</h2>
-        <p class="text-sm text-gray-400 mb-6">Are you sure you want to approve this event?</p>
-        <div class="flex gap-3">
-            <button onclick="closeApprove()" class="flex-1 py-2 border border-white/10 rounded-xl hover:bg-white/5 transition">Cancel</button>
-            <button onclick="closeApprove()" class="flex-1 py-2 bg-blue-500/20 text-blue-400 rounded-xl hover:bg-blue-500/30 transition">Approve</button>
-        </div>
-    </div>
-</div>
-
-{{-- ================= REJECT MODAL ================= --}}
-<div id="rejectModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
-    <div class="bg-[#1e1e1e] rounded-2xl p-6 w-[400px] border border-white/10 text-center">
-        <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-red-500/20 flex items-center justify-center">
-            <i class="fa-solid fa-xmark text-red-400 text-xl"></i>
-        </div>
-        <h2 class="text-lg font-bold mb-2">Reject Event</h2>
-        <p class="text-sm text-gray-400 mb-6">Are you sure you want to reject this event?</p>
-        <div class="flex gap-3">
-            <button onclick="closeReject()" class="flex-1 py-2 border border-white/10 rounded-xl hover:bg-white/5 transition">Cancel</button>
-            <button onclick="closeReject()" class="flex-1 py-2 bg-red-500/20 text-red-400 rounded-xl hover:bg-red-500/30 transition">Reject</button>
-        </div>
-    </div>
-</div>
-
-{{-- ================= SWIPER + JS ================= --}}
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script>
-// ── 1. SWIPER CAROUSEL ──────────────────────────────────────────
-const swiper = new Swiper('.myHeroSwiper', {
-    loop: true,
-    autoplay: { delay: 4000, disableOnInteraction: false },
-    pagination: { el: '.swiper-pagination', clickable: true },
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-    },
-    effect: 'fade',
-    fadeEffect: { crossFade: true },
-});
-
-// ── 2. LIVE SEARCH & FILTER ─────────────────────────────────────
-const cards      = document.querySelectorAll('.event-card');
-const searchName = document.getElementById('searchName');
-const filterCat  = document.getElementById('filterCategory');
-const filterDate = document.getElementById('filterDate');
-const noResult   = document.getElementById('noResult');
-const searchInfo = document.getElementById('searchInfo');
-const searchCount= document.getElementById('searchCount');
-const btnReset   = document.getElementById('btnReset');
-
-function applyFilter() {
-    const name = searchName.value.toLowerCase().trim();
-    const cat  = filterCat.value.toLowerCase().trim();
-    const date = filterDate.value;
-
-    let visible = 0;
-
-    cards.forEach(card => {
-        const cardName = card.dataset.name || '';
-        const cardCat  = card.dataset.category || '';
-        const cardDate = card.dataset.date || '';
-
-        const matchName = !name || cardName.includes(name);
-        const matchCat  = !cat  || cardCat.includes(cat);
-        const matchDate = !date || cardDate === date;
-
-        if (matchName && matchCat && matchDate) {
-            card.classList.remove('hidden');
-            visible++;
-        } else {
-            card.classList.add('hidden');
-        }
-    });
-
-    // Tampilkan pesan kosong
-    noResult.classList.toggle('hidden', visible > 0);
-
-    // Tampilkan info jumlah hasil
-    const hasFilter = name || cat || date;
-    searchInfo.classList.toggle('hidden', !hasFilter);
-    if (hasFilter) searchCount.textContent = visible;
-
-    // Tampilkan tombol reset kalau ada filter aktif
-    btnReset.classList.toggle('hidden', !hasFilter);
-}
-
-// Live filter saat ketik
-searchName.addEventListener('input', applyFilter);
-filterCat.addEventListener('change', applyFilter);
-filterDate.addEventListener('change', applyFilter);
-
-// Tombol Cari
-document.getElementById('btnCari').addEventListener('click', applyFilter);
-
-// Tombol Reset
-btnReset.addEventListener('click', () => {
-    searchName.value = '';
-    filterCat.value  = '';
-    filterDate.value = '';
-    applyFilter();
-});
-
-// ── 3. MODAL DETAIL ─────────────────────────────────────────────
-function openDetailFromElement(btn) {
-    const data = JSON.parse(btn.getAttribute('data-event'));
-
-    // Banner — pakai path images/events/
-    const bannerBase = '{{ asset('images/events/') }}/';
-    const fallback   = '{{ asset('images/kmipn.jpeg') }}';
-    document.getElementById('detailPoster').src = data.banner ? bannerBase + data.banner : fallback;
-
-    // Tanggal
-    if (data.date) {
-        const d = new Date(data.date);
-        document.getElementById('detailDay').textContent   = d.getDate();
-        document.getElementById('detailMonth').textContent = d.toLocaleString('id-ID', { month: 'short' });
-        document.getElementById('detailDate').textContent  = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-    }
-
-    // Waktu
-    const timeStr = data.time_start ? data.time_start.slice(0,5) : '-';
-    const timeEnd = data.time_end   ? data.time_end.slice(0,5)   : '-';
-    document.getElementById('detailTime').textContent = timeStr + ' – ' + timeEnd + ' WIB';
-
-    // Info lain
-    document.getElementById('detailTitle').textContent    = data.name     || '-';
-    document.getElementById('detailLocation').textContent = data.location || '-';
-    document.getElementById('detailCategory').textContent = data.category || '-';
-    document.getElementById('detailDesc').textContent     = data.description || '-';
-
-    // Tickets
-    const ticketBox = document.getElementById('detailTickets');
-    ticketBox.innerHTML = '';
-
-    let tickets = [];
-    try { tickets = typeof data.ticket_types === 'string' ? JSON.parse(data.ticket_types) : (data.ticket_types || []); }
-    catch(e) { tickets = []; }
-
-    if (tickets.length > 0) {
-        tickets.forEach(t => {
-            const price = parseInt(t.price || 0).toLocaleString('id-ID');
-            ticketBox.innerHTML += `
-                <div class="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-xl">
-                    <div>
-                        <p class="font-bold text-sm">${t.name || 'Tiket'}</p>
-                        <p class="text-xs text-gray-400">Stok: ${t.stock ?? '-'}</p>
+            <form id="rejectForm" method="POST">
+                @csrf
+                <div class="mb-4">
+                    <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">
+                        Alasan Reject <span class="text-red-400">*</span>
+                    </label>
+                    <textarea name="reason" id="rejectReason" rows="4"
+                        placeholder="Jelaskan alasan mengapa event ini ditolak... (min. 10 karakter)"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-gray-200 outline-none focus:border-red-500/50 transition resize-none placeholder:text-gray-600"
+                        maxlength="500"></textarea>
+                    <div class="flex justify-between mt-1">
+                        <p id="rejectReasonError" class="text-xs text-red-400 hidden">Alasan minimal 10 karakter.</p>
+                        <p class="text-xs text-gray-600 ml-auto"><span id="rejectReasonCount">0</span>/500</p>
                     </div>
-                    <div class="text-right">
-                        <p class="font-bold text-blue-400">IDR ${price}</p>
-                    </div>
-                </div>`;
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeRejectModal()"
+                        class="flex-1 py-2.5 border border-white/10 rounded-xl text-sm hover:bg-white/5 transition">Batal</button>
+                    <button type="submit"
+                        class="flex-1 py-2.5 bg-red-500 text-white rounded-xl text-sm font-bold hover:bg-red-600 transition">
+                        <i class="fa-solid fa-xmark mr-1"></i> Reject
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const el = document.querySelector('.myHeroSwiper');
+            if (el) {
+                new Swiper(el, {
+                    loop: true,
+                    autoplay: { delay: 5000, disableOnInteraction: false },
+                    pagination: { el: '.swiper-pagination', clickable: true },
+                    effect: 'fade',
+                    fadeEffect: { crossFade: true },
+                });
+            }
         });
-    } else {
-        ticketBox.innerHTML = '<p class="text-sm text-gray-500">Tidak ada data tiket.</p>';
-    }
+    </script>
 
-    const modal = document.getElementById('detailModal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
+    <script>
+        const openBtn = document.getElementById('open-sidebar');
+        const closeBtn = document.getElementById('close-sidebar');
+        const sidebar = document.getElementById('main-sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
 
-function closeDetail() {
-    const modal = document.getElementById('detailModal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-}
-
-function closeApprove() {
-    const m = document.getElementById('approveModal');
-    m.classList.add('hidden'); m.classList.remove('flex');
-}
-function closeReject() {
-    const m = document.getElementById('rejectModal');
-    m.classList.add('hidden'); m.classList.remove('flex');
-}
-
-// Tutup modal klik di luar
-['detailModal','approveModal','rejectModal'].forEach(id => {
-    document.getElementById(id).addEventListener('click', function(e) {
-        if (e.target === this) {
-            this.classList.add('hidden');
-            this.classList.remove('flex');
+        if (openBtn && sidebar) {
+            function toggleSidebar() {
+                sidebar.classList.toggle('-translate-x-full');
+                if (overlay) {
+                    overlay.classList.toggle('hidden');
+                }
+                document.body.classList.toggle('overflow-hidden', !sidebar.classList.contains('-translate-x-full'));
+            }
+            openBtn.addEventListener('click', toggleSidebar);
+            if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+            if (overlay) overlay.addEventListener('click', toggleSidebar);
         }
-    });
-});
-</script>
+    </script>
 
-@endsection
+    <script>
+        function openDetailFromElement(btn) {
+            const event = JSON.parse(btn.getAttribute('data-event'));
+            const date = new Date(event.date);
+            const day = String(date.getDate()).padStart(2, '0');
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+            const month = months[date.getMonth()];
+            const fullDate = `${day} ${month} ${date.getFullYear()}`;
+
+            document.getElementById('detailPoster').src = event.banner
+                ? `{{ asset('images/events') }}/${event.banner}`
+                : 'https://via.placeholder.com/600x750';
+            document.getElementById('detailDay').textContent = day;
+            document.getElementById('detailMonth').textContent = month;
+            document.getElementById('detailDate').textContent = fullDate;
+            document.getElementById('detailTime').textContent = `${event.time_start.slice(0, 5)} WIB`;
+            document.getElementById('detailTitle').textContent = event.name;
+            document.getElementById('detailLocation').textContent = event.location || '-';
+            document.getElementById('detailCategory').textContent = event.category?.name || event.category || '-';
+            document.getElementById('detailDesc').textContent = event.description || 'Tidak ada deskripsi.';
+
+            const ticketContainer = document.getElementById('detailTickets');
+            ticketContainer.innerHTML = '';
+            if (event.tickets && event.tickets.length > 0) {
+                event.tickets.forEach(t => {
+                    const div = document.createElement('div');
+                    div.className = 'flex justify-between items-center bg-white/5 border border-white/10 rounded-xl p-4';
+                    div.innerHTML = `
+                        <div>
+                            <p class="font-bold text-sm">${t.ticket_type || 'Reguler'}</p>
+                            <p class="text-xs text-gray-400 mt-1">Stok: ${t.stock ?? 'Unlimited'}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-black text-blue-400">${t.price ? 'Rp ' + Number(t.price).toLocaleString('id-ID') : 'Gratis'}</p>
+                        </div>
+                    `;
+                    ticketContainer.appendChild(div);
+                });
+            } else {
+                ticketContainer.innerHTML = '<p class="text-gray-500 text-sm">Tidak ada tiket tersedia.</p>';
+            }
+
+            document.getElementById('detailModal').classList.remove('hidden');
+            document.getElementById('detailModal').classList.add('flex');
+        }
+
+        function closeDetail() {
+            document.getElementById('detailModal').classList.add('hidden');
+            document.getElementById('detailModal').classList.remove('flex');
+        }
+
+        function openApproveModal(btn) {
+            const event = JSON.parse(btn.getAttribute('data-event'));
+            document.getElementById('approveEventName').textContent = event.name;
+            const form = document.getElementById('approveForm');
+            form.action = `{{ url('admin/events') }}/${event.id}/approve`;
+            document.getElementById('approveModal').classList.remove('hidden');
+            document.getElementById('approveModal').classList.add('flex');
+        }
+
+        function closeApproveModal() {
+            document.getElementById('approveModal').classList.add('hidden');
+            document.getElementById('approveModal').classList.remove('flex');
+        }
+
+        function openRejectModal(btn) {
+            const event = JSON.parse(btn.getAttribute('data-event'));
+            document.getElementById('rejectEventName').textContent = event.name;
+            const form = document.getElementById('rejectForm');
+            form.action = `{{ url('admin/events') }}/${event.id}/reject`;
+            document.getElementById('rejectReason').value = '';
+            document.getElementById('rejectReasonCount').textContent = '0';
+            document.getElementById('rejectReasonError').classList.add('hidden');
+            document.getElementById('rejectModal').classList.remove('hidden');
+            document.getElementById('rejectModal').classList.add('flex');
+        }
+
+        function closeRejectModal() {
+            document.getElementById('rejectModal').classList.add('hidden');
+            document.getElementById('rejectModal').classList.remove('flex');
+        }
+
+        document.getElementById('rejectReason')?.addEventListener('input', function() {
+            document.getElementById('rejectReasonCount').textContent = this.value.length;
+            if (this.value.length >= 10) {
+                document.getElementById('rejectReasonError').classList.add('hidden');
+            }
+        });
+
+        document.getElementById('rejectForm')?.addEventListener('submit', function(e) {
+            const reason = document.getElementById('rejectReason').value;
+            if (reason.length < 10) {
+                e.preventDefault();
+                document.getElementById('rejectReasonError').classList.remove('hidden');
+            }
+        });
+    </script>
+
+</body>
+</html>

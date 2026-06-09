@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticketify | Bruce Wayne Ticket</title>
+    <title>Ticketify | {{ $ticket->ticket_type }} Ticket</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -34,15 +34,15 @@
                 <h2 class="text-4xl font-black italic uppercase tracking-tighter text-white">Ticketify</h2>
                 <div class="mt-4 inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 px-3 py-1 rounded-full">
                     <div class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                    <span class="text-green-500 text-[9px] font-black uppercase tracking-widest">Active</span>
+                    <span class="text-green-500 text-[9px] font-black uppercase tracking-widest">{{ $ticket->status }}</span>
                 </div>
             </div>
 
             <div class="px-8 pb-6 flex flex-col items-center">
                 <div class="bg-white p-5 rounded-[2.5rem] shadow-xl">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=A89UHBCXL" class="w-32 h-32">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ $ticket->qr_code ?? $ticket->order->order_code ?? $ticket->id }}" class="w-32 h-32">
                 </div>
-                <p class="mt-4 text-[9px] text-gray-500 font-medium uppercase tracking-[0.2em]">Purchased on April 10, 2026, at 12:43:20</p>
+                <p class="mt-4 text-[9px] text-gray-500 font-medium uppercase tracking-[0.2em]">Purchased on {{ ($ticket->order->paid_at ?? $ticket->created_at)->format('F d, Y') }}, at {{ ($ticket->order->paid_at ?? $ticket->created_at)->format('H:i:s') }}</p>
             </div>
 
             <div class="relative border-t border-dashed border-white/10 my-4">
@@ -53,47 +53,47 @@
             <div class="px-10 py-6">
                 <div class="flex items-center gap-3 mb-6">
                     <i class="fa-solid fa-ticket text-blue-500 text-xl -rotate-12"></i>
-                    <h3 class="text-2xl font-black italic uppercase text-white tracking-tight">Reguler Ticket</h3>
+                    <h3 class="text-2xl font-black italic uppercase text-white tracking-tight">{{ $ticket->ticket_type }} Ticket</h3>
                 </div>
 
                 <div class="grid grid-cols-2 gap-y-6 mb-8">
                     <div>
                         <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">Date</p>
-                        <p class="text-sm font-bold text-white uppercase italic">24 April 2026</p>
+                        <p class="text-sm font-bold text-white uppercase italic">{{ $ticket->event->date ? \Carbon\Carbon::parse($ticket->event->date)->format('d F Y') : 'TBA' }}</p>
                     </div>
                     <div class="text-right">
                         <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">Time</p>
-                        <p class="text-sm font-bold text-white uppercase italic">15 : 00</p>
+                        <p class="text-sm font-bold text-white uppercase italic">{{ $ticket->event->time ? \Carbon\Carbon::parse($ticket->event->time)->format('H : i') : 'TBA' }}</p>
                     </div>
                     <div class="col-span-2">
                         <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">Location</p>
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-location-dot text-red-500 text-xs"></i>
-                            <p class="text-sm font-bold text-white uppercase italic">Politeknik Negeri Batam</p>
+                            <p class="text-sm font-bold text-white uppercase italic">{{ $ticket->event->location ?? 'TBA' }}</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="bg-white/5 border border-white/5 rounded-2xl p-4 text-center mb-8">
                     <p class="text-[9px] text-gray-500 font-black uppercase tracking-[0.3em] mb-2">Unique Code</p>
-                    <p class="text-2xl font-black text-white tracking-[0.4em]">A89UHBCXL</p>
+                    <p class="text-2xl font-black text-white tracking-[0.4em]">{{ $ticket->qr_code ?? $ticket->order->order_code ?? $ticket->id }}</p>
                 </div>
 
                 <div class="border-t border-white/5 pt-6 space-y-1">
                     <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">On behalf of</p>
-                    <p class="text-lg font-black text-white italic uppercase leading-none">Bruce Wayne</p>
-                    <p class="text-[10px] text-gray-500 font-medium">iamnotabatman@gmail.com</p>
+                    <p class="text-lg font-black text-white italic uppercase leading-none">{{ $ticket->user->name ?? Auth::user()->name }}</p>
+                    <p class="text-[10px] text-gray-500 font-medium">{{ $ticket->user->email ?? Auth::user()->email }}</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 border-t border-white/5 mt-4">
-                <button class="py-6 border-r border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition flex items-center justify-center gap-2 group">
+                <button onclick="window.print()" class="py-6 border-r border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition flex items-center justify-center gap-2 group">
                     <i class="fa-solid fa-download text-gray-500 group-hover:text-blue-500 transition-colors"></i>
                     <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Save</span>
                 </button>
-                <button class="py-6 bg-white/[0.05] hover:bg-white/10 transition">
+                <a href="{{ route('pembeli.myticket') }}" class="py-6 bg-white/[0.05] hover:bg-white/10 transition flex items-center justify-center">
                     <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white">Close</span>
-                </button>
+                </a>
             </div>
         </div>
 

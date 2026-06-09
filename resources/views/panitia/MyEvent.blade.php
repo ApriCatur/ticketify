@@ -101,17 +101,22 @@
                         </div>
                         {{-- ============ END STATUS BADGE ============ --}}
 
+                        @php
+                            $kuota = $event->tickets->sum('stock');
+                            $terjual = $event->tickets_sold ?? 0;
+                            $persentase = $kuota > 0 ? ($terjual / $kuota) * 100 : 0;
+                        @endphp
                         <div class="md:col-span-3 space-y-2">
                             <div class="flex justify-between text-[9px] font-black uppercase tracking-widest text-gray-500">
-                                <span>Sold: <b class="text-white">0</b></span>
-                                <span>Target: {{ $event->stock ?? '-' }}</span>
+                                <span>Sold: <b class="text-white">{{ $terjual }}</b></span>
+                                <span>Target: {{ $kuota ?: '-' }}</span>
                             </div>
                             <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                                <div class="h-full bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.4)]" style="width: 0%"></div>
+                                <div class="h-full bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.4)]" style="width: {{ $persentase }}%"></div>
                             </div>
                         </div>
 
-                        <div class="flex items-center justify-end md:col-span-2 gap-3">
+                        <div class="flex items-center justify-end md:col-span-2 gap-2 flex-nowrap">
                             @php
                                 $canEdit = $event->status !== 'rejected' && $displayStatus !== 'completed';
                             @endphp
@@ -119,7 +124,7 @@
                             @if($canEdit)
                                 {{-- DETAIL EVENT --}}
                                 <a href="{{ route('panitia.events.show', $event->id) }}" class="flex flex-col items-center gap-1">
-                                    <div class="flex items-center justify-center w-11 h-11 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 rounded-xl transition-colors border border-emerald-500/10">
+                                    <div class="flex items-center justify-center w-9 h-9 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 rounded-xl transition-colors border border-emerald-500/10">
                                         <i class="fa-solid fa-eye text-sm"></i>
                                     </div>
                                     <span class="text-[9px] font-bold uppercase text-emerald-500">Detail</span>
@@ -127,7 +132,7 @@
 
                                 {{-- EDIT --}}
                                 <a href="{{ route('panitia.events.edit', $event->id) }}" class="flex flex-col items-center gap-1">
-                                    <div class="flex items-center justify-center w-11 h-11 bg-white/5 hover:bg-white/10 text-yellow-500 hover:text-yellow-600 rounded-xl transition-colors border border-white/5">
+                                    <div class="flex items-center justify-center w-9 h-9 bg-white/5 hover:bg-white/10 text-yellow-500 hover:text-yellow-600 rounded-xl transition-colors border border-white/5">
                                         <i class="fa-solid fa-pen-to-square text-sm"></i>
                                     </div>
                                     <span class="text-[9px] font-bold uppercase text-yellow-500">Edit</span>
@@ -135,7 +140,7 @@
 
                                 {{-- PESERTA --}}
                                 <a href="{{ route('panitia.customerdata', $event->id) }}" class="flex flex-col items-center gap-1">
-                                    <div class="flex items-center justify-center w-11 h-11 bg-blue-600/10 hover:bg-blue-600/20 text-blue-500 hover:text-blue-400 rounded-xl transition-colors border border-blue-500/10">
+                                    <div class="flex items-center justify-center w-9 h-9 bg-blue-600/10 hover:bg-blue-600/20 text-blue-500 hover:text-blue-400 rounded-xl transition-colors border border-blue-500/10">
                                         <i class="fa-solid fa-table text-sm"></i>
                                     </div>
                                     <span class="text-[9px] font-bold uppercase text-blue-500/80">Peserta</span>
@@ -143,7 +148,7 @@
 
                                 {{-- HAPUS --}}
                                 <button type="button" onclick="openDeleteModal({{ $event->id }}, '{{ addslashes($event->name) }}')" class="flex flex-col items-center gap-1">
-                                    <div class="flex items-center justify-center w-11 h-11 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl transition-colors border border-red-500/10">
+                                    <div class="flex items-center justify-center w-9 h-9 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl transition-colors border border-red-500/10">
                                         <i class="fa-solid fa-trash-can text-sm"></i>
                                     </div>
                                     <span class="text-[9px] font-bold uppercase text-red-500">Hapus</span>

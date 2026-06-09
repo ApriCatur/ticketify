@@ -76,7 +76,13 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/settings/update_profile', [PembeliSettingsController::class, 'updateProfile'])->name('pembeli.settings.update_profile');
         Route::put('/settings/update-password', [PembeliSettingsController::class, 'updatePassword'])->name('pembeli.settings.update-password');
         Route::get('/about', function () { return view('Pembeli.About'); })->name('pembeli.about');
-        Route::get('/ticketdigital', function () { return view('Pembeli.TicketDigital'); })->name('pembeli.ticketdigital');
+        Route::get('/ticketdigital/{ticket}', function (\App\Models\Ticket $ticket) {
+            if ($ticket->user_id !== Auth::id()) {
+                abort(403);
+            }
+            $ticket->load('event', 'order', 'user');
+            return view('Pembeli.TicketDigital', compact('ticket'));
+        })->name('pembeli.ticketdigital');
         Route::get('/buatevent', [RoleApplicationController::class, 'create'])->name('pembeli.buatevent');
         Route::post('/ajukan-panitia', [RoleApplicationController::class, 'store'])->name('role.apply');
     });

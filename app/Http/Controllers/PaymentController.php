@@ -2,44 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Http\Requests\CreateSnapTokenRequest;
+use App\Http\Requests\HandleSuccessRequest;
 use App\Models\Order;
-use App\Models\Ticket;
 use App\Models\Event;
+use App\Services\PaymentService;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Notification;
 
 class PaymentController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(
+        protected PaymentService $paymentService
+    ) {
         Config::$serverKey    = config('midtrans.server_key');
         Config::$isProduction = config('midtrans.is_production');
         Config::$isSanitized  = config('midtrans.is_sanitized');
         Config::$is3ds        = config('midtrans.is_3ds');
     }
 
-    /**
-     * Dipanggil via AJAX dari detail.blade.php saat tombol "Beli Tiket" ditekan.
-     * Membuat Order + Snap Token lalu mengembalikan token ke frontend.
-     */
-    public function createSnapToken(Request $request, Event $event)
+    public function createSnapToken(CreateSnapTokenRequest $request, Event $event)
     {
-        $request->validate([
-            'ticket_type' => 'required|string',
-            'quantity'    => 'required|integer|min:1',
-            'price'       => 'required|numeric|min:0',
-        ]);
-
         $user        = auth()->user();
         $quantity    = (int) $request->quantity;
         $price       = (float) $request->price;
         $totalAmount = $price * $quantity;
         $orderCode   = Order::generateOrderCode();
 
-        // Buat order dengan status pending
         $order = Order::create([
             'user_id'          => $user->id,
             'event_id'         => $event->id,
@@ -52,7 +42,6 @@ class PaymentController extends Controller
             'expired_at'       => now()->addHours(24),
         ]);
 
-        // Parameter Midtrans
         $params = [
             'transaction_details' => [
                 'order_id'     => $orderCode,
@@ -79,7 +68,6 @@ class PaymentController extends Controller
 
         try {
             $snapToken = Snap::getSnapToken($params);
-
             $order->update(['snap_token' => $snapToken]);
 
             return response()->json([
@@ -92,28 +80,16 @@ class PaymentController extends Controller
         }
     }
 
-    /**
-     * Dipanggil via AJAX setelah Snap popup berhasil (onSuccess callback).
-     * Generate tiket digital dan ubah status order → paid.
-     */
-    public function handleSuccess(Request $request)
+    public function handleSuccess(HandleSuccessRequest $request)
     {
-        $request->validate([
-            'order_id'       => 'required|integer',
-            'transaction_id' => 'required|string',
-            'payment_type'   => 'required|string',
-        ]);
-
         $order = Order::where('id', $request->order_id)
-                      ->where('user_id', auth()->id())
-                      ->firstOrFail();
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
 
-        // Jika sudah diproses sebelumnya, langsung kembalikan sukses
         if ($order->status === 'paid') {
             return response()->json(['success' => true, 'already_paid' => true]);
         }
 
-        // Update order
         $order->update([
             'status'         => 'paid',
             'transaction_id' => $request->transaction_id,
@@ -121,23 +97,7 @@ class PaymentController extends Controller
             'paid_at'        => now(),
         ]);
 
-        // Generate tiket digital sebanyak quantity
-        $tickets = [];
-        for ($i = 0; $i < $order->quantity; $i++) {
-            $qrCode = strtoupper(Str::random(12)); // kode unik untuk QR
-
-            $ticket = Ticket::create([
-                'user_id'       => $order->user_id,
-                'event_id'      => $order->event_id,
-                'order_id'      => $order->id,
-                'ticket_type'   => $order->ticket_type,
-                'status'        => 'Active',
-                'purchase_date' => now(),
-                'qr_code'       => $qrCode,
-            ]);
-
-            $tickets[] = $ticket;
-        }
+        $tickets = $this->paymentService->createTickets($order);
 
         return response()->json([
             'success'    => true,
@@ -146,11 +106,7 @@ class PaymentController extends Controller
         ]);
     }
 
-    /**
-     * Webhook dari server Midtrans (tanpa auth, via CSRF exception).
-     * Menangani notifikasi pembayaran secara server-to-server.
-     */
-    public function notification(Request $request)
+    public function notification()
     {
         try {
             $notification = new Notification();
@@ -167,7 +123,6 @@ class PaymentController extends Controller
                 return response()->json(['message' => 'Order not found'], 404);
             }
 
-            // Tentukan status berdasarkan notifikasi Midtrans
             if ($transactionStatus === 'capture') {
                 $status = ($fraudStatus === 'accept') ? 'paid' : 'failed';
             } elseif ($transactionStatus === 'settlement') {
@@ -187,19 +142,8 @@ class PaymentController extends Controller
                 'paid_at'        => $status === 'paid' ? now() : null,
             ]);
 
-            // Jika paid dan belum ada tiket, generate tiket
             if ($status === 'paid' && $order->tickets()->count() === 0) {
-                for ($i = 0; $i < $order->quantity; $i++) {
-                    Ticket::create([
-                        'user_id'       => $order->user_id,
-                        'event_id'      => $order->event_id,
-                        'order_id'      => $order->id,
-                        'ticket_type'   => $order->ticket_type,
-                        'status'        => 'Active',
-                        'purchase_date' => now(),
-                        'qr_code'       => strtoupper(Str::random(12)),
-                    ]);
-                }
+                $this->paymentService->createTickets($order);
             }
 
             return response()->json(['message' => 'OK']);
@@ -208,19 +152,15 @@ class PaymentController extends Controller
         }
     }
 
-    /**
-     * Halaman sukses (redirect dari Midtrans)
-     */
-    public function success(Request $request)
+    public function success()
     {
-        return redirect()->route('pembeli.myticket')->with('success', 'Pembayaran berhasil! Tiket kamu sudah tersedia.');
+        return redirect()->route('pembeli.myticket')
+            ->with('success', 'Pembayaran berhasil! Tiket kamu sudah tersedia.');
     }
 
-    /**
-     * Halaman gagal (redirect dari Midtrans)
-     */
-    public function failed(Request $request)
+    public function failed()
     {
-        return redirect()->route('pembeli.event')->with('error', 'Pembayaran gagal atau dibatalkan.');
+        return redirect()->route('pembeli.event')
+            ->with('error', 'Pembayaran gagal atau dibatalkan.');
     }
 }

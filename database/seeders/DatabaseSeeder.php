@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UkmSeeder::class,          // Tambahan seeder baru kita
             RoleSettingsSeeder::class,  // Bawaan proyekmu sebelumnya
+            DummyPendingEventsSeeder::class,
         ]);
     }
 }

@@ -36,11 +36,8 @@
 
             @forelse($events as $item)
     @php
-        // 1. DIUBAH: Gunakan $item->stock sesuai database
-        $kuota = $item->stock ?? 0;
-
-        // Perhitungan tiket terjual (tetap pertahankan relasi kamu jika ada)
-        $terjual = $item->registrations_count ?? ($item->registrations ? $item->registrations->count() : 0);
+        $kuota = $item->tickets->sum('stock');
+        $terjual = $item->tickets_sold ?? 0;
         $persentase = $kuota > 0 ? ($terjual / $kuota) * 100 : 0;
     @endphp
 

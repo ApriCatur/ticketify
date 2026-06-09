@@ -21,8 +21,8 @@ class MyTicketController extends Controller
 
     // 2. Ambil semua tickets milik user yang sedang login
     $tickets = Ticket::where('user_id', Auth::id())
-    ->with('event') // Load relasi event untuk mendapatkan info event
-    ->orderBy('purchase_date', 'desc') // Urutkan dari yang terbaru
+    ->with('event', 'order')
+    ->orderBy('purchase_date', 'desc')
     ->get();
 
     // 3. Hitung statistik

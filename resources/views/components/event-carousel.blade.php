@@ -3,15 +3,18 @@
         <div class="swiper-wrapper">
             @forelse($events->take(5) as $carouselEvent)
                 @php
-                    // Determine the correct route based on user authentication
-                    $detailRoute = auth()->check() && auth()->user()->hasRole('pembeli')
-                        ? route('pembeli.detail', $carouselEvent)
-                        : route('guest.event.detail', $carouselEvent->id);
+                    $user = auth()->user();
+                    $detailRoute = match(true) {
+                        $user && $user->role === 'pembeli' => route('pembeli.detail', $carouselEvent),
+                        $user && $user->role === 'admin'   => '#', // admin no click
+                        $user && $user->role === 'panitia' => route('panitia.events.show', $carouselEvent->id),
+                        default                            => route('guest.event.detail', $carouselEvent->id),
+                    };
                 @endphp
                 <div class="swiper-slide relative h-[350px] group cursor-pointer" onclick="window.location='{{ $detailRoute }}'">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10"></div>
 
-                    <img src="{{ $carouselEvent->banner ? asset('images/events/' . $carouselEvent->banner) : '' }}"
+                    <img src="{{ $carouselEvent->banner ? asset('images/events/' . $carouselEvent->banner) : asset('images/events/banner_1779635248.jpg') }}"
                     class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
                     alt="{{ $carouselEvent->name }}">
 
