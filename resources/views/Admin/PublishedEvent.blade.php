@@ -295,10 +295,10 @@
             document.getElementById('detailDay').textContent = day;
             document.getElementById('detailMonth').textContent = month;
             document.getElementById('detailDate').textContent = fullDate;
-            document.getElementById('detailTime').textContent = `${event.time_start} WIB`;
+            document.getElementById('detailTime').textContent = `${event.time_start.slice(0, 5)} WIB`;
             document.getElementById('detailTitle').textContent = event.name;
             document.getElementById('detailLocation').textContent = event.location || '-';
-            document.getElementById('detailCategory').textContent = event.category || '-';
+            document.getElementById('detailCategory').textContent = event.category?.name || event.category || '-';
             document.getElementById('detailDesc').textContent = event.description || 'Tidak ada deskripsi.';
 
             const ticketContainer = document.getElementById('detailTickets');
