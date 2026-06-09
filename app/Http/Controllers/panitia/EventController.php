@@ -16,7 +16,7 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $today = Carbon::today();
-        $query = Event::query();
+        $query = Event::with('tickets');
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
@@ -31,8 +31,8 @@ class EventController extends Controller
         }
 
         $publicEvents = $query->where('status', 'published')->get();
-        $events = Event::where('status', 'published')->take(5)->get();
-        $upcomingEvents = Event::where('status', 'published')->whereDate('date', '>=', $today)->take(3)->get();
+        $events = Event::with('tickets')->where('status', 'published')->take(5)->get();
+        $upcomingEvents = Event::with('tickets')->where('status', 'published')->whereDate('date', '>=', $today)->take(3)->get();
         $categories = Category::all();
 
         return view('panitia.event', compact('publicEvents', 'events', 'upcomingEvents', 'categories'));

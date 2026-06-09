@@ -116,12 +116,12 @@
                     day="{{ \Illuminate\Support\Carbon::parse($event->date)->format('d') }}"
                     month="{{ \Illuminate\Support\Carbon::parse($event->date)->format('M') }}"
                     year="{{ \Illuminate\Support\Carbon::parse($event->date)->format('Y') }}"
-                    category="{{ $event->category?->name }}
+                    category="{{ $event->category?->name }}"
                     title="{{ $event->name }}"
                     location="{{ $event->location }}"
                     startTime="{{ \Illuminate\Support\Carbon::parse($event->time_start)->format('H:i') }}"
                     endTime="{{ isset($event->time_end) ? \Illuminate\Support\Carbon::parse($event->time_end)->format('H:i') : \Illuminate\Support\Carbon::parse($event->time_start)->addHour()->format('H:i') }}"
-                    price="IDR {{ number_format($event->price, 0, ',', '.') }}"
+                    price="IDR {{ $event->tickets->whereNull('order_id')->min('price') ? number_format($event->tickets->whereNull('order_id')->min('price'), 0, ',', '.') : 'Gratis' }}"
                 >
                     @php
                         $viewRoute = auth()->check() && auth()->user()->hasRole('pembeli')

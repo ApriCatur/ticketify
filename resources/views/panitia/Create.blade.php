@@ -88,8 +88,11 @@
         </div>
 
         {{-- TUNGGAL FORM UTAMA UNTUK SUBMIT KE BACKEND --}}
-        <form action="{{ route('panitia.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('panitia.store') }}" method="POST" enctype="multipart/form-data" novalidate>
             @csrf
+
+            {{-- ALERT VALIDASI GLOBAL --}}
+            <div id="form-alert" class="hidden mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-sm space-y-1"></div>
 
             {{-- ========================================================================= --}}
             {{-- STEP 1: TICKET & INFO UTAMA --}}
@@ -263,14 +266,7 @@
 
     {{-- Script Handler Sidebar Responsif --}}
     <script>
-        // Debug Alpine.js state
-        window.addEventListener('alpine:initialized', () => {
-            console.log('✅ Alpine.js initialized');
-        });
-
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🔍 DOM Content Loaded');
-
             const openBtn = document.getElementById('open-sidebar');
             const closeBtn = document.getElementById('close-sidebar');
             const sidebar = document.getElementById('main-sidebar');
@@ -290,68 +286,73 @@
                 if (overlay) overlay.addEventListener('click', toggleSidebar);
             }
 
-            // Monitor form and Alpine state
             const form = document.querySelector('form');
-            const submitBtn = document.getElementById('submit-event-btn');
-
-            console.log('📋 Form element:', form);
-            console.log('🔘 Submit button:', submitBtn);
 
             if (form) {
-                // Log when form tab changes
-                const ticketTab = document.querySelector('[\\@click="activeTab = \'ticket\'"]');
-                const detailTab = document.querySelector('[\\@click="activeTab = \'detail\'"]');
-                const organiserTab = document.querySelector('[\\@click="activeTab = \'organiser\'"]');
-
-                console.log('📑 Tab elements found:', {
-                    ticket: !!ticketTab,
-                    detail: !!detailTab,
-                    organiser: !!organiserTab
-                });
+                const fieldLabels = {
+                    'name': 'Nama Event', 'category_id': 'Kategori Event', 'location': 'Lokasi',
+                    'date': 'Tanggal', 'time_start': 'Waktu Mulai', 'time_end': 'Waktu Selesai',
+                    'description': 'Deskripsi', 'terms': 'Syarat & Ketentuan',
+                };
+                const fieldTabMap = {
+                    'name': 'ticket', 'category_id': 'ticket', 'location': 'ticket',
+                    'date': 'ticket', 'time_start': 'ticket', 'time_end': 'ticket',
+                    'description': 'detail', 'terms': 'detail',
+                };
 
                 form.addEventListener('submit', function(e) {
-                    console.log('📤 Form submit event triggered');
+                    const alertEl = document.getElementById('form-alert');
+                    alertEl.classList.add('hidden');
+                    alertEl.innerHTML = '';
 
-                    // Get all input fields
                     const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
-                    let isValid = true;
-                    const emptyFields = [];
+                    const errors = [];
+                    let firstInvalid = null;
+                    let targetTab = null;
 
                     inputs.forEach(input => {
                         if (!input.value || input.value.trim() === '') {
-                            isValid = false;
-                            emptyFields.push(input.name || input.id || input.type);
+                            if (!firstInvalid) firstInvalid = input;
+                            const tab = fieldTabMap[input.name];
+                            if (tab && !targetTab) targetTab = tab;
+                            errors.push(fieldLabels[input.name] || input.name);
                         }
                     });
 
-                    // Check if at least one ticket exists
-                    const ticketNameInputs = form.querySelectorAll('input[name*="ticket_type"][name*="name"]');
-                    console.log('🎫 Ticket inputs found:', ticketNameInputs.length);
-
-                    if (ticketNameInputs.length === 0) {
-                        isValid = false;
-                        emptyFields.push('Minimal 1 jenis tiket harus ditambahkan');
+                    const ticketTypeInputs = form.querySelectorAll('[name*="[ticket_type]"]');
+                    if (ticketTypeInputs.length === 0) {
+                        errors.push('Minimal 1 jenis tiket');
+                        if (!targetTab) targetTab = 'ticket';
                     }
 
-                    if (!isValid) {
+                    if (errors.length > 0) {
                         e.preventDefault();
-                        console.warn('❌ Form validation failed. Empty fields:', emptyFields);
-                        alert('❌ Mohon isi semua field yang diperlukan:\n\n' + emptyFields.join('\n'));
+                        const title = document.createElement('p');
+                        title.className = 'font-bold mb-1';
+                        title.textContent = 'ⓘ Lengkapi field berikut:';
+                        alertEl.appendChild(title);
+                        const listEl = document.createElement('ul');
+                        listEl.className = 'list-disc pl-5 space-y-0.5';
+                        errors.forEach(f => {
+                            const li = document.createElement('li');
+                            li.textContent = f;
+                            listEl.appendChild(li);
+                        });
+                        alertEl.appendChild(listEl);
+                        alertEl.classList.remove('hidden');
+
+                        if (targetTab && typeof Alpine !== 'undefined') {
+                            Alpine.$data(document.querySelector('[x-data]')).activeTab = targetTab;
+                        }
+                        if (firstInvalid) {
+                            setTimeout(() => {
+                                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }, 150);
+                        }
                         return false;
                     }
-
-                    console.log('✅ Form validation passed, submitting...');
                     return true;
                 });
-
-                // Monitor submit button click
-                if (submitBtn) {
-                    submitBtn.addEventListener('click', function(e) {
-                        console.log('🖱️ Submit button clicked directly');
-                        console.log('Button disabled:', this.disabled);
-                        console.log('Button visible:', this.offsetParent !== null);
-                    });
-                }
             }
         });
     </script>

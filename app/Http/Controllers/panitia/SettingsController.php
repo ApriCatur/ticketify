@@ -34,6 +34,7 @@ class SettingsController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'nim' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($user->id)],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'phone_number' => ['nullable', 'string', 'max:15'],
             'nomor_rekening' => ['required', 'string', 'max:50'],
             'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
@@ -43,6 +44,9 @@ class SettingsController extends Controller
             'name.required' => 'Nama lengkap wajib diisi.',
             'nim.required' => 'NIM wajib diisi.',
             'nim.unique' => 'NIM ini sudah terdaftar pada akun lain.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email ini sudah terdaftar pada akun lain.',
             'nomor_rekening.required' => 'Nomor rekening wajib diisi.',
         ]);
 
@@ -59,6 +63,7 @@ class SettingsController extends Controller
         // 3. Simpan Perubahan ke Tabel Users
         $user->name = $request->name;
         $user->nim = $request->nim;
+        $user->email = $request->email;
         $user->phone_number = $request->phone_number;
         $user->save();
 

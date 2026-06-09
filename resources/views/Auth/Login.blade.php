@@ -21,8 +21,8 @@
 </head>
 <body class="bg-[#0f0f0f] text-white antialiased">
 
-    <div class="flex max-w-[1600px] mx-auto min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
-        <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
+    <div class="flex w-full min-h-screen bg-[#121212]">
+        <div class="flex-1 flex flex-col min-w-0">
             <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
                 <div>
                     <span class="text-sm text-gray-400 font-medium italic">Welcome back! Please login to your account.</span>
@@ -32,7 +32,7 @@
                 </div>
             </nav>
 
-            <main class="flex-1 flex items-center justify-center p-8">
+            <main class="flex-1 flex items-center justify-center p-8 overflow-y-auto">
                 <div class="w-full max-w-md bg-[#1e1e1e] border border-white/10 rounded-3xl p-10 shadow-2xl animate-login">
                     <div class="text-center mb-8">
                         <h2 class="text-3xl font-black italic tracking-tighter mb-2">Sign In</h2>

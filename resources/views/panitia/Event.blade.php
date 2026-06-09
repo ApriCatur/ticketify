@@ -60,7 +60,7 @@
             :location="$event->location"
             :startTime="\Carbon\Carbon::parse($event->time_start)->format('H:i')"
             :endTime="\Carbon\Carbon::parse($event->time_end)->format('H:i')"
-            :price="'Rp ' . number_format($event->price, 0, ',', '.')"
+            :price="$event->tickets->whereNull('order_id')->min('price') ? 'Rp ' . number_format($event->tickets->whereNull('order_id')->min('price'), 0, ',', '.') : 'Gratis'"
         >
             {{-- Tombol sesuai Role --}}
            @if(auth()->user()->role === 'panitia')

@@ -39,20 +39,14 @@ class SettingsController extends Controller
             if ($user->profile_picture) {
                 Storage::disk('public')->delete($user->profile_picture);
             }
-            $path = $request->file('profile_picture')->store('profiles', 'public');
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $user->profile_picture = $path;
         }
 
-        $updateData = [
-            'name'  => $request->name,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-        ];
-
-        if (isset($path)) {
-            $updateData['profile_picture'] = $path;
-        }
-
-        $user->update($updateData);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone_number = $request->phone_number;
+        $user->save();
 
         return redirect()->route('pembeli.settings')->with('success', 'Informasi profil berhasil diperbarui.');
     }

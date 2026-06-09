@@ -10,7 +10,7 @@ class PendingEventController extends Controller
 {
     public function index()
     {
-        $pendingEvents = Event::where('status', 'pending')
+        $pendingEvents = Event::with('tickets')->where('status', 'pending')
             ->orderBy('date', 'asc')
             ->get();
 

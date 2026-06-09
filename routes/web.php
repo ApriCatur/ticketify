@@ -117,7 +117,9 @@ Route::middleware([RoleMiddleware::class . ':panitia'])->prefix('panitia')->grou
     Route::middleware([RoleMiddleware::class . ':admin'])->prefix('admin')->group(function () {
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-        Route::get('/Settings', function () { return view('Admin.Settings'); })->name('admin.Settings');
+        Route::get('/Settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('admin.Settings');
+        Route::put('/Settings/profile', [\App\Http\Controllers\Admin\SettingsController::class, 'updateProfile'])->name('admin.settings.update-profile');
+        Route::put('/Settings/password', [\App\Http\Controllers\Admin\SettingsController::class, 'updatePassword'])->name('admin.settings.update-password');
 
         // Approval Event
         Route::get('/PublishedEvents', [PublishedEventController::class, 'index'])->name('admin.PublishedEvent');

@@ -12,6 +12,8 @@
                 $route = 'pembeli.event';
             } elseif ($userRole === 'panitia') {
                 $route = 'panitia.event';
+            } elseif ($userRole === 'admin') {
+                $route = 'admin.PublishedEvent';
             }
         }
     @endphp

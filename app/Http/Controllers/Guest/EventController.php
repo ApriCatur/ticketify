@@ -15,7 +15,7 @@ class EventController extends Controller // Pastikan class dibuka di sini
         $today = Carbon::today();
 
         // 1. Query untuk event utama (dengan filter)
-        $query = Event::where('status', 'published');
+        $query = Event::with('tickets')->where('status', 'published');
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
@@ -32,10 +32,10 @@ class EventController extends Controller // Pastikan class dibuka di sini
         $publicEvents = $query->orderBy('date', 'asc')->get();
 
         // 2. Query untuk carousel
-        $events = Event::where('status', 'published')->take(5)->get();
+        $events = Event::with('tickets')->where('status', 'published')->take(5)->get();
 
         // 3. Query untuk sidebar
-        $upcomingEvents = Event::where('status', 'published')
+        $upcomingEvents = Event::with('tickets')->where('status', 'published')
             ->whereDate('date', '>=', $today)
             ->orderBy('date', 'asc')
             ->take(3)

@@ -60,7 +60,7 @@
         :location="$event->location"
         :startTime="\Carbon\Carbon::parse($event->time_start)->format('H:i')"
         :endTime="\Carbon\Carbon::parse($event->time_end)->format('H:i')"
-        :price="'Rp ' . number_format($event->price, 0, ',', '.')"
+        :price="$event->tickets->whereNull('order_id')->min('price') ? 'Rp ' . number_format($event->tickets->whereNull('order_id')->min('price'), 0, ',', '.') : 'Gratis'"
     >
         {{-- Tombol sesuai Role --}}
         @if(auth()->user() && auth()->user()->role === 'pembeli')
@@ -86,46 +86,46 @@
                 </div>
 
                      <div class="space-y-4">
-                        @if(isset($upcomingEvents) && $upcomingEvents->count() > 0)
-                            @foreach($upcomingEvents as $upEvent)
-                                @php
-                                    $eventDate = \Carbon\Carbon::parse($upEvent->date);
-                                @endphp
-                                <div class="group p-4 bg-[#1e1e1e] border border-white/5 rounded-2xl hover:border-blue-500/30 transition-all cursor-pointer">
-                                    <div class="flex gap-4 items-center">
-                                        <div class="flex-shrink-0 w-12 h-12 bg-blue-500/10 rounded-xl flex flex-col items-center justify-center border border-blue-500/20">
-                                            <span class="text-[10px] font-bold text-blue-400 uppercase leading-none">
-                                                {{ $eventDate->translatedFormat('M') }}
-                                            </span>
-                                            <span class="text-lg font-black text-white mt-0.5 leading-none">
-                                                {{ $eventDate->format('d') }}
-                                            </span>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <h4 class="text-sm font-bold text-white tracking-tight truncate group-hover:text-blue-400 transition-colors">
-                                                {{ $upEvent->name }}
-                                            </h4>
-                                            <p class="text-[10px] text-gray-500 mt-1 uppercase flex items-center gap-1">
-                                                <i class="fa-regular fa-clock text-[9px]"></i>
-                                                {{ \Carbon\Carbon::parse($upEvent->time_start)->format('H:i') }} WIB
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
+                         @if(isset($upcomingEvents) && $upcomingEvents->count() > 0)
+                             @foreach($upcomingEvents as $upEvent)
+                                 @php
+                                     $eventDate = \Carbon\Carbon::parse($upEvent->date);
+                                 @endphp
+                                 <div class="group p-4 bg-[#1e1e1e] border border-white/5 rounded-2xl hover:border-blue-500/30 transition-all cursor-pointer">
+                                     <div class="flex gap-4 items-center">
+                                         <div class="flex-shrink-0 w-12 h-12 bg-blue-500/10 rounded-xl flex flex-col items-center justify-center border border-blue-500/20">
+                                             <span class="text-[10px] font-bold text-blue-400 uppercase leading-none">
+                                                 {{ $eventDate->translatedFormat('M') }}
+                                             </span>
+                                             <span class="text-lg font-black text-white mt-0.5 leading-none">
+                                                 {{ $eventDate->format('d') }}
+                                             </span>
+                                         </div>
+                                         <div class="flex-1 min-w-0">
+                                             <h4 class="text-sm font-bold text-white tracking-tight truncate group-hover:text-blue-400 transition-colors">
+                                                 {{ $upEvent->name }}
+                                             </h4>
+                                             <p class="text-[10px] text-gray-500 mt-1 uppercase flex items-center gap-1">
+                                                 <i class="fa-regular fa-clock text-[9px]"></i>
+                                                 {{ \Carbon\Carbon::parse($upEvent->time_start)->format('H:i') }} WIB
+                                             </p>
+                                         </div>
+                                     </div>
+                                 </div>
+                             @endforeach
+                         @else
+                             <div class="text-center py-8 bg-[#1e1e1e] border border-dashed border-white/5 rounded-2xl">
+                                 <i class="fa-solid fa-calendar-xmark text-gray-700 text-xl mb-2 block"></i>
+                                 <p class="text-[11px] text-gray-500 font-medium">Belum ada event terdekat</p>
+                             </div>
+                         @endif
 
-                            @if(auth()->user() && auth()->user()->role === 'pembeli')
-                                    <a href="{{ route('pembeli.buatevent') }}" class="inline-flex items-center justify-center rounded-2xl border border-blue-500 bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500">
-                                        <i class="fa-solid fa-plus mr-2"></i> Ajukan Jadi Panitia
-                                    </a>
-                                @endif
-                    @else
-                        <div class="text-center py-8 bg-[#1e1e1e] border border-dashed border-white/5 rounded-2xl">
-                            <i class="fa-solid fa-calendar-xmark text-gray-700 text-xl mb-2 block"></i>
-                            <p class="text-[11px] text-gray-500 font-medium">Belum ada event terdekat</p>
-                        </div>
-                    @endif
-                </div>
+                         @if(auth()->user() && auth()->user()->role === 'pembeli')
+                             <a href="{{ route('pembeli.buatevent') }}" class="inline-flex items-center justify-center rounded-2xl border border-blue-500 bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 w-full">
+                                 <i class="fa-solid fa-plus mr-2"></i> Ajukan Jadi Panitia
+                             </a>
+                         @endif
+                     </div>
             </div>
         </aside>
 

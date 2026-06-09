@@ -20,7 +20,7 @@
 </head>
 <body class="bg-[#0f0f0f] text-white antialiased">
 
-    <div class="flex max-w-[1600px] mx-auto min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
+    <div class="flex w-full min-h-screen bg-[#121212]">
 
         <aside class="w-64 hidden lg:flex flex-col sticky top-0 h-screen border-r border-white/5 p-6 space-y-8">
             <div class="flex items-center gap-2 mb-4">
@@ -42,13 +42,13 @@
             </div>
         </aside>
 
-        <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
+        <div class="flex-1 flex flex-col min-w-0">
             <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
                 <span class="text-sm text-gray-400 font-medium italic tracking-tight">Join our community today!</span>
                 <a href="{{ route('guest.event') }}" class="text-[10px] font-black text-gray-500 hover:text-white uppercase tracking-widest transition">Cancel</a>
             </nav>
 
-            <main class="flex-1 flex items-center justify-center p-8">
+            <main class="flex-1 flex items-center justify-center p-8 overflow-y-auto">
                 <div class="w-full max-w-xl bg-[#1e1e1e] border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl animate-regis">
                     <div class="mb-10 text-center">
                         <h2 class="text-3xl font-black italic tracking-tighter mb-2">Get Started</h2>
@@ -90,6 +90,14 @@
                             <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
                                 <i class="fa-solid fa-phone text-blue-500 text-sm w-5 text-center"></i>
                                 <input type="tel" name="phone_number" placeholder="Nomor Telepon Anda" required value="{{ old('phone_number') }}" class="bg-transparent w-full outline-none text-sm text-gray-200">
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="text-[10px] font-bold text-gray-500 uppercase ml-1 mb-2 block">Email Address</label>
+                            <div class="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 border border-transparent focus-within:border-blue-500 transition">
+                                <i class="fa-solid fa-envelope text-blue-500 text-sm w-5 text-center"></i>
+                                <input type="email" name="email" placeholder="Alamat Email Anda" required value="{{ old('email') }}" class="bg-transparent w-full outline-none text-sm text-gray-200">
                             </div>
                         </div>
 

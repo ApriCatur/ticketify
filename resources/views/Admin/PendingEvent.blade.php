@@ -168,7 +168,8 @@
                             </div>
                             <div class="flex items-center gap-2">
                                 <i class="fa-solid fa-ticket text-blue-500"></i>
-                                From IDR {{ number_format($event->price, 0, ',', '.') }}
+                                @php $minPrice = $event->tickets->whereNull('order_id')->min('price'); @endphp
+                                From IDR {{ $minPrice ? number_format($minPrice, 0, ',', '.') : 'Gratis' }}
                             </div>
                         </div>
 

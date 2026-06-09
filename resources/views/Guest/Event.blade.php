@@ -82,7 +82,7 @@
                     :location="$event->location"
                     :startTime="\Carbon\Carbon::parse($event->time_start)->format('H:i')"
                     :endTime="\Carbon\Carbon::parse($event->time_end)->format('H:i')"
-                    :price="'Rp ' . number_format($event->price, 0, ',', '.')"
+                    :price="$event->tickets->whereNull('order_id')->min('price') ? 'Rp ' . number_format($event->tickets->whereNull('order_id')->min('price'), 0, ',', '.') : 'Gratis'"
                 >
                     <a href="{{ route('guest.event.detail', $event->id) }}"
                        class="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all text-center">

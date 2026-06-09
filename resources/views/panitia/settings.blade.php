@@ -100,12 +100,22 @@
                         </div>
                     </div>
 
-                    <div class="mb-8">
-                        <label class="block text-[10px] text-gray-500 font-black uppercase tracking-widest mb-2">Phone Number</label>
-                        <input type="text" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}"
-                               placeholder="0812345567"
-                               class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition duration-200">
-                        @error('phone_number') <span class="text-xs text-red-500 mt-1 block font-medium">{{ $message }}</span> @enderror
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-[10px] text-gray-500 font-black uppercase tracking-widest mb-2">Email Address</label>
+                            <input type="email" name="email" value="{{ old('email', $user->email) }}"
+                                   placeholder="contoh@email.com"
+                                   class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition duration-200">
+                            @error('email') <span class="text-xs text-red-500 mt-1 block font-medium">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] text-gray-500 font-black uppercase tracking-widest mb-2">Phone Number</label>
+                            <input type="text" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}"
+                                   placeholder="0812345567"
+                                   class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition duration-200">
+                            @error('phone_number') <span class="text-xs text-red-500 mt-1 block font-medium">{{ $message }}</span> @enderror
+                        </div>
                     </div>
 
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-widest px-6 py-3.5 rounded-xl shadow-lg shadow-blue-600/10 transition duration-200">
