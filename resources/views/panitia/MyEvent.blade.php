@@ -141,6 +141,14 @@
                                     <span class="text-[9px] font-bold uppercase text-blue-500/80">Peserta</span>
                                 </a>
 
+                                {{-- HAPUS --}}
+                                <button type="button" onclick="openDeleteModal({{ $event->id }}, '{{ addslashes($event->name) }}')" class="flex flex-col items-center gap-1">
+                                    <div class="flex items-center justify-center w-11 h-11 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl transition-colors border border-red-500/10">
+                                        <i class="fa-solid fa-trash-can text-sm"></i>
+                                    </div>
+                                    <span class="text-[9px] font-bold uppercase text-red-500">Hapus</span>
+                                </button>
+
                             @else
                                 <div class="flex items-center gap-1.5 text-[10px] text-zinc-600 font-bold uppercase tracking-wider bg-zinc-900/50 border border-zinc-800/50 px-3 py-2 rounded-xl">
                                     <i class="fa-solid fa-lock text-[9px]"></i> Locked
@@ -207,6 +215,39 @@
     </div>
     {{-- ✅ END Modal --}}
 
+    {{-- ✅ TAMBAHAN: Modal Konfirmasi Hapus Event --}}
+    <div id="deleteModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+        <div class="bg-[#1e1e1e] rounded-2xl w-[400px] border border-red-500/20 overflow-hidden shadow-2xl">
+            <div class="bg-red-500/10 border-b border-red-500/20 px-6 py-4 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-red-500/20 flex items-center justify-center">
+                    <i class="fa-solid fa-trash-can text-red-400 text-sm"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">Hapus Event</h3>
+                    <p class="text-xs text-gray-400">Tindakan ini tidak dapat dibatalkan.</p>
+                </div>
+                <button onclick="closeDeleteModal()" class="ml-auto text-gray-400 hover:text-white transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="px-6 py-5">
+                <p class="text-sm text-gray-300 mb-2">Yakin ingin menghapus event <strong id="deleteEventName" class="text-white"></strong>?</p>
+                <p class="text-xs text-gray-500">Semua data tiket dan peserta akan ikut terhapus.</p>
+            </div>
+            <div class="px-6 pb-5 flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 py-2.5 border border-white/10 rounded-xl text-sm hover:bg-white/5 transition">Batal</button>
+                <form id="deleteForm" method="POST" class="flex-1">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="w-full py-2.5 bg-red-500 text-white rounded-xl text-sm font-bold hover:bg-red-600 transition">
+                        <i class="fa-solid fa-trash-can mr-1"></i> Hapus
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{-- ✅ END Modal --}}
+
 
     <script>
         // Sidebar toggle
@@ -224,6 +265,18 @@
             openBtn.addEventListener('click', toggleSidebar);
             if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
             if (overlay) overlay.addEventListener('click', toggleSidebar);
+        }
+
+        // ─── DELETE MODAL ───
+        function openDeleteModal(id, name) {
+            document.getElementById('deleteEventName').textContent = name;
+            document.getElementById('deleteForm').action = '/panitia/my-events/' + id;
+            document.getElementById('deleteModal').classList.remove('hidden');
+            document.getElementById('deleteModal').classList.add('flex');
+        }
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            document.getElementById('deleteModal').classList.remove('flex');
         }
     </script>
 

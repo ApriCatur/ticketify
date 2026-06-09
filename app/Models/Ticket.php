@@ -12,6 +12,7 @@ class Ticket extends Model
    protected $fillable = [
     'user_id',
     'event_id',
+    'order_id',
     'ticket_type',
     'price',
     'stock',
@@ -40,5 +41,11 @@ class Ticket extends Model
     public function event()
     {
         return $this->belongsTo(Event::class);
+    }
+
+    // Relasi ke Order
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
     }
 }

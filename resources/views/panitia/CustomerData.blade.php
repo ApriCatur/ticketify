@@ -85,7 +85,7 @@
                             </td>
                             <td class="p-6">
                                 <code class="bg-[#18181b] px-3 py-1 rounded-md text-blue-400 font-mono text-xs border border-white/5 group-hover:border-blue-500/50">
-                                    {{ $ticket->unique_code ?? $ticket->code ?? '-' }}
+                                    {{ $ticket->order->order_code ?? '-' }}
                                 </code>
                             </td>
                             <td class="p-6 text-[11px] text-gray-500">

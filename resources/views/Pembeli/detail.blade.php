@@ -108,7 +108,7 @@
             <div class="space-y-4 max-w-4xl mx-auto" x-data="ticketApp()">
                 <h3 class="font-bold text-lg mb-4">Pilih Tipe Tiket</h3>
 
-                @forelse ($event->tickets as $index => $ticket)
+                @forelse ($event->tickets->whereNull('order_id') as $index => $ticket)
                     <div class="bg-[#18181b] p-6 rounded-2xl border border-white/5 flex items-center justify-between hover:border-blue-500/30 transition-all">
                         <div>
                             <h3 class="font-bold"><i class="fa-solid fa-ticket text-blue-500 mr-2"></i> {{ $ticket->ticket_type }}</h3>
@@ -254,7 +254,7 @@
 
 {{-- ===== ALPINE.JS DATA + MIDTRANS LOGIC ===== --}}
 @php
-    $ticketData = $event->tickets->map(function($t) {
+    $ticketData = $event->tickets->whereNull('order_id')->map(function($t) {
         return [
             'id'    => $t->id,
             'name'  => $t->ticket_type,

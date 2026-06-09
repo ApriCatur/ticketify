@@ -25,16 +25,7 @@
             </div>
         </div>
 
-        <form action="{{ route('panitia.events.destroy', $event->id) }}"
-              method="POST"
-              onsubmit="return confirm('Yakin ingin menghapus event ini?')">
-            @csrf
-            @method('DELETE')
-            <button type="submit"
-                    class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-xs font-bold transition">
-                <i class="fa-solid fa-trash mr-1"></i> Hapus Event
-            </button>
-        </form>
+        
     </header>
 
     {{-- ===== TAB NAVIGATION ===== --}}

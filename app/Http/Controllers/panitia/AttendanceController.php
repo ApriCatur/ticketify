@@ -37,12 +37,10 @@ class AttendanceController extends Controller
 
     public function showAttendees($id)
 {
-    // Mengambil event dan memverifikasi bahwa event ini milik panitia yang sedang login
     $event = Auth::user()->events()->findOrFail($id);
 
-    // Mengambil daftar tiket yang sudah terjual untuk event ini
-    $attendees = \App\Models\Ticket::where('event_id', $id)
-        ->with('user:id,name,nim,')
+    $attendees = Ticket::where('event_id', $id)
+        ->with(['user:id,name,email,no_telp', 'order:id,order_code'])
         ->orderBy('created_at', 'desc')
         ->paginate(10);
 

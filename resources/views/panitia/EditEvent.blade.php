@@ -18,38 +18,53 @@
         }
     </style>
 </head>
-<body class="bg-[#09090b] text-white flex min-h-screen"
-    x-data="{
-        activeTab: 'ticket',
-        bannerName: '{{ $event->banner ? $event->banner : '' }}',
-        bannerPreview: '{{ $event->banner ? asset("images/events/" . $event->banner) : "" }}',
-        orgPhotoName: '{{ $event->organiser_photo ? $event->organiser_photo : '' }}',
-        orgPhotoPreview: '{{ $event->organiser_photo ? asset("images/organizers/" . $event->organiser_photo) : "" }}',
-        ticketRows: {{ $event->ticket_types ? json_encode($event->ticket_types) : '[{ name: &quot;Reguler Pass&quot;, price: 0, stock: 100 }]' }},
-        handleBannerChange(event) {
-            const file = event.target.files[0];
-            if (file) {
-                this.bannerName = file.name;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.bannerPreview = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        },
-        handleOrgPhotoChange(event) {
-            const file = event.target.files[0];
-            if (file) {
-                this.orgPhotoName = file.name;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.orgPhotoPreview = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    }">
+<body
+class="bg-[#09090b] text-white flex min-h-screen"
 
+x-data='{
+    activeTab: "ticket",
+
+    bannerName: @json($event->banner ?? ""),
+    bannerPreview: @json($event->banner ? asset("images/events/".$event->banner) : ""),
+
+    orgPhotoName: @json($event->organiser_photo ?? ""),
+    orgPhotoPreview: @json($event->organiser_photo ? asset("images/organizers/".$event->organiser_photo) : ""),
+
+    ticketRows: @json($ticketTypes),
+
+    handleBannerChange(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            this.bannerName = file.name;
+
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                this.bannerPreview = e.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    },
+
+    handleOrgPhotoChange(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            this.orgPhotoName = file.name;
+
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                this.orgPhotoPreview = e.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+}'
+>
     @include('layouts.sidebar-panitia')
 
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden lg:hidden"></div>
@@ -125,23 +140,17 @@
 
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Kategori Event</label>
-                            <select name="category" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all text-white" required>
+                            <select name="category_id" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all text-white" required>
                                 <option value="" disabled class="bg-[#121212]">Pilih kategori event</option>
-                                <option value="Music Concert" {{ old('category', $event->category) == 'Music Concert' ? 'selected' : '' }} class="bg-[#121212]">Music Concert</option>
-                                <option value="Seminar" {{ old('category', $event->category) == 'Seminar' ? 'selected' : '' }} class="bg-[#121212]">Seminar</option>
-                                <option value="Workshop" {{ old('category', $event->category) == 'Workshop' ? 'selected' : '' }} class="bg-[#121212]">Workshop</option>
-                                <option value="Festival" {{ old('category', $event->category) == 'Festival' ? 'selected' : '' }} class="bg-[#121212]">Festival</option>
+                                @foreach($categories as $cat)
+                                    <option value="{{ $cat->id }}" {{ old('category_id', $event->category_id) == $cat->id ? 'selected' : '' }} class="bg-[#121212]">{{ $cat->name }}</option>
+                                @endforeach
                             </select>
                         </div>
 
                         <div class="space-y-2">
                              <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Event Location</label>
-                             <input type="text" name="location" value="{{ old('location', $event->location) }}" placeholder="Masukkan lokasi event" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
-                        </div>
-
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Social Media Link</label>
-                            <input type="url" name="social_link" value="{{ old('social_link', $event->social_link) }}" placeholder="https://instagram.com/..." class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all">
+                             <input type="text" name="location" value="{{ old('location', $event->location) }}" placeholder="Masukkan lokasi event (contoh: Batam, Kepulauan Riau)" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all" required>
                         </div>
 
                         <div class="grid grid-cols-3 gap-4">
@@ -166,7 +175,7 @@
                         <h3 class="font-bold text-sm flex items-center gap-2">
                             <i class="fa-solid fa-ticket text-blue-500"></i> Ticket Pricing & Stock
                         </h3>
-                        <button type="button" @click="ticketRows.push({ name: '', price: 0, stock: 100 })" class="px-4 py-2 bg-blue-600 text-white rounded-2xl text-xs font-black uppercase tracking-wide hover:bg-blue-500 transition">Tambah Jenis Tiket</button>
+                        <button type="button" @click="ticketRows.push({ ticket_type: '', price: 0, stock: 100 })" class="px-4 py-2 bg-blue-600 text-white rounded-2xl text-xs font-black uppercase tracking-wide hover:bg-blue-500 transition">Tambah Jenis Tiket</button>
                     </div>
 
                     <div class="space-y-3">
@@ -174,7 +183,7 @@
                             <div class="grid md:grid-cols-12 gap-4 items-end bg-white/[0.02] p-4 rounded-2xl border border-white/5">
                                 <div class="md:col-span-4 space-y-2">
                                     <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Jenis Tiket</label>
-                                    <input type="text" :name="'ticket_types['+index+'][name]'" x-model="ticket.name" placeholder="Contoh: Reguler / VIP" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none" required>
+                                    <input type="text" :name="'ticket_types['+index+'][ticket_type]'" x-model="ticket.ticket_type" placeholder="Contoh: Reguler / VIP" class="w-full bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none" required>
                                 </div>
                                 <div class="md:col-span-4 space-y-2">
                                     <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Harga (IDR)</label>

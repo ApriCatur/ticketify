@@ -41,7 +41,12 @@ class EventController extends Controller
     public function edit($id)
     {
         $event = Event::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
-        return view('panitia.EditEvent', compact('event'));
+        $categories = Category::all();
+        $ticketTypes = $event->tickets()->get(['ticket_type', 'price', 'stock'])->toArray();
+        if (empty($ticketTypes)) {
+            $ticketTypes = [['ticket_type' => 'Reguler', 'price' => 0, 'stock' => 100]];
+        }
+        return view('panitia.EditEvent', compact('event', 'categories', 'ticketTypes'));
     }
 
     public function show($id)
@@ -111,7 +116,18 @@ class EventController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
+            'location' => 'required|string',
+            'date' => 'required|date',
+            'time_start' => 'required',
+            'time_end' => 'required',
+            'description' => 'required|string',
+            'terms' => 'required|string',
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'organiser_photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'ticket_types' => 'required|array|min:1',
+            'ticket_types.*.ticket_type' => 'required|string|max:255',
+            'ticket_types.*.price' => 'required|numeric|min:0',
+            'ticket_types.*.stock' => 'required|integer|min:0',
         ]);
 
         DB::transaction(function () use ($request, $event) {
@@ -121,19 +137,19 @@ class EventController extends Controller
             $orgPhotoName = $request->hasFile('organiser_photo') ? $this->handleFileUpload($request, 'organiser_photo', 'images/organizers', 'organiser_', $event->organiser_photo) : $event->organiser_photo;
 
             $event->update([
-            'name' => $request->name,
-            'category_id' => $request->category_id,
-            'location' => $request->location,
-            'date' => $request->date,
-            'time_start' => $request->time_start,
-            'time_end' => $request->time_end,
-            'description' => $request->description,
-            'terms' => $request->terms,
-            'organiser_description' => $request->organiser_description,
-            'banner' => $bannerName,
-            'organiser_photo' => $orgPhotoName,
-            'status' => $isCriticalChanged ? 'pending' : $event->status,
-        ]);
+                'name' => $request->name,
+                'category_id' => $request->category_id,
+                'location' => $request->location,
+                'date' => $request->date,
+                'time_start' => $request->time_start,
+                'time_end' => $request->time_end,
+                'description' => $request->description,
+                'terms' => $request->terms,
+                'organiser_description' => $request->organiser_description,
+                'banner' => $bannerName,
+                'organiser_photo' => $orgPhotoName,
+                'status' => $isCriticalChanged ? 'pending' : $event->status,
+            ]);
 
             // Sync: Hapus lama, ganti baru
             $event->tickets()->delete();
@@ -144,6 +160,7 @@ class EventController extends Controller
                     'price' => $t['price'],
                     'stock' => $t['stock'],
                     'status' => 'Active',
+                    'purchase_date' => now(),
                 ]);
             }
         });
