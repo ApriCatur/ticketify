@@ -74,7 +74,7 @@
                                 </div>
                             </td>
                             <td class="p-6 text-xs text-gray-400 font-medium">
-                                {{ $ticket->user->no_telp ?? $ticket->user->phone ?? '-' }}
+                                {{ $ticket->user->phone_number ?? '-' }}
                             </td>
                             <td class="p-6">
                                 @if(strtoupper($ticket->ticket_type ?? '') === 'VIP')
@@ -85,7 +85,7 @@
                             </td>
                             <td class="p-6">
                                 <code class="bg-[#18181b] px-3 py-1 rounded-md text-blue-400 font-mono text-xs border border-white/5 group-hover:border-blue-500/50">
-                                    {{ $ticket->order->order_code ?? '-' }}
+                                    {{ $ticket->qr_code ?? '-' }}
                                 </code>
                             </td>
                             <td class="p-6 text-[11px] text-gray-500">

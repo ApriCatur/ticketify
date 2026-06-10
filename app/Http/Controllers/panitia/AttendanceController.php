@@ -72,7 +72,7 @@ class AttendanceController extends Controller
 
         $attendees = Ticket::where('event_id', $id)
             ->whereNotNull('order_id')
-            ->with(['user:id,name,email,no_telp', 'order:id,order_code'])
+            ->with('user:id,name,email,phone_number')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
