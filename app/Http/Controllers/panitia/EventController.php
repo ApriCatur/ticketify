@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Panitia;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEventRequest;
-use App\Models\Event;
 use App\Models\Category;
+use App\Models\Event;
 use App\Services\EventService;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -17,16 +18,27 @@ class EventController extends Controller
 
     public function index()
     {
-        $events = Event::where('user_id', Auth::id())
-            ->orderByDesc('created_at')
+        $categories = Category::all();
+
+        $publicEvents = Event::with('tickets', 'category')
+            ->where('status', 'published')
+            ->orderByDesc('date')
             ->get();
 
-        return view('panitia.Event', compact('events'));
+        $upcomingEvents = Event::where('status', 'published')
+            ->whereDate('date', '>=', Carbon::today())
+            ->orderBy('date')
+            ->take(5)
+            ->get();
+
+        $events = $publicEvents;
+
+        return view('panitia.Event', compact('categories', 'publicEvents', 'upcomingEvents', 'events'));
     }
 
     public function show($id)
     {
-        $event = Event::where('id', $id)
+        $event = Event::with('tickets')->where('id', $id)
             ->where('user_id', Auth::id())
             ->firstOrFail();
 

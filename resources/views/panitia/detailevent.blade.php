@@ -93,16 +93,16 @@
             </div>
 
             <div class="space-y-4 max-w-4xl mx-auto">
-                @forelse ($event->ticket_types ?? [] as $ticket)
+                @forelse ($event->tickets->whereNull('order_id') as $ticket)
                     <div class="bg-[#18181b] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
                         <h3 class="font-bold">
                             <i class="fa-solid fa-ticket text-blue-500 mr-2"></i>
-                            {{ $ticket['name'] }}
+                            {{ $ticket->ticket_type }}
                         </h3>
                         <div class="text-right">
-                            <span class="text-[10px] text-gray-600 block">Stock: {{ $ticket['stock'] }}</span>
+                            <span class="text-[10px] text-gray-600 block">Stock: {{ $ticket->stock }}</span>
                             <span class="font-black text-blue-400">
-                                IDR {{ number_format($ticket['price'], 0, ',', '.') }}
+                                IDR {{ number_format($ticket->price, 0, ',', '.') }}
                             </span>
                         </div>
                     </div>
