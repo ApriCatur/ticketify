@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             UkmSeeder::class,          // Tambahan seeder baru kita
             RoleSettingsSeeder::class,  // Bawaan proyekmu sebelumnya
             DummyPendingEventsSeeder::class,
+            PanitiaProfileSeeder::class,
         ]);
     }
 }

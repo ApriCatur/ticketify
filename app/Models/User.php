@@ -60,9 +60,7 @@ class User extends Authenticatable
 
     public function panitiaProfile()
 {
-    // Menghubungkan user ke data pendaftarannya di tabel role_applications
-    return $this->hasOne(RoleApplication::class, 'user_id')
-                ->where('status', 'approved');
+    return $this->hasOne(PanitiaProfile::class, 'user_id');
 }
 
 }

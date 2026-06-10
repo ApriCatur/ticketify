@@ -25,6 +25,7 @@ class ManageUserController extends Controller
             ->latest()->get();
 
         $panitia = User::where('role', 'panitia')
+            ->with('panitiaProfile')
             ->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
             ->latest()
             ->get();
