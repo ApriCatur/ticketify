@@ -216,9 +216,9 @@
                                 <td class="py-4 text-gray-500 text-sm">{{ $i + 1 }}</td>
                                 <td class="py-4 text-gray-400 text-sm">{{ $user->nim ?? '-' }}</td>
                                 <td class="py-4 font-medium text-sm text-white">{{ $user->name }}</td>
-                                <td class="py-4 text-gray-400 text-sm">{{ $user->panitiaProfile->asal_ukm ?? '-' }}</td>
+                                <td class="py-4 text-gray-400 text-sm">{{ $user->approvedApplication?->ukm?->nama_ukm ?? '-' }}</td>
                                 <td class="py-4 text-gray-400 text-sm">{{ $user->phone_number ?? '-' }}</td>
-                                <td class="py-4 text-gray-400 text-sm">{{ $user->panitiaProfile->no_rekening ?? '-' }}</td>
+                                <td class="py-4 text-gray-400 text-sm">{{ $user->approvedApplication?->nomor_rekening ?? '-' }}</td>
                                 <td class="py-4">
                                     <div class="flex justify-center gap-2">
                                         <button onclick="openEditUser({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->nim }}', '{{ $user->phone_number }}', '{{ $user->role }}')"

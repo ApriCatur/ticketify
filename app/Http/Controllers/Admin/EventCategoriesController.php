@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Event;
 use App\Models\Ukm;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EventCategoriesController extends Controller
 {
@@ -37,33 +38,56 @@ public function index(Request $request)
 $orderColumn = ($tab === 'ukm') ? 'nama_ukm' : 'name';
 $categories = $query->orderBy($orderColumn)->get();
 
-    // 3. Data Statistik (Sesuaikan jika perlu)
+    // 3. Hitung jumlah event per kategori / UKM
+    $eventCountByCategory = [];
+    if ($tab === 'active' || $tab === 'deleted') {
+        $countsById = Event::whereNotNull('category_id')
+            ->selectRaw('category_id, COUNT(*) as total')
+            ->groupBy('category_id')
+            ->pluck('total', 'category_id');
+        foreach ($categories as $cat) {
+            $eventCountByCategory[$cat->name] = $countsById[$cat->id] ?? 0;
+        }
+    } elseif ($tab === 'ukm') {
+        foreach ($categories as $ukm) {
+            $userIdsForThisUkm = DB::table('role_applications')
+                ->where('ukm_id', $ukm->id)
+                ->where('status', 'approved')
+                ->pluck('user_id');
+            $eventCountByCategory[$ukm->nama_ukm] = Event::whereIn('user_id', $userIdsForThisUkm)->count();
+        }
+    }
+
+    // 4. Data Statistik
     $totalCategories = Category::count();
     $totalDeleted = Category::onlyTrashed()->count();
     $totalEventsTagged = Event::whereNotNull('category_id')->count();
-   // Statistik hanya untuk tab active
     $mostUsed = '-';
     if ($tab === 'active') {
         $mostUsed = Category::withCount('events')->orderByDesc('events_count')->first()?->name ?? '-';
     }
     return view('Admin.EventCategories', compact(
         'categories', 'tab', 'search', 'totalCategories',
-        'totalDeleted', 'totalEventsTagged', 'mostUsed'
+        'totalDeleted', 'totalEventsTagged', 'mostUsed', 'eventCountByCategory'
     ));
 }
     public function store(Request $request)
 {
     $tab = $request->input('type'); // Ambil dari input hidden di form
 
-   if ($tab === 'ukm') {
-    $request->validate([
-        'name' => 'required|string|max:100|unique:ukms,nama_ukm'
-    ]);
-    Ukm::create([
-        'nama_ukm' => $request->name
-    ]);
-    $msg = 'UKM berhasil ditambahkan.';
-}
+    if ($tab === 'ukm') {
+        $request->validate([
+            'name' => 'required|string|max:100|unique:ukms,nama_ukm'
+        ]);
+        Ukm::create(['nama_ukm' => $request->name]);
+        $msg = 'UKM berhasil ditambahkan.';
+    } else {
+        $request->validate([
+            'name' => 'required|string|max:100|unique:categories,name'
+        ]);
+        Category::create(['name' => $request->name]);
+        $msg = 'Kategori berhasil ditambahkan.';
+    }
 
     return redirect()->route('admin.categories', ['tab' => $tab])->with('success', $msg);
 }

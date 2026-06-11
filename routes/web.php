@@ -134,6 +134,9 @@ Route::middleware([RoleMiddleware::class . ':panitia'])->prefix('panitia')->grou
         Route::post('/events/{event}/approve', [PendingEventController::class, 'approve'])->name('admin.events.approve');
         Route::post('/events/{event}/reject', [PendingEventController::class, 'reject'])->name('admin.events.reject');
         Route::post('/events/{event}/unpublish', [PublishedEventController::class, 'unpublish'])->name('admin.events.unpublish');
+        Route::get('/event-statistics', [\App\Http\Controllers\Admin\EventStatisticController::class, 'index'])->name('admin.event-statistics');
+        Route::get('/event-statistics/{event}/statistic', [\App\Http\Controllers\Admin\EventStatisticController::class, 'show'])->name('admin.event-statistics.detail');
+        Route::get('/event-statistics/{event}/attendees', [\App\Http\Controllers\Admin\EventStatisticController::class, 'attendees'])->name('admin.event-statistics.attendees');
 
         // Role Applications
         Route::get('/role-applications', [RoleApplicationController::class, 'index'])->name('admin.role-applications');

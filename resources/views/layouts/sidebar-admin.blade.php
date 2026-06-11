@@ -45,6 +45,9 @@
         <div>
             <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Other</p>
             <nav class="space-y-1">
+                <a href="{{ route('admin.event-statistics') }}" class="{{ $base }} {{ request()->routeIs('admin.event-statistics*') ? $active : $inactive }}">
+                    <i class="fa-solid fa-chart-pie w-5"></i> Statistik Event
+                </a>
                 <a href="{{ route('admin.Settings') }}" class="{{ $base }} {{ request()->routeIs('admin.Settings') ? $active : $inactive }}">
                     <i class="fa-solid fa-gear w-5"></i> Settings
                 </a>

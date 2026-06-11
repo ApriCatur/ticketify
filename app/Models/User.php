@@ -63,4 +63,11 @@ class User extends Authenticatable
     return $this->hasOne(PanitiaProfile::class, 'user_id');
 }
 
+    public function approvedApplication()
+    {
+        return $this->hasOne(RoleApplication::class, 'user_id')
+            ->where('status', 'approved')
+            ->withDefault();
+    }
+
 }

@@ -67,7 +67,7 @@
                         :price="$event->tickets->whereNull('order_id')->min('price') ? 'Rp ' . number_format($event->tickets->whereNull('order_id')->min('price'), 0, ',', '.') : 'Gratis'"
                     >
                         <button type="button"
-                            class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-bold transition"
+                            class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold transition"
                             data-event='@json($event->load('tickets'))'
                             onclick="openDetailFromElement(this)">
                             Detail
