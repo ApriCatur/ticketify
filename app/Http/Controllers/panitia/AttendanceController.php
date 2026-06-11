@@ -9,6 +9,7 @@ use App\Services\AttendanceService;
 use App\Services\StatisticsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 class AttendanceController extends Controller
 {
@@ -77,5 +78,32 @@ class AttendanceController extends Controller
             ->paginate(10);
 
         return view('panitia.customerdata', compact('event', 'attendees'));
+    }
+
+    public function exportAttendees($id)
+    {
+        $event = Auth::user()->events()->findOrFail($id);
+
+        $attendees = Ticket::where('event_id', $id)
+            ->whereNotNull('order_id')
+            ->with('user:id,name,email,phone_number')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $filename = 'peserta-' . str_replace(' ', '-', $event->name) . '.xls';
+
+        $headers = [
+            'Content-Type' => 'application/vnd.ms-excel',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        return Response::make(
+            view('panitia.customerdata-export', compact('event', 'attendees')),
+            200,
+            $headers
+        );
     }
 }

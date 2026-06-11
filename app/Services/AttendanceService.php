@@ -40,6 +40,8 @@ class AttendanceService
         $ticket->update([
             'is_attended' => true,
             'attended_at' => now(),
+            'status' => 'Used',
+            'date_used' => now(),
         ]);
 
         return [

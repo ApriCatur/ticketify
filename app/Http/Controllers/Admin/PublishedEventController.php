@@ -45,14 +45,22 @@ class PublishedEventController extends Controller
     {
         $request->validate([
             'reason' => 'required|string|min:10|max:500',
+            'refund_date' => 'nullable|date',
+            'refund_location' => 'nullable|string|max:255',
+            'refund_info' => 'nullable|string|max:1000',
         ]);
 
         $event->update([
-            'status'           => 'rejected',
+            'status'           => 'unpublished',
             'unpublish_reason' => $request->reason,
             'unpublished_at'   => now(),
+            'refund_date'      => $request->refund_date,
+            'refund_location'  => $request->refund_location,
+            'refund_info'      => $request->refund_info,
         ]);
 
-        return redirect()->route('admin.PublishedEvent')->with('success', 'Event berhasil di-unpublish.');
+        $event->tickets()->whereNotNull('order_id')->update(['status' => 'Canceled']);
+
+        return redirect()->route('admin.PublishedEvent')->with('success', 'Event berhasil di-unpublish dan tiket pembeli telah di-cancel.');
     }
 }

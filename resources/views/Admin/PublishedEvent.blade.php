@@ -203,16 +203,14 @@
 
     {{-- ================= UNPUBLISH MODAL ================= --}}
     <div id="unpublishModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
-        <div class="bg-[#1e1e1e] rounded-2xl p-6 w-full max-w-md border border-white/10">
+        <div class="bg-[#1e1e1e] rounded-2xl p-6 w-full max-w-lg border border-white/10">
             <div class="flex items-center gap-3 mb-4">
                 <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
                     <i class="fa-solid fa-triangle-exclamation text-red-400"></i>
                 </div>
                 <div>
                     <h2 class="text-base font-bold">Unpublish Event</h2>
-                    <p class="text-xs text-gray-400">Event akan dipindahkan ke status
-                        <span class="text-red-400 font-bold">Rejected</span>
-                    </p>
+                    <p class="text-xs text-gray-400">Event akan di-<span class="text-red-400 font-bold">unpublished</span> dan tiket pembeli di-<span class="text-red-400 font-bold">canceled</span></p>
                 </div>
             </div>
 
@@ -222,7 +220,7 @@
                     <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">
                         Alasan Unpublish <span class="text-red-400">*</span>
                     </label>
-                    <textarea name="reason" id="unpublishReason" rows="4"
+                    <textarea name="reason" id="unpublishReason" rows="3"
                         placeholder="Jelaskan alasan mengapa event ini di-unpublish... (min. 10 karakter)"
                         class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-gray-200 outline-none focus:border-red-500/50 transition resize-none placeholder:text-gray-600"
                         maxlength="500"></textarea>
@@ -230,6 +228,32 @@
                         <p id="unpublishReasonError" class="text-xs text-red-400 hidden">Alasan minimal 10 karakter.</p>
                         <p class="text-xs text-gray-600 ml-auto"><span id="reasonCount">0</span>/500</p>
                     </div>
+                </div>
+
+                <div class="mb-3">
+                    <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Informasi Refund (opsional)</p>
+                    <p class="text-[10px] text-gray-600 mb-3">Jika event sudah ada pembeli, isi informasi refund di bawah agar pembeli tahu prosedurnya.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1 block">Tanggal Refund</label>
+                        <input type="datetime-local" name="refund_date"
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-blue-500/50 transition">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1 block">Lokasi Refund</label>
+                        <input type="text" name="refund_location" placeholder="Ruang Sekretariat UKM"
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-gray-200 outline-none focus:border-blue-500/50 transition placeholder:text-gray-600">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1 block">Info Tambahan Refund</label>
+                    <textarea name="refund_info" rows="2"
+                        placeholder="Contoh: Hubungi panitia di nomor WA 08xxx untuk proses refund."
+                        class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-gray-200 outline-none focus:border-blue-500/50 transition resize-none placeholder:text-gray-600"
+                        maxlength="1000"></textarea>
                 </div>
 
                 <div class="flex gap-3">

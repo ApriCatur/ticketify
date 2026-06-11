@@ -29,12 +29,14 @@ class MyTicketController extends Controller
     $totalTickets = $tickets->count();
     $activeTickets = $tickets->where('status', 'Active')->count();
     $usedTickets = $tickets->where('status', 'Used')->count();
+    $canceledTickets = $tickets->where('status', 'Canceled')->count();
 
     return view('Pembeli.MyTicket', [
         'tickets' => $tickets,
         'totalTickets' => $totalTickets,
         'activeTickets' => $activeTickets,
         'usedTickets' => $usedTickets,
+        'canceledTickets' => $canceledTickets,
     ]);
 }
 }

@@ -31,6 +31,9 @@ class Event extends Model
         'status',
         'unpublish_reason',
         'unpublished_at',
+        'refund_date',
+        'refund_location',
+        'refund_info',
     ];
 
     protected $casts = [

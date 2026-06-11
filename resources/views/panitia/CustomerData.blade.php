@@ -26,9 +26,9 @@
                     <h1 class="text-3xl font-black tracking-tight uppercase italic text-blue-500">{{ $event->name }}</h1>
                     <p class="text-gray-500 text-sm mt-2 font-medium">Daftar lengkap peserta yang telah membeli tiket.</p>
                 </div>
-                <button class="bg-white/5 hover:bg-white/10 text-white px-6 py-3 rounded-xl text-xs font-black uppercase transition-all flex items-center gap-2 border border-white/5">
+                <a href="{{ route('panitia.customerdata.export', $event->id) }}" class="bg-white/5 hover:bg-white/10 text-white px-6 py-3 rounded-xl text-xs font-black uppercase transition-all flex items-center gap-2 border border-white/5">
                     <i class="fa-solid fa-file-export text-blue-500"></i> Export Excel
-                </button>
+                </a>
             </div>
         </header>
 

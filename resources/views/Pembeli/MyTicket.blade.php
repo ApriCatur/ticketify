@@ -35,7 +35,7 @@
 
             <header class="p-8 pb-0">
                 <h2 class="text-2xl font-black italic tracking-tighter mb-6">Ticket Summary</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div class="bg-[#1e1e1e] border border-white/5 p-6 rounded-2xl relative overflow-hidden group">
                         <i class="fa-solid fa-layer-group absolute -right-2 -bottom-2 text-5xl text-white/5 group-hover:text-blue-500/10 transition-colors"></i>
                         <p class="text-[10px] font-bold  uppercase tracking-widest mb-1 text-blue-600">Total Ticket</p>
@@ -52,6 +52,12 @@
                         <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-red-500">Used</p>
                         <p class="text-3xl font-black italic text-gray-500">{{ $usedTickets }}</p>
                     </div>
+
+                    <div class="bg-[#1e1e1e] border border-white/5 p-6 rounded-2xl relative overflow-hidden group">
+                        <i class="fa-solid fa-ban absolute -right-2 -bottom-2 text-5xl text-white/5 group-hover:text-red-500/10 transition-colors"></i>
+                        <p class="text-[10px] font-bold uppercase tracking-widest mb-1 text-red-400">Canceled</p>
+                        <p class="text-3xl font-black italic text-red-400">{{ $canceledTickets }}</p>
+                    </div>
                 </div>
             </header>
 
@@ -67,11 +73,11 @@
                 <!-- Daftar Tickets dari Database -->
                 <div class="space-y-4">
                     @forelse($tickets as $ticket)
-                        <div class="ticket-card flex flex-wrap md:flex-nowrap items-center gap-6 p-5 bg-[#1e1e1e] border border-white/5 rounded-2xl transition-all duration-300 {{ $ticket->status === 'Used' ? 'opacity-60' : '' }}">
+                        <div class="ticket-card flex flex-wrap md:flex-nowrap items-center gap-6 p-5 bg-[#1e1e1e] border border-white/5 rounded-2xl transition-all duration-300 {{ in_array($ticket->status, ['Used', 'Canceled']) ? 'opacity-60' : '' }}">
                             <!-- Event Banner -->
-                            <div class="w-full md:w-32 h-20 bg-blue-500/20 rounded-xl overflow-hidden border border-blue-500/30 {{ $ticket->status === 'Used' ? 'grayscale' : '' }}">
+                            <div class="w-full md:w-32 h-20 bg-blue-500/20 rounded-xl overflow-hidden border border-blue-500/30 {{ in_array($ticket->status, ['Used', 'Canceled']) ? 'grayscale' : '' }}">
                                 @if($ticket->event && $ticket->event->banner)
-                                    <img src="{{ asset('images/events/' . $ticket->event->banner) }}" class="w-full h-full object-cover {{ $ticket->status === 'Used' ? 'opacity-40' : 'opacity-60' }}" alt="Event">
+                                    <img src="{{ asset('images/events/' . $ticket->event->banner) }}" class="w-full h-full object-cover {{ in_array($ticket->status, ['Used', 'Canceled']) ? 'opacity-40' : 'opacity-60' }}" alt="Event">
                                 @else
                                     <div class="w-full h-full bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
                                         <i class="fa-solid fa-ticket text-2xl text-white/50"></i>
@@ -81,7 +87,15 @@
 
                             <!-- Event Info -->
                             <div class="flex-1">
-                                <span class="px-2 py-0.5 bg-{{ $ticket->status === 'Active' ? 'green' : ($ticket->status === 'Used' ? 'red' : 'gray') }}-500 text-[9px] font-black rounded uppercase tracking-tighter">{{ $ticket->status }}</span>
+                                @php
+                                    $badgeColor = match($ticket->status) {
+                                        'Active' => 'green',
+                                        'Used' => 'red',
+                                        'Canceled' => 'gray',
+                                        default => 'gray',
+                                    };
+                                @endphp
+                                <span class="px-2 py-0.5 bg-{{ $badgeColor }}-500 text-[9px] font-black rounded uppercase tracking-tighter">{{ $ticket->status }}</span>
                                 <h3 class="text-lg font-black italic tracking-tight mt-1">{{ $ticket->event->name ?? 'Event Tidak Ditemukan' }}</h3>
                                 <p class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-calendar mr-2"></i>{{ $ticket->event->date ? \Carbon\Carbon::parse($ticket->event->date)->format('d M Y') : 'TBA' }}</p>
                             </div>
@@ -104,6 +118,10 @@
                                 <a href="{{ route('pembeli.ticketdigital', $ticket->id) }}" class="w-full md:w-auto px-6 py-2.5 bg-white text-black font-black rounded-xl text-[10px] uppercase hover:bg-blue-500 hover:text-white transition-all inline-block text-center">
                                     View Ticket
                                 </a>
+                            @elseif($ticket->status === 'Canceled')
+                                <button type="button" onclick="openRefundModal({{ $ticket->id }})" class="w-full md:w-auto px-6 py-2.5 bg-red-500/10 border border-red-500/30 text-red-400 font-black rounded-xl text-[10px] hover:bg-red-500/20 transition-all uppercase">
+                                    <i class="fa-solid fa-circle-info mr-1"></i> Refund Info
+                                </button>
                             @else
                                 <button class="w-full md:w-auto px-6 py-2.5 bg-white/5 border border-white/10 text-gray-500 font-black rounded-xl text-[10px] cursor-not-allowed uppercase">
                                     {{ $ticket->status === 'Used' ? 'Used' : 'Expired' }}
@@ -129,7 +147,93 @@
         </div>
     </div>
 
-        <script>
+    @php
+        $refundData = [];
+        foreach ($tickets as $t) {
+            if ($t->status === 'Canceled' && $t->event) {
+                $refundData[$t->id] = [
+                    'name' => $t->event->name,
+                    'unpublish_reason' => $t->event->unpublish_reason,
+                    'refund_date' => $t->event->refund_date,
+                    'refund_location' => $t->event->refund_location,
+                    'refund_info' => $t->event->refund_info,
+                ];
+            }
+        }
+    @endphp
+
+    {{-- ================= REFUND INFO MODAL ================= --}}
+    <div id="refundModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
+        <div class="bg-[#1e1e1e] rounded-2xl p-6 w-full max-w-md border border-white/10">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-circle-exclamation text-red-400"></i>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold">Event Dibatalkan</h2>
+                    <p class="text-xs text-gray-400">Informasi refund tiket kamu</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Nama Event</p>
+                    <p id="refundEventName" class="text-sm font-bold text-white">-</p>
+                </div>
+
+                <div>
+                    <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Alasan Pembatalan</p>
+                    <p id="refundReason" class="text-sm text-gray-300 bg-white/5 rounded-xl p-3 border border-white/5">-</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Tanggal Refund</p>
+                        <p id="refundDate" class="text-sm font-bold text-white">-</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Lokasi Refund</p>
+                        <p id="refundLocation" class="text-sm font-bold text-white">-</p>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Info Tambahan</p>
+                    <p id="refundInfo" class="text-sm text-gray-300 bg-white/5 rounded-xl p-3 border border-white/5">-</p>
+                </div>
+            </div>
+
+            <button type="button" onclick="closeRefundModal()" class="w-full mt-6 py-2.5 bg-white/10 rounded-xl text-sm font-bold hover:bg-white/20 transition">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const refundData = @json($refundData);
+
+        function openRefundModal(ticketId) {
+            const data = refundData[ticketId] || {};
+
+            document.getElementById('refundEventName').textContent = data.name || '-';
+            document.getElementById('refundReason').textContent = data.unpublish_reason || '-';
+            document.getElementById('refundDate').textContent = data.refund_date
+                ? new Date(data.refund_date).toLocaleString('id-ID', { dateStyle: 'long', timeStyle: 'short' })
+                : 'Belum ditentukan';
+            document.getElementById('refundLocation').textContent = data.refund_location || 'Belum ditentukan';
+            document.getElementById('refundInfo').textContent = data.refund_info || 'Tidak ada info tambahan';
+
+            document.getElementById('refundModal').classList.remove('hidden');
+            document.getElementById('refundModal').classList.add('flex');
+        }
+
+        function closeRefundModal() {
+            document.getElementById('refundModal').classList.add('hidden');
+            document.getElementById('refundModal').classList.remove('flex');
+        }
+    </script>
+
+    <script>
     const openBtn = document.getElementById('open-sidebar');
     const closeBtn = document.getElementById('close-sidebar');
     const sidebar = document.getElementById('main-sidebar');
