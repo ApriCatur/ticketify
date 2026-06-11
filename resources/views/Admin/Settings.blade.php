@@ -88,22 +88,15 @@
                     </div>
 
                     <div class="space-y-2">
-                        <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">NIM</label>
-                        <input type="text" name="nim" value="{{ old('nim', $user->nim) }}"
-                               placeholder="NIM"
-                               class="w-full bg-[#1c1c1e] border border-white/5 rounded-xl px-4 py-3 text-sm text-gray-400 opacity-60" readonly>
-                    </div>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-6 mb-8">
-                    <div class="space-y-2">
                         <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Email Address</label>
                         <input type="email" name="email" value="{{ old('email', $user->email) }}"
                                placeholder="contoh@email.com"
                                class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition duration-200">
                         @error('email') <span class="text-xs text-red-500 mt-1 block font-medium">{{ $message }}</span> @enderror
                     </div>
+                </div>
 
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
                     <div class="space-y-2">
                         <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Phone Number</label>
                         <input type="text" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}"

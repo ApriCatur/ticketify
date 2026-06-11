@@ -21,7 +21,7 @@
             </button>
             <div>
                 <h1 class="text-2xl font-black uppercase">{{ $event->name }}</h1>
-                <p class="text-xs text-gray-500 mt-1">{{ $event->category }}</p>
+                <p class="text-xs text-gray-500 mt-1">{{ $event->category?->name ?? 'Umum' }}</p>
             </div>
         </div>
 
@@ -100,15 +100,15 @@
             <form action="#" method="POST" class="space-y-4 max-w-4xl mx-auto" x-data="{ tickets: {} }">
                 @csrf
                 <h3 class="font-bold text-lg mb-4">Pilih Tipe Tiket</h3>
-                @forelse ($event->ticket_types ?? [] as $index => $ticket)
+                @forelse ($event->tickets->whereNull('order_id') as $index => $ticket)
                     <div x-init="tickets[{{ $index }}] = 0"
                          class="bg-[#18181b] p-6 rounded-2xl border border-white/5 flex items-center justify-between hover:border-blue-500/30 transition-all">
                         <div>
-                            <h3 class="font-bold"><i class="fa-solid fa-ticket text-blue-500 mr-2"></i> {{ $ticket['name'] }}</h3>
-                            <span class="text-[10px] text-gray-500">Stock: {{ $ticket['stock'] }}</span>
+                            <h3 class="font-bold"><i class="fa-solid fa-ticket text-blue-500 mr-2"></i> {{ $ticket->ticket_type }}</h3>
+                            <span class="text-[10px] text-gray-500">Stock: {{ $ticket->stock }}</span>
                         </div>
                         <div class="flex items-center gap-6">
-                            <span class="font-black text-blue-400">IDR {{ number_format($ticket['price'], 0, ',', '.') }}</span>
+                            <span class="font-black text-blue-400">IDR {{ number_format($ticket->price, 0, ',', '.') }}</span>
 
                             {{-- Counter Plus/Minus --}}
                             <div class="flex items-center bg-[#09090b] rounded-lg border border-white/10">
@@ -116,8 +116,8 @@
                                         class="px-3 py-1 hover:text-blue-400">-</button>
                                 <span class="px-3 font-bold text-sm" x-text="tickets[{{ $index }}]">0</span>
                                 <input type="hidden" name="tickets[{{ $index }}][qty]" :value="tickets[{{ $index }}]">
-                                <input type="hidden" name="tickets[{{ $index }}][name]" value="{{ $ticket['name'] }}">
-                                <button type="button" @click="if(tickets[{{ $index }}] < {{ $ticket['stock'] }}) tickets[{{ $index }}]++"
+                                <input type="hidden" name="tickets[{{ $index }}][name]" value="{{ $ticket->ticket_type }}">
+                                <button type="button" @click="if(tickets[{{ $index }}] < {{ $ticket->stock }}) tickets[{{ $index }}]++"
                                         class="px-3 py-1 hover:text-blue-400">+</button>
                             </div>
                         </div>

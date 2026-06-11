@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class SettingsController extends Controller
 {
@@ -48,7 +49,7 @@ class SettingsController extends Controller
     {
         $request->validate([
             'current_password' => ['required'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
         $user = Auth::user();

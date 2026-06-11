@@ -15,7 +15,7 @@ class SettingsController extends Controller
     // Menampilkan halaman settings pembeli
     public function index()
     {
-        return view('Pembeli.settings'); 
+        return view('Pembeli.Settings'); 
     }
 
     // Memproses update Profile Details

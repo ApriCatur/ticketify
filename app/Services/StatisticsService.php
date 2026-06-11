@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Event;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class StatisticsService
@@ -36,7 +37,31 @@ class StatisticsService
             ->groupBy('ticket_type')
             ->get();
 
-        return compact('tiketTerjual', 'totalKuota', 'totalHadir', 'totalPendapatan', 'kategoriTiket');
+        $dailySales = $this->getDailySales($eventId);
+
+        return compact('tiketTerjual', 'totalKuota', 'totalHadir', 'totalPendapatan', 'kategoriTiket', 'dailySales');
+    }
+
+    public function getDailySales(int $eventId): array
+    {
+        $rows = DB::table('tickets')
+            ->select(DB::raw('DATE(purchase_date) as date'), DB::raw('COUNT(*) as total'))
+            ->where('event_id', $eventId)
+            ->whereNotNull('order_id')
+            ->groupBy(DB::raw('DATE(purchase_date)'))
+            ->orderBy('date')
+            ->pluck('total', 'date');
+
+        $days = [];
+        $labels = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::today()->subDays($i);
+            $key = $date->format('Y-m-d');
+            $days[] = $rows->get($key, 0);
+            $labels[] = $date->isoFormat('dd');
+        }
+
+        return ['data' => $days, 'labels' => $labels];
     }
 
     public function getAttendanceStats(int $eventId): array

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use App\Models\User;
 
 class SettingsController extends Controller
@@ -86,10 +87,7 @@ class SettingsController extends Controller
     {
         $request->validate([
             'current_password' => ['required'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ], [
-            'password.confirmed' => 'Konfirmasi password baru tidak cocok.',
-            'password.min' => 'Password baru minimal harus 8 karakter.',
+            'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
         /** @var \App\Models\User $user */

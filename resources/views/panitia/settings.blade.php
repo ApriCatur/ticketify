@@ -38,6 +38,16 @@
             </div>
         @endif
 
+        @if($errors->any())
+            <div class="mb-6 p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-2xl text-sm max-w-4xl">
+                <ul class="list-disc list-inside space-y-1">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="bg-[#121212] p-8 rounded-[2.5rem] border border-white/5 max-w-4xl shadow-2xl">
 
             <div x-show="activeTab === 'profile'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95">

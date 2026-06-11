@@ -80,11 +80,7 @@
         kategoriData = [0];
     }
 
-    const totalTerjualRiil = @json($tiketTerjual);
-
-    const salesDataFromDB = totalTerjualRiil > 0
-        ? [0, 0, 0, 0, 0, 0, totalTerjualRiil]
-        : [0, 0, 0, 0, 0, 0, 0];
+    const dailySales = @json($dailySales);
 
     const salesCanvas = document.getElementById('salesChart');
 
@@ -94,10 +90,10 @@
         new Chart(salesCtx, {
             type: 'line',
             data: {
-                labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
+                labels: dailySales.labels,
                 datasets: [{
                     label: 'Tiket Terjual',
-                    data: salesDataFromDB,
+                    data: dailySales.data,
                     borderColor: '#3b82f6',
                     backgroundColor: 'rgba(59,130,246,0.05)',
                     borderWidth: 3,
@@ -120,7 +116,7 @@
                         },
                         ticks: {
                             color: '#666',
-                            stepSize: 1
+                            precision: 0
                         }
                     },
                     x: {

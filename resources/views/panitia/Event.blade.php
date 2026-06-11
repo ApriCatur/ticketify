@@ -33,7 +33,7 @@
                 <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
                     <i class="fa-solid fa-bars-staggered text-2xl"></i>
                 </button>
-    
+
                 <div class="hidden lg:block">
                     <span class="text-sm text-gray-400 font-medium italic">Welcome To Ticketify! Discover something new today.</span>
                 </div>
@@ -48,7 +48,7 @@
         </div>
 
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-8 pb-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 px-8 pb-8">
     @forelse($publicEvents as $event)
         <x-event-card
             :image="asset('images/events/' . $event->banner)"
