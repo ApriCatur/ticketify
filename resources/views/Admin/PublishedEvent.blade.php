@@ -3,13 +3,10 @@
 @section('title', 'Published Events')
 
 @push('styles')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
         .glass { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(10px); }
         .spotify-shadow { transition: all 0.3s ease; }
         .spotify-shadow:hover { box-shadow: 0 20px 25px -5px rgba(34, 197, 94, 0.2); }
-        .swiper-pagination-bullet { background: #fff; opacity: 0.5; }
-        .swiper-pagination-bullet-active { background: #3b82f6; opacity: 1; width: 20px; border-radius: 5px; transition: all 0.3s; }
     </style>
 @endpush
 
@@ -239,21 +236,6 @@
 @endsection
 
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const el = document.querySelector('.myHeroSwiper');
-            if (el) {
-                new Swiper(el, {
-                    loop: true,
-                    autoplay: { delay: 5000, disableOnInteraction: false },
-                    pagination: { el: '.swiper-pagination', clickable: true },
-                    effect: 'fade',
-                    fadeEffect: { crossFade: true },
-                });
-            }
-        });
-    </script>
     <script>
         function openDetailFromElement(btn) {
             const event = JSON.parse(btn.getAttribute('data-event'));
