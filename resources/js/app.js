@@ -4,12 +4,11 @@ import 'flowbite';
 
 // ✅ SWIPER CORE + MODULE
 import Swiper from 'swiper';
-import { Autoplay, Pagination, EffectFade } from 'swiper/modules';
+import { Autoplay, Pagination } from 'swiper/modules';
 
 // ✅ SWIPER CSS
 import 'swiper/css';
 import 'swiper/css/pagination';
-import 'swiper/css/effect-fade';
 
 import './pages/AdminManageUser';
 
@@ -151,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!el) return;
 
     new Swiper(el, {
-        modules: [Autoplay, Pagination, EffectFade],
+        modules: [Autoplay, Pagination],
 
         loop: true,
 
@@ -165,7 +164,6 @@ document.addEventListener('DOMContentLoaded', function () {
             clickable: true,
         },
 
-        effect: 'fade',
         speed: 800,
     });
 });

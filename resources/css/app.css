@@ -14,6 +14,10 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+.myHeroSwiper {
+    height: 350px;
+}
+
 .swiper-pagination {
     position: absolute !important;
     bottom: 10px !important;
