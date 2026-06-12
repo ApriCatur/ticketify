@@ -20,6 +20,7 @@ class Order extends Model
         'quantity',
         'price_per_ticket',
         'total_amount',
+        'ticket_items',
         'status',
         'payment_type',
         'transaction_id',
@@ -32,6 +33,7 @@ class Order extends Model
         'expired_at' => 'datetime',
         'total_amount' => 'decimal:2',
         'price_per_ticket' => 'decimal:2',
+        'ticket_items' => 'array',
     ];
 
     // ─── Relationships ────────────────────────────────────────────────────────

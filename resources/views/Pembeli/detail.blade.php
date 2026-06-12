@@ -230,12 +230,8 @@
                 <span class="font-bold">{{ \Carbon\Carbon::parse($event->date)->format('d F Y') }}</span>
             </div>
             <div class="flex justify-between text-sm">
-                <span class="text-gray-500">Tipe Tiket</span>
-                <span class="font-bold" id="modal-ticket-type">-</span>
-            </div>
-            <div class="flex justify-between text-sm">
-                <span class="text-gray-500">Jumlah</span>
-                <span class="font-bold" id="modal-quantity">-</span>
+                <span class="text-gray-500">Tiket</span>
+                <span class="font-bold text-right max-w-[220px]" id="modal-ticket-summary">-</span>
             </div>
         </div>
 
@@ -285,23 +281,10 @@
                 }, 0);
             },
 
-            get selectedTicket() {
-                // Ambil tiket pertama yang qty > 0
-                const idx = this.quantities.findIndex(q => q > 0);
-                if (idx === -1) return null;
-                return {
-                    index: idx,
-                    name: ticketTypes[idx].name,
-                    price: ticketTypes[idx].price,
-                    qty: this.quantities[idx],
-                };
-            },
-
             increment(index, stock) {
-                // Hanya boleh 1 tipe tiket aktif sekaligus (simple flow)
                 const current = this.quantities[index];
                 if (current < stock) {
-                    this.quantities = this.quantities.map((q, i) => i === index ? q + 1 : 0);
+                    this.quantities[index]++;
                 }
             },
 
@@ -315,16 +298,25 @@
                 return num.toLocaleString('id-ID');
             },
 
+            get selectedItems() {
+                return ticketTypes
+                    .map((t, i) => ({ ...t, qty: this.quantities[i] }))
+                    .filter(t => t.qty > 0);
+            },
+
+            get summaryText() {
+                return this.selectedItems.map(t => `${t.name} x${t.qty}`).join(', ');
+            },
+
             async bayar() {
                 if (this.totalQty === 0 || this.isLoading) return;
 
-                const ticket = this.selectedTicket;
-                if (!ticket) return;
+                const items = this.selectedItems;
+                if (items.length === 0) return;
 
                 this.isLoading = true;
 
                 try {
-                    // 1. Minta snap token ke Laravel
                     const res = await fetch(snapTokenUrl, {
                         method: 'POST',
                         headers: {
@@ -332,9 +324,11 @@
                             'X-CSRF-TOKEN': csrfToken,
                         },
                         body: JSON.stringify({
-                            ticket_type: ticket.name,
-                            quantity: ticket.qty,
-                            price: ticket.price,
+                            items: items.map(t => ({
+                                ticket_type: t.name,
+                                quantity: t.qty,
+                                price: t.price,
+                            })),
                         }),
                     });
 
@@ -349,10 +343,8 @@
                     const orderId   = data.order_id;
                     const snapToken = data.snap_token;
 
-                    // 2. Buka Snap popup Midtrans
                     window.snap.pay(snapToken, {
                         onSuccess: async (result) => {
-                            // 3. Kirim ke Laravel untuk generate tiket
                             const successRes = await fetch(handleSuccessUrl, {
                                 method: 'POST',
                                 headers: {
@@ -369,8 +361,7 @@
                             const successData = await successRes.json();
 
                             if (successData.success) {
-                                // 4. Tampilkan modal sukses
-                                showSuccessModal(successData.order_code, ticket.name, ticket.qty);
+                                showSuccessModal(successData.order_code, this.summaryText);
                             }
                         },
                         onPending: (result) => {
@@ -379,9 +370,7 @@
                         onError: (result) => {
                             alert('Pembayaran gagal. Silakan coba lagi.');
                         },
-                        onClose: () => {
-                            // User menutup popup tanpa bayar
-                        },
+                        onClose: () => {},
                     });
 
                 } catch (err) {
@@ -393,11 +382,9 @@
         };
     }
 
-    function showSuccessModal(orderCode, ticketType, quantity) {
+    function showSuccessModal(orderCode, summary) {
         document.getElementById('modal-order-code').textContent = 'Order: ' + orderCode;
-        document.getElementById('modal-ticket-type').textContent = ticketType;
-        document.getElementById('modal-quantity').textContent = quantity + ' tiket';
-
+        document.getElementById('modal-ticket-summary').textContent = summary;
         const modal = document.getElementById('success-modal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');

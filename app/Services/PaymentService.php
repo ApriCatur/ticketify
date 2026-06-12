@@ -12,34 +12,36 @@ class PaymentService
     {
         $tickets = [];
 
-        for ($i = 0; $i < $order->quantity; $i++) {
-            $ticket = Ticket::create([
-                'user_id' => $order->user_id,
-                'event_id' => $order->event_id,
-                'order_id' => $order->id,
-                'ticket_type' => $order->ticket_type,
-                'status' => 'Active',
-                'purchase_date' => now(),
-                'qr_code' => Str::random(12),
-            ]);
+        foreach ($order->ticket_items as $item) {
+            for ($i = 0; $i < $item['quantity']; $i++) {
+                $ticket = Ticket::create([
+                    'user_id' => $order->user_id,
+                    'event_id' => $order->event_id,
+                    'order_id' => $order->id,
+                    'ticket_type' => $item['ticket_type'],
+                    'status' => 'Active',
+                    'purchase_date' => now(),
+                    'qr_code' => Str::random(12),
+                ]);
 
-            $tickets[] = $ticket;
+                $tickets[] = $ticket;
+            }
+
+            $this->decrementStock($order->event_id, $item['ticket_type'], $item['quantity']);
         }
-
-        $this->decrementStock($order);
 
         return $tickets;
     }
 
-    public function decrementStock(Order $order): void
+    public function decrementStock(int $eventId, string $ticketType, int $quantity): void
     {
-        $template = Ticket::where('event_id', $order->event_id)
-            ->where('ticket_type', $order->ticket_type)
+        $template = Ticket::where('event_id', $eventId)
+            ->where('ticket_type', $ticketType)
             ->whereNull('order_id')
             ->first();
 
         if ($template) {
-            $template->decrement('stock', $order->quantity);
+            $template->decrement('stock', $quantity);
         }
     }
 }

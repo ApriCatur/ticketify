@@ -24,22 +24,42 @@ class PaymentController extends Controller
 
     public function createSnapToken(CreateSnapTokenRequest $request, Event $event)
     {
-        $user        = auth()->user();
-        $quantity    = (int) $request->quantity;
-        $price       = (float) $request->price;
-        $totalAmount = $price * $quantity;
-        $orderCode   = Order::generateOrderCode();
+        $user      = auth()->user();
+        $items     = $request->items;
+        $orderCode = Order::generateOrderCode();
+
+        $totalAmount = 0;
+        $itemDetails = [];
+        $ticketItems = [];
+
+        foreach ($items as $item) {
+            $qty  = (int) $item['quantity'];
+            $price = (float) $item['price'];
+            $subtotal = $qty * $price;
+            $totalAmount += $subtotal;
+
+            $ticketItems[] = [
+                'ticket_type' => $item['ticket_type'],
+                'quantity'    => $qty,
+                'price'       => $price,
+            ];
+
+            $itemDetails[] = [
+                'id'       => $item['ticket_type'],
+                'price'    => (int) $price,
+                'quantity' => $qty,
+                'name'     => $event->name . ' - ' . $item['ticket_type'],
+            ];
+        }
 
         $order = Order::create([
-            'user_id'          => $user->id,
-            'event_id'         => $event->id,
-            'order_code'       => $orderCode,
-            'ticket_type'      => $request->ticket_type,
-            'quantity'         => $quantity,
-            'price_per_ticket' => $price,
-            'total_amount'     => $totalAmount,
-            'status'           => 'pending',
-            'expired_at'       => now()->addHours(24),
+            'user_id'      => $user->id,
+            'event_id'     => $event->id,
+            'order_code'   => $orderCode,
+            'total_amount' => $totalAmount,
+            'ticket_items' => $ticketItems,
+            'status'       => 'pending',
+            'expired_at'   => now()->addHours(24),
         ]);
 
         $params = [
@@ -51,14 +71,7 @@ class PaymentController extends Controller
                 'first_name' => $user->name,
                 'email'      => $user->email,
             ],
-            'item_details' => [
-                [
-                    'id'       => $request->ticket_type,
-                    'price'    => (int) $price,
-                    'quantity' => $quantity,
-                    'name'     => $event->name . ' - ' . $request->ticket_type,
-                ],
-            ],
+            'item_details' => $itemDetails,
             'callbacks' => [
                 'finish'  => route('payment.success'),
                 'unfinish'=> route('payment.failed'),

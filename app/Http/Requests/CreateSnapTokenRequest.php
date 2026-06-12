@@ -14,9 +14,10 @@ class CreateSnapTokenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ticket_type' => 'required|string',
-            'quantity' => 'required|integer|min:1',
-            'price' => 'required|numeric|min:0',
+            'items' => 'required|array|min:1',
+            'items.*.ticket_type' => 'required|string',
+            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.price' => 'required|numeric|min:0',
         ];
     }
 }
