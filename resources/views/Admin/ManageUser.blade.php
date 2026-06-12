@@ -1,16 +1,9 @@
+@php $navTitle = 'Users'; $navSubtitle = 'Manage all users in the platform'; @endphp
 @extends('layouts.admin')
 
 @section('title', 'Users Management')
 
 @section('content')
-
-{{-- HEADER --}}
-<nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-5 flex justify-between items-center">
-    <div>
-        <h2 class="text-2xl font-black tracking-tight">Users</h2>
-        <p class="text-sm text-gray-500">Manage all users in the platform</p>
-    </div>
-</nav>
 
 <div class="p-8">
 

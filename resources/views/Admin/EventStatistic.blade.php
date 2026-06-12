@@ -1,24 +1,9 @@
+@php $navTitle = 'Statistik Event'; $navSubtitle = 'Pantau status dan penjualan tiket semua event.'; @endphp
 @extends('layouts.admin')
 
 @section('title', 'Statistik Event')
 
-@push('styles')
-    <style>
-        .glass { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(10px); }
-    </style>
-@endpush
-
 @section('content')
-
-<nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
-    <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
-        <i class="fa-solid fa-bars-staggered text-2xl"></i>
-    </button>
-    <div>
-        <h2 class="text-2xl font-black tracking-tight">Statistik Event</h2>
-        <p class="text-gray-500 text-sm">Pantau status dan penjualan tiket semua event.</p>
-    </div>
-</nav>
 
 <div class="p-8">
 

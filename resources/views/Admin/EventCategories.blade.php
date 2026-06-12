@@ -1,25 +1,13 @@
+@php $navTitle = 'Event Categories'; $navSubtitle = 'Manage all event categories in the platform'; @endphp
 @extends('layouts.admin')
 
 @section('title', 'Event Categories')
 
 @section('content')
 
-{{-- HEADER --}}
-<nav class="sticky top-0 z-40 border-b border-white/5 px-8 py-5 flex justify-between items-center">
-    <div>
-        <h2 class="text-2xl font-black">Event Categories</h2>
-        <p class="text-sm text-gray-500">Manage all event categories in the platform</p>
-    </div>
-</nav>
-
 <div class="p-8">
 
-    {{-- SUCCESS MESSAGE --}}
-    @if(session('success'))
-        <div class="mb-6 bg-green-500/10 border border-green-500/30 text-green-400 px-5 py-3 rounded-xl text-sm">
-            <i class="fa-solid fa-circle-check mr-2"></i> {{ session('success') }}
-        </div>
-    @endif
+    <x-alert-toast />
 
     {{-- STATS --}}
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">

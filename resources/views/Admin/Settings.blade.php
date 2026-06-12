@@ -1,3 +1,4 @@
+@php $navTitle = 'Account Settings'; $navSubtitle = 'Kelola informasi profil dan keamanan akun kamu.'; @endphp
 @extends('layouts.admin')
 
 @section('title', 'Settings')
@@ -7,13 +8,6 @@
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 <div x-data="{ activeTab: 'profile' }" class="p-8">
-
-    <header class="mb-8">
-        <h1 class="text-3xl font-black tracking-tight">Account Settings</h1>
-        <p class="text-gray-500 text-sm mt-2">
-            Kelola informasi profil dan keamanan akun kamu.
-        </p>
-    </header>
 
     <div class="flex gap-6 mb-8 border-b border-white/5">
         <button @click="activeTab = 'profile'"

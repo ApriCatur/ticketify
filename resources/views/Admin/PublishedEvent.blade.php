@@ -1,110 +1,55 @@
+@php $hasRightSidebar = true; $navTitle = 'Published Events'; $navSubtitle = 'Kelola event yang sudah terpublikasi'; @endphp
 @extends('layouts.admin')
 
 @section('title', 'Published Events')
 
-@push('styles')
-    <style>
-        .glass { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(10px); }
-        .spotify-shadow { transition: all 0.3s ease; }
-        .spotify-shadow:hover { box-shadow: 0 20px 25px -5px rgba(34, 197, 94, 0.2); }
-    </style>
-@endpush
+@section('right-sidebar')
+    <x-upcoming-sidebar :events="$upcomingEvents" />
+@endsection
 
 @section('content')
 
-<nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
-    <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
-        <i class="fa-solid fa-bars-staggered text-2xl"></i>
-    </button>
-    <div class="hidden lg:block">
-        <span class="text-sm text-gray-400 font-medium italic">Published Events — Kelola event yang sudah terpublikasi</span>
-    </div>
-</nav>
-
 @include('components.event-carousel')
 
-<div class="p-8">
+<div class="px-8 mt-6">
     <x-event-filter :categories="$categories" />
+</div>
 
-    @if(session('success'))
-        <div class="p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl text-sm flex items-center gap-3">
-            <i class="fa-solid fa-circle-check text-base"></i>
-            <span>{{ session('success') }}</span>
+<x-alert-toast />
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 px-8 pb-8 mt-6">
+    @forelse($publishedEvents as $event)
+        <x-event-card
+            :image="$event->banner ? asset('images/events/' . $event->banner) : asset('images/events/banner_1779635248.jpg')"
+            :day="\Carbon\Carbon::parse($event->date)->format('d')"
+            :month="\Carbon\Carbon::parse($event->date)->translatedFormat('M')"
+            :year="\Carbon\Carbon::parse($event->date)->format('Y')"
+            :category="$event->category?->name"
+            :title="$event->name"
+            :location="$event->location"
+            :startTime="\Carbon\Carbon::parse($event->time_start)->format('H:i')"
+            :endTime="\Carbon\Carbon::parse($event->time_end)->format('H:i')"
+            :price="$event->tickets->whereNull('order_id')->min('price') ? 'Rp ' . number_format($event->tickets->whereNull('order_id')->min('price'), 0, ',', '.') : 'Gratis'"
+        >
+            <button type="button"
+                class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-bold transition"
+                data-event='@json($event->load("tickets"))'
+                onclick="openDetailFromElement(this)">
+                Detail
+            </button>
+            <button type="button"
+                class="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs font-bold transition"
+                data-event='@json($event)'
+                onclick="openUnpublishModal(this)">
+                Unpublish
+            </button>
+        </x-event-card>
+    @empty
+        <div class="col-span-full text-center text-gray-400 py-20 bg-[#1e1e1e] border border-white/5 rounded-3xl">
+            <i class="fa-solid fa-calendar-xmark text-3xl text-gray-600 mb-3 block"></i>
+            Belum ada event terpublikasi.
         </div>
-    @endif
-
-    <div class="flex gap-8 mt-6">
-        <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
-            @forelse($publishedEvents as $event)
-                <x-event-card
-                    :image="$event->banner ? asset('images/events/' . $event->banner) : asset('images/events/banner_1779635248.jpg')"
-                    :day="\Carbon\Carbon::parse($event->date)->format('d')"
-                    :month="\Carbon\Carbon::parse($event->date)->translatedFormat('M')"
-                    :year="\Carbon\Carbon::parse($event->date)->format('Y')"
-                    :category="$event->category?->name"
-                    :title="$event->name"
-                    :location="$event->location"
-                    :startTime="\Carbon\Carbon::parse($event->time_start)->format('H:i')"
-                    :endTime="\Carbon\Carbon::parse($event->time_end)->format('H:i')"
-                    :price="$event->tickets->whereNull('order_id')->min('price') ? 'Rp ' . number_format($event->tickets->whereNull('order_id')->min('price'), 0, ',', '.') : 'Gratis'"
-                >
-                    <button type="button"
-                        class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold transition"
-                        data-event='@json($event->load('tickets'))'
-                        onclick="openDetailFromElement(this)">
-                        Detail
-                    </button>
-                    <button type="button"
-                        class="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs font-bold transition"
-                        data-event='@json($event)'
-                        onclick="openUnpublishModal(this)">
-                        Unpublish
-                    </button>
-                </x-event-card>
-            @empty
-                <div class="col-span-full text-center text-gray-400 py-20 bg-[#1e1e1e] border border-white/5 rounded-3xl">
-                    <i class="fa-solid fa-calendar-xmark text-3xl text-gray-600 mb-3 block"></i>
-                    Belum ada event terpublikasi.
-                </div>
-            @endforelse
-        </div>
-
-        <aside class="w-80 hidden xl:block space-y-8">
-            <div>
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-black italic tracking-tighter text-white">Upcoming</h2>
-                    <i class="fa-solid fa-calendar-check text-blue-500"></i>
-                </div>
-                <div class="space-y-4">
-                    @if(isset($upcomingEvents) && $upcomingEvents->count() > 0)
-                        @foreach($upcomingEvents as $upEvent)
-                            @php $eventDate = \Carbon\Carbon::parse($upEvent->date); @endphp
-                            <div class="group p-4 bg-[#1e1e1e] border border-white/5 rounded-2xl hover:border-blue-500/30 transition-all cursor-pointer">
-                                <div class="flex gap-4 items-center">
-                                    <div class="flex-shrink-0 w-12 h-12 bg-blue-500/10 rounded-xl flex flex-col items-center justify-center border border-blue-500/20">
-                                        <span class="text-[10px] font-bold text-blue-400 uppercase leading-none">{{ $eventDate->translatedFormat('M') }}</span>
-                                        <span class="text-lg font-black text-white mt-0.5 leading-none">{{ $eventDate->format('d') }}</span>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <h4 class="text-sm font-bold text-white tracking-tight truncate group-hover:text-blue-400 transition-colors">{{ $upEvent->name }}</h4>
-                                        <p class="text-[10px] text-gray-500 mt-1 uppercase flex items-center gap-1">
-                                            <i class="fa-regular fa-clock text-[9px]"></i>
-                                            {{ \Carbon\Carbon::parse($upEvent->time_start)->format('H:i') }} WIB
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    @else
-                        <div class="text-center py-8 bg-[#1e1e1e] border border-dashed border-white/5 rounded-2xl">
-                            <i class="fa-solid fa-calendar-xmark text-gray-700 text-xl mb-2 block"></i>
-                            <p class="text-[11px] text-gray-500 font-medium">Belum ada event terdekat</p>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </aside>
-    </div>
+    @endforelse
 </div>
 
 {{-- DETAIL MODAL --}}
@@ -233,89 +178,89 @@
     </div>
 </div>
 
-@endsection
-
 @push('scripts')
-    <script>
-        function openDetailFromElement(btn) {
-            const event = JSON.parse(btn.getAttribute('data-event'));
-            const date = new Date(event.date);
-            const day = String(date.getDate()).padStart(2, '0');
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
-            const month = months[date.getMonth()];
-            const fullDate = `${day} ${month} ${date.getFullYear()}`;
+<script>
+    function openDetailFromElement(btn) {
+        const event = JSON.parse(btn.getAttribute('data-event'));
+        const date = new Date(event.date);
+        const day = String(date.getDate()).padStart(2, '0');
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+        const month = months[date.getMonth()];
+        const fullDate = `${day} ${month} ${date.getFullYear()}`;
 
-            document.getElementById('detailPoster').src = event.banner
-                ? `{{ asset('images/events') }}/${event.banner}`
-                : 'https://via.placeholder.com/600x750';
-            document.getElementById('detailDay').textContent = day;
-            document.getElementById('detailMonth').textContent = month;
-            document.getElementById('detailDate').textContent = fullDate;
-            document.getElementById('detailTime').textContent = `${event.time_start.slice(0, 5)} WIB`;
-            document.getElementById('detailTitle').textContent = event.name;
-            document.getElementById('detailLocation').textContent = event.location || '-';
-            document.getElementById('detailCategory').textContent = event.category?.name || event.category || '-';
-            document.getElementById('detailDesc').textContent = event.description || 'Tidak ada deskripsi.';
+        document.getElementById('detailPoster').src = event.banner
+            ? `{{ asset('images/events') }}/${event.banner}`
+            : 'https://via.placeholder.com/600x750';
+        document.getElementById('detailDay').textContent = day;
+        document.getElementById('detailMonth').textContent = month;
+        document.getElementById('detailDate').textContent = fullDate;
+        document.getElementById('detailTime').textContent = `${event.time_start.slice(0, 5)} WIB`;
+        document.getElementById('detailTitle').textContent = event.name;
+        document.getElementById('detailLocation').textContent = event.location || '-';
+        document.getElementById('detailCategory').textContent = event.category?.name || event.category || '-';
+        document.getElementById('detailDesc').textContent = event.description || 'Tidak ada deskripsi.';
 
-            const ticketContainer = document.getElementById('detailTickets');
-            ticketContainer.innerHTML = '';
-            if (event.tickets && event.tickets.length > 0) {
-                event.tickets.forEach(t => {
-                    const div = document.createElement('div');
-                    div.className = 'flex justify-between items-center bg-white/5 border border-white/10 rounded-xl p-4';
-                    div.innerHTML = `
-                        <div>
-                            <p class="font-bold text-sm">${t.ticket_type || 'Reguler'}</p>
-                            <p class="text-xs text-gray-400 mt-1">Stok: ${t.stock ?? 'Unlimited'}</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-black text-blue-400">${t.price ? 'Rp ' + Number(t.price).toLocaleString('id-ID') : 'Gratis'}</p>
-                        </div>
-                    `;
-                    ticketContainer.appendChild(div);
-                });
-            } else {
-                ticketContainer.innerHTML = '<p class="text-gray-500 text-sm">Tidak ada tiket tersedia.</p>';
-            }
-
-            document.getElementById('detailModal').classList.remove('hidden');
-            document.getElementById('detailModal').classList.add('flex');
+        const ticketContainer = document.getElementById('detailTickets');
+        ticketContainer.innerHTML = '';
+        if (event.tickets && event.tickets.length > 0) {
+            event.tickets.forEach(t => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center bg-white/5 border border-white/10 rounded-xl p-4';
+                div.innerHTML = `
+                    <div>
+                        <p class="font-bold text-sm">${t.ticket_type || 'Reguler'}</p>
+                        <p class="text-xs text-gray-400 mt-1">Stok: ${t.stock ?? 'Unlimited'}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-black text-blue-400">${t.price ? 'Rp ' + Number(t.price).toLocaleString('id-ID') : 'Gratis'}</p>
+                    </div>
+                `;
+                ticketContainer.appendChild(div);
+            });
+        } else {
+            ticketContainer.innerHTML = '<p class="text-gray-500 text-sm">Tidak ada tiket tersedia.</p>';
         }
 
-        function closeDetail() {
-            document.getElementById('detailModal').classList.add('hidden');
-            document.getElementById('detailModal').classList.remove('flex');
-        }
+        document.getElementById('detailModal').classList.remove('hidden');
+        document.getElementById('detailModal').classList.add('flex');
+    }
 
-        function openUnpublishModal(btn) {
-            const event = JSON.parse(btn.getAttribute('data-event'));
-            const form = document.getElementById('unpublishForm');
-            form.action = `{{ url('admin/events') }}/${event.id}/unpublish`;
-            document.getElementById('unpublishReason').value = '';
-            document.getElementById('reasonCount').textContent = '0';
+    function closeDetail() {
+        document.getElementById('detailModal').classList.add('hidden');
+        document.getElementById('detailModal').classList.remove('flex');
+    }
+
+    function openUnpublishModal(btn) {
+        const event = JSON.parse(btn.getAttribute('data-event'));
+        const form = document.getElementById('unpublishForm');
+        form.action = `{{ url('admin/events') }}/${event.id}/unpublish`;
+        document.getElementById('unpublishReason').value = '';
+        document.getElementById('reasonCount').textContent = '0';
+        document.getElementById('unpublishReasonError').classList.add('hidden');
+        document.getElementById('unpublishModal').classList.remove('hidden');
+        document.getElementById('unpublishModal').classList.add('flex');
+    }
+
+    function closeUnpublishModal() {
+        document.getElementById('unpublishModal').classList.add('hidden');
+        document.getElementById('unpublishModal').classList.remove('flex');
+    }
+
+    document.getElementById('unpublishReason')?.addEventListener('input', function() {
+        document.getElementById('reasonCount').textContent = this.value.length;
+        if (this.value.length >= 10) {
             document.getElementById('unpublishReasonError').classList.add('hidden');
-            document.getElementById('unpublishModal').classList.remove('hidden');
-            document.getElementById('unpublishModal').classList.add('flex');
         }
+    });
 
-        function closeUnpublishModal() {
-            document.getElementById('unpublishModal').classList.add('hidden');
-            document.getElementById('unpublishModal').classList.remove('flex');
+    document.getElementById('unpublishForm')?.addEventListener('submit', function(e) {
+        const reason = document.getElementById('unpublishReason').value;
+        if (reason.length < 10) {
+            e.preventDefault();
+            document.getElementById('unpublishReasonError').classList.remove('hidden');
         }
-
-        document.getElementById('unpublishReason')?.addEventListener('input', function() {
-            document.getElementById('reasonCount').textContent = this.value.length;
-            if (this.value.length >= 10) {
-                document.getElementById('unpublishReasonError').classList.add('hidden');
-            }
-        });
-
-        document.getElementById('unpublishForm')?.addEventListener('submit', function(e) {
-            const reason = document.getElementById('unpublishReason').value;
-            if (reason.length < 10) {
-                e.preventDefault();
-                document.getElementById('unpublishReasonError').classList.remove('hidden');
-            }
-        });
-    </script>
+    });
+</script>
 @endpush
+
+@endsection
