@@ -15,8 +15,7 @@
 </head>
 <body class="bg-[#0f0f0f] text-white antialiased">
 
-    <div class="flex max-w-[1600px] mx-auto min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
-
+<div class="flex w-full min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
     @include('layouts.sidebar-pembeli')
         <div class="flex-1 flex flex-col min-w-0 border-r border-white/5">
             <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
