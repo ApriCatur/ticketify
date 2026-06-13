@@ -223,7 +223,7 @@
 
         document.getElementById('detailPoster').src = banner
             ? '/images/events/' + banner
-            : 'https://via.placeholder.com/600x750';
+            : '/images/events/banner_1779635248.jpg';
         document.getElementById('detailDate').textContent = fullDate || '-';
         const timeDisplay = timeStr ? timeStr.slice(0, 5) : '-';
         document.getElementById('detailTime').textContent = `${timeDisplay} WIB`;
