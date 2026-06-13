@@ -31,9 +31,18 @@
             :endTime="\Carbon\Carbon::parse($event->time_end)->format('H:i')"
             :price="$event->tickets->whereNull('order_id')->min('price') ? 'Rp ' . number_format($event->tickets->whereNull('order_id')->min('price'), 0, ',', '.') : 'Gratis'"
         >
+            @php $ticketsJson = json_encode($event->tickets->whereNull('order_id')->values()->map(fn($t) => ['ticket_type' => $t->ticket_type, 'price' => $t->price, 'stock' => $t->stock])); @endphp
             <button type="button"
                 class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-bold transition"
-                data-event='@json($event->load("tickets"))'
+                data-id="{{ $event->id }}"
+                data-banner="{{ $event->banner }}"
+                data-name="{{ $event->name }}"
+                data-date="{{ $event->date }}"
+                data-time="{{ $event->time_start }}"
+                data-location="{{ $event->location }}"
+                data-category="{{ $event->category?->name }}"
+                data-description="{{ $event->description }}"
+                data-tickets='{!! $ticketsJson !!}'
                 onclick="openDetailFromElement(this)">
                 Detail
             </button>
@@ -77,34 +86,42 @@
                         <img id="detailPoster" src="" alt="Poster Event" class="w-full h-[340px] object-cover">
                     </div>
                 </div>
-                <div class="space-y-5">
-                    <div class="flex items-start gap-4">
-                        <div id="detailDateBox" class="bg-blue-500/20 text-blue-400 rounded-xl px-4 py-3 text-center">
-                            <p id="detailDay" class="text-xl font-bold">-</p>
-                            <p id="detailMonth" class="text-xs uppercase">-</p>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-regular fa-calendar text-blue-400 w-4"></i>
+                            <span class="text-gray-500 text-xs">Tanggal</span>
                         </div>
-                        <div>
-                            <p class="text-xs text-gray-400 uppercase">Waktu Pelaksanaan</p>
-                            <p id="detailTime" class="font-bold text-xl">-</p>
-                            <p id="detailDate" class="text-sm text-gray-400">-</p>
+                        <div class="text-right">
+                            <span id="detailDate" class="font-semibold text-gray-200">-</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-regular fa-clock text-blue-400 w-4"></i>
+                            <span class="text-gray-500 text-xs">Waktu</span>
+                        </div>
+                        <div class="text-right">
+                            <span id="detailTime" class="font-semibold text-gray-200">-</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-location-dot text-red-400 w-4"></i>
+                            <span class="text-gray-500 text-xs">Lokasi</span>
+                        </div>
+                        <div class="text-right">
+                            <span id="detailLocation" class="font-semibold text-gray-200">-</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-folder text-yellow-400 w-4"></i>
+                            <span class="text-gray-500 text-xs">Kategori</span>
+                        </div>
+                        <div class="text-right">
+                            <span id="detailCategory" class="font-semibold text-gray-200">-</span>
                         </div>
                     </div>
                     <div>
-                        <p class="text-xs text-gray-400 uppercase">Nama Event</p>
                         <h3 id="detailTitle" class="text-blue-400 font-bold text-2xl">-</h3>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <p class="text-xs text-gray-400 uppercase">Lokasi</p>
-                            <p id="detailLocation" class="text-sm">-</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400 uppercase">Kategori</p>
-                            <p id="detailCategory" class="text-sm">-</p>
-                        </div>
-                    </div>
                     <div>
-                        <p class="text-xs text-gray-400 uppercase">Deskripsi</p>
+                        <p class="text-xs text-gray-400 uppercase mb-2">Deskripsi</p>
                         <div class="bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-gray-300 leading-relaxed max-h-32 overflow-y-auto">
                             <span id="detailDesc">-</span>
                         </div>
@@ -186,29 +203,39 @@
 @push('scripts')
 <script>
     function openDetailFromElement(btn) {
-        const event = JSON.parse(btn.getAttribute('data-event'));
-        const date = new Date(event.date);
+        const dv = btn.dataset;
+        const banner  = dv.banner;
+        const name    = dv.name;
+        const dateStr = dv.date;
+        const timeStr = dv.time;
+        const loc     = dv.location;
+        const cat     = dv.category;
+        const desc    = dv.description;
+        let tickets   = [];
+
+        try { tickets = JSON.parse(dv.tickets || '[]'); } catch(e) {}
+
+        const date = new Date(dateStr);
         const day = String(date.getDate()).padStart(2, '0');
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
-        const month = months[date.getMonth()];
+        const month = months[date.getMonth()] || '';
         const fullDate = `${day} ${month} ${date.getFullYear()}`;
 
-        document.getElementById('detailPoster').src = event.banner
-            ? `{{ asset('images/events') }}/${event.banner}`
+        document.getElementById('detailPoster').src = banner
+            ? '/images/events/' + banner
             : 'https://via.placeholder.com/600x750';
-        document.getElementById('detailDay').textContent = day;
-        document.getElementById('detailMonth').textContent = month;
-        document.getElementById('detailDate').textContent = fullDate;
-        document.getElementById('detailTime').textContent = `${event.time_start.slice(0, 5)} WIB`;
-        document.getElementById('detailTitle').textContent = event.name;
-        document.getElementById('detailLocation').textContent = event.location || '-';
-        document.getElementById('detailCategory').textContent = event.category?.name || event.category || '-';
-        document.getElementById('detailDesc').textContent = event.description || 'Tidak ada deskripsi.';
+        document.getElementById('detailDate').textContent = fullDate || '-';
+        const timeDisplay = timeStr ? timeStr.slice(0, 5) : '-';
+        document.getElementById('detailTime').textContent = `${timeDisplay} WIB`;
+        document.getElementById('detailTitle').textContent = name || '-';
+        document.getElementById('detailLocation').textContent = loc || '-';
+        document.getElementById('detailCategory').textContent = cat || '-';
+        document.getElementById('detailDesc').textContent = desc || 'Tidak ada deskripsi.';
 
         const ticketContainer = document.getElementById('detailTickets');
         ticketContainer.innerHTML = '';
-        if (event.tickets && event.tickets.length > 0) {
-            event.tickets.forEach(t => {
+        if (tickets.length > 0) {
+            tickets.forEach(t => {
                 const div = document.createElement('div');
                 div.className = 'flex justify-between items-center bg-white/5 border border-white/10 rounded-xl p-4';
                 div.innerHTML = `
