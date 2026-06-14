@@ -1,16 +1,9 @@
+@php $navTitle = 'Role Applications'; $navSubtitle = 'Manage user role upgrade requests'; @endphp
 @extends('layouts.admin')
 
 @section('title', 'Role Applications')
 
 @section('content')
-
-{{-- ── HEADER ─────────────────────────────────────────────── --}}
-<nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-5 flex justify-between items-center">
-    <div>
-        <h2 class="text-2xl font-black tracking-tight">Role Applications</h2>
-        <p class="text-sm text-gray-500">Manage user role upgrade requests</p>
-    </div>
-</nav>
 
 <div class="p-8">
 

@@ -1,12 +1,7 @@
+@php $showNav = false; @endphp
 @extends('layouts.admin')
 
 @section('title', 'Peserta ' . ($event->name ?? ''))
-
-@push('styles')
-    <style>
-        .glass { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(10px); }
-    </style>
-@endpush
 
 @section('content')
 

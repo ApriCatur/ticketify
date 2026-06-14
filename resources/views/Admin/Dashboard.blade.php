@@ -1,3 +1,4 @@
+@php $showNav = false; @endphp
 @extends('layouts.admin')
 
 @section('content')
@@ -7,7 +8,6 @@
     .card-hover {
         transition: all .3s ease;
     }
-
     .card-hover:hover {
         transform: translateY(-6px);
         box-shadow: 0 20px 25px rgba(59,130,246,.15);
@@ -22,7 +22,6 @@
     </div>
 </nav>
 
-<!-- CONTENT -->
 <div class="p-8">
 
     <!-- STATS -->
