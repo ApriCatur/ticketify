@@ -42,6 +42,8 @@ class SettingsController extends Controller
         $user->phone_number = $request->phone_number;
         $user->save();
 
+        Auth::setUser($user->fresh());
+
         return redirect()->route('admin.Settings')->with('success', 'Informasi profil berhasil diperbarui!');
     }
 

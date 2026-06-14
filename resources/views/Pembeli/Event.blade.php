@@ -24,7 +24,7 @@
 </head>
 <body class="bg-[#0f0f0f] text-white antialiased">
 
-    <div class="flex w-full min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
+    <div class="flex max-w-[1600px] mx-auto min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
 
         @include('layouts.sidebar-pembeli')
 
