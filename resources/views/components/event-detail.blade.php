@@ -74,7 +74,7 @@
                     <div class="text-sm font-bold text-gray-400">
                         <i class="fa-solid fa-calendar-days text-blue-500 mr-2"></i>
                         @if($event->date)
-                            {{ \Carbon\Carbon::parse($event->date)->format('d F Y') }}, {{ $event->time_start }} - {{ $event->time_end }} WIB
+                            {{ \Carbon\Carbon::parse($event->date)->format('d F Y') }}, {{ substr($event->time_start, 0, 5) }} - {{ substr($event->time_end, 0, 5) }} WIB
                         @else
                             Date not available
                         @endif
@@ -97,7 +97,7 @@
                 <span class="inline-block mt-2 px-4 py-1 bg-[#18181b] rounded-full text-[10px] border border-white/5 font-bold">
                     <i class="fa-solid fa-calendar-check mr-2"></i>
                     @if($event->date)
-                        Event Date : {{ \Carbon\Carbon::parse($event->date)->format('d F Y') }}, {{ $event->time_start }} - {{ $event->time_end }} WIB
+                        Event Date : {{ \Carbon\Carbon::parse($event->date)->format('d F Y') }}, {{ substr($event->time_start, 0, 5) }} - {{ substr($event->time_end, 0, 5) }} WIB
                     @else
                         Date not available
                     @endif
