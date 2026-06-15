@@ -59,6 +59,7 @@
                     'completed' => ['bg' => 'bg-blue-500/20', 'border' => 'border-blue-500/50', 'text' => 'text-blue-500', 'label' => 'Completed'],
                     'pending' => ['bg' => 'bg-amber-500/20', 'border' => 'border-amber-500/50', 'text' => 'text-amber-500', 'label' => 'Pending'],
                     'rejected' => ['bg' => 'bg-red-500/20', 'border' => 'border-red-500/50', 'text' => 'text-red-500', 'label' => 'Rejected'],
+                    'unpublished' => ['bg' => 'bg-gray-500/20', 'border' => 'border-gray-500/50', 'text' => 'text-gray-400', 'label' => 'Unpublished'],
                 ];
                 $config = $statusConfig[$displayStatus] ?? $statusConfig['published'];
             @endphp

@@ -29,7 +29,7 @@ class AttendanceController extends Controller
                 ->where('is_attended', true)
                 ->with('user:id,name')
                 ->orderBy('attended_at', 'desc')
-                ->take(5)
+                ->take(20)
                 ->get();
         }
 

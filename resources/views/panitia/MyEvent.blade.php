@@ -93,6 +93,10 @@
                                     <i class="fa-solid fa-circle-info text-[8px]"></i>
                                 </button>
 
+                            @elseif($displayStatus === 'unpublished')
+                                <div class="flex items-center gap-2 bg-gray-500/10 border border-gray-500/30 text-gray-400 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
+                                    <i class="fa-solid fa-ban"></i> Unpublished
+                                </div>
                             @else
                                 <div class="flex items-center gap-2 bg-gray-500/10 border border-gray-500/30 text-gray-400 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
                                     {{ ucfirst($displayStatus) }}
