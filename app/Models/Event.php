@@ -63,9 +63,9 @@ class Event extends Model
             return $this->status;
         }
 
-        // Cek apakah tanggal event sudah lewat hari ini
-        $eventDate = Carbon::parse($this->date)->endOfDay();
-        if ($eventDate < Carbon::now()) {
+        // Cek apakah event sudah selesai (date + time_end sudah lewat)
+        $eventEnd = Carbon::parse($this->date . ' ' . $this->time_end);
+        if ($eventEnd < Carbon::now()) {
             return 'completed';
         }
 
