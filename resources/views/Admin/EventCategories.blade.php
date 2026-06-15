@@ -31,7 +31,7 @@
 
     {{-- TABS --}}
     <div class="flex gap-2 mb-6">
-        @foreach(['active' => 'Active', 'ukm' => 'UKM', 'deleted' => 'Deleted'] as $key => $label)
+        @foreach(['active' => 'Events', 'ukm' => 'UKM', 'deleted' => 'Deleted'] as $key => $label)
             <a href="{{ route('admin.categories', ['tab' => $key, 'search' => $search]) }}"
                 class="px-4 py-2 rounded-xl text-sm font-bold {{ $tab === $key ? 'bg-white text-black' : 'bg-white/5 text-gray-400 hover:bg-white/10' }}">
                 {{ $label }}
