@@ -79,4 +79,22 @@ class Event extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+    public function scopeFilter($query, array $filters)
+{
+    // Filter Nama Event
+    $query->when($filters['search'] ?? null, function ($q, $search) {
+        $q->where('name', 'like', '%' . $search . '%');
+    });
+
+    // Filter Kategori (Sesuaikan dengan nama field di DB, kemungkinan 'category_id')
+    $query->when($filters['category_id'] ?? null, function ($q, $category_id) {
+        $q->where('category_id', $category_id);
+    });
+
+    // Filter Tanggal
+    $query->when($filters['date'] ?? null, function ($q, $date) {
+        $q->whereDate('date', $date);
+    });
+}
+
 }
