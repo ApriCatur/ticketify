@@ -19,9 +19,18 @@ class StoreEventRequest extends FormRequest
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'location' => 'required|string',
-            'date' => 'required|date',
-            'time_start' => 'required',
-            'time_end' => 'required',
+            'date' => $this->isMethod('POST') ? 'required|date|after_or_equal:today' : 'required|date',
+            'time_start' => 'required|date_format:H:i',
+            'time_end' => [
+                'required',
+                'date_format:H:i',
+                function ($attribute, $value, $fail) {
+                    $start = $this->input('time_start');
+                    if ($start && $value <= $start) {
+                        $fail('Jam selesai harus setelah jam mulai.');
+                    }
+                },
+            ],
             'description' => 'required|string',
             'terms' => 'required|string',
             'banner' => "{$required}|image|mimes:jpeg,png,jpg,webp|max:2048",
@@ -30,6 +39,13 @@ class StoreEventRequest extends FormRequest
             'ticket_types.*.ticket_type' => 'required|string|max:255',
             'ticket_types.*.price' => 'required|numeric|min:0',
             'ticket_types.*.stock' => 'required|integer|min:0',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'date.after_or_equal' => 'Tanggal event tidak boleh di masa lalu. Pilih hari ini atau tanggal yang akan datang.',
         ];
     }
 }

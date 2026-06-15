@@ -149,7 +149,7 @@
                         <div class="grid grid-cols-3 gap-4">
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal</label>
-                                <input type="date" name="date" value="{{ old('date') }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-2 text-xs focus:border-blue-500 outline-none transition-all" required>
+                                <input type="date" name="date" value="{{ old('date') }}" min="{{ date('Y-m-d') }}" class="w-full bg-[#121212] border border-white/5 rounded-xl px-4 py-2 text-xs focus:border-blue-500 outline-none transition-all" required>
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Waktu Mulai</label>
