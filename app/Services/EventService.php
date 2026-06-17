@@ -91,7 +91,7 @@ class EventService
 
     public function syncTickets(Event $event, array $ticketTypes): void
     {
-        $event->tickets()->delete();
+        $event->tickets()->whereNull('order_id')->delete();
 
         foreach ($ticketTypes as $t) {
             $event->tickets()->create([
