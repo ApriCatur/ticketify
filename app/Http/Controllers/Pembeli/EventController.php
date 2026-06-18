@@ -41,7 +41,14 @@ class EventController extends Controller
             ->get();
 
         $categories = Category::all();
-        
+
         return view('pembeli.event', compact('publicEvents', 'events', 'upcomingEvents', 'categories'));
     }
+
+        public function show(Event $event)
+        {
+            $event->load(['tickets', 'category']);
+
+            return view('Pembeli.detail', compact('event'));
+        }
 }
