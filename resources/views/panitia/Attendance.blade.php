@@ -13,7 +13,7 @@
 
     @include('layouts.sidebar-panitia')
 
-    <main class="flex-1 p-6 lg:p-10 overflow-y-auto">
+    <main class="flex-1 p-6 lg:p-10 overflow-y-auto min-h-screen">
 
         @php
             $eventsJson = $userEvents->map(fn($e) => ['id' => $e->id, 'name' => $e->name])->values();
@@ -27,221 +27,197 @@
             ]);
         @endphp
 
-        {{-- HEADER --}}
-        <div class="flex items-center justify-between mb-10">
-            <div>
-                <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors mb-3">
-                    <i class="fa-solid fa-bars-staggered text-2xl"></i>
-                </button>
-                <h1 class="text-3xl font-black tracking-tight">Attendance</h1>
-                <p class="text-gray-500 text-sm mt-2">Verifikasi kehadiran peserta event.</p>
-            </div>
-        </div>
-
         @if($userEvents->count() > 0)
 
-        {{-- EVENT SELECTOR + STATS SNAPSHOT --}}
-        <div class="bg-[#121212] border border-white/5 rounded-[2rem] p-6 mb-8">
-            <div class="flex flex-col lg:flex-row lg:items-center gap-6">
+        {{-- ─── EVENT BAR ─── --}}
+        <div class="bg-[#121212] border border-white/5 rounded-[2rem] p-5 mb-8">
+            <div class="flex flex-col lg:flex-row lg:items-center gap-5">
                 <div class="flex-1">
                     <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Pilih Event</label>
-                    <select x-model="selectedEventId" @change="onEventChange()"
-                        class="w-full lg:max-w-md bg-[#1e1e1e] border border-white/5 rounded-xl px-5 py-3.5 text-sm focus:border-blue-500 outline-none appearance-none cursor-pointer">
-                        <option value="">— Pilih Event —</option>
-                        @foreach($userEvents as $event)
-                            <option value="{{ $event->id }}">{{ $event->name }}</option>
-                        @endforeach
-                    </select>
+                    <div class="flex gap-3">
+                        <select x-model="selectedEventId" @change="onEventChange()"
+                            class="flex-1 lg:max-w-md bg-[#1e1e1e] border border-white/5 rounded-xl px-5 py-3.5 text-sm focus:border-blue-500 outline-none appearance-none cursor-pointer">
+                            <option value="">— Pilih Event —</option>
+                            @foreach($userEvents as $event)
+                                <option value="{{ $event->id }}">{{ $event->name }}</option>
+                            @endforeach
+                        </select>
+                        <template x-if="selectedEventId">
+                            <button @click="manualTicketId = ''; showResult = false; $refs.ticketInput.focus()"
+                                    class="bg-[#1e1e1e] border border-white/5 rounded-xl px-4 text-gray-400 hover:text-white hover:border-white/20 transition-all text-sm">
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                            </button>
+                        </template>
+                    </div>
                 </div>
                 <template x-if="statistics && selectedEventId">
-                    <div class="flex gap-6 lg:gap-10 flex-wrap">
-                        <div class="text-center">
-                            <p class="text-2xl font-black" x-text="statistics.total_tickets"></p>
-                            <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Total</p>
+                    <div class="flex items-center gap-5">
+                        <div class="flex items-center gap-2.5 px-4 py-2 bg-blue-500/5 rounded-xl border border-blue-500/10">
+                            <i class="fa-solid fa-ticket text-blue-500 text-[10px]"></i>
+                            <span class="text-sm font-bold" x-text="statistics.total_tickets"></span>
+                            <span class="text-[9px] text-gray-500 uppercase tracking-wider">Total</span>
                         </div>
-                        <div class="text-center">
-                            <p class="text-2xl font-black text-green-500" x-text="statistics.attended_tickets"></p>
-                            <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Hadir</p>
+                        <div class="flex items-center gap-2.5 px-4 py-2 bg-green-500/5 rounded-xl border border-green-500/10">
+                            <i class="fa-solid fa-user-check text-green-500 text-[10px]"></i>
+                            <span class="text-sm font-bold text-green-500" x-text="statistics.attended_tickets"></span>
+                            <span class="text-[9px] text-gray-500 uppercase tracking-wider">Hadir</span>
                         </div>
-                        <div class="text-center">
-                            <p class="text-2xl font-black text-blue-500" x-text="statistics.attendance_rate + '%'"></p>
-                            <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Rate</p>
+                        <div class="flex items-center gap-2.5 px-4 py-2 bg-purple-500/5 rounded-xl border border-purple-500/10">
+                            <i class="fa-solid fa-chart-line text-purple-500 text-[10px]"></i>
+                            <span class="text-sm font-bold text-purple-500" x-text="statistics.attendance_rate + '%'"></span>
+                            <span class="text-[9px] text-gray-500 uppercase tracking-wider">Rate</span>
                         </div>
                     </div>
                 </template>
             </div>
         </div>
 
-        {{-- MAIN GRID --}}
-        <div class="grid lg:grid-cols-12 gap-8">
-
-            {{-- LEFT: VERIFY PANEL --}}
-            <div class="lg:col-span-5 space-y-6">
-
-                {{-- INPUT TICKET --}}
-                <div class="bg-[#121212] border border-white/5 rounded-[2rem] p-8">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                            <i class="fa-solid fa-ticket text-blue-500"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-sm font-bold">Verifikasi Tiket</h3>
-                            <p class="text-[10px] text-gray-500">Masukkan kode tiket peserta</p>
-                        </div>
+        {{-- ─── VERIFY HERO ─── --}}
+        <div class="relative mb-8">
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5 rounded-[2.5rem]"></div>
+            <div class="relative bg-[#121212] border border-white/5 rounded-[2.5rem] p-8 lg:p-12">
+                <div class="max-w-2xl mx-auto text-center">
+                    <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-blue-500/20 mb-6">
+                        <i class="fa-solid fa-ticket"></i>
                     </div>
 
-                    <div class="flex gap-3">
+                    <h2 class="text-xl lg:text-2xl font-black mb-2">Verifikasi Tiket</h2>
+                    <p class="text-sm text-gray-500 mb-8">Masukkan kode tiket peserta untuk verifikasi kehadiran.</p>
+
+                    <div class="flex gap-3 max-w-xl mx-auto">
                         <div class="flex-1 relative">
-                            <i class="fa-solid fa-hashtag absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 text-sm"></i>
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                <i class="fa-solid fa-hashtag text-blue-500 text-xs"></i>
+                            </div>
                             <input type="text" x-model="manualTicketId" x-ref="ticketInput"
                                    placeholder="Kode Tiket"
                                    @keyup.enter="verifyManualTicket()"
-                                   class="w-full bg-[#1e1e1e] border border-white/5 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:border-blue-500 outline-none transition-all"
-                                   :class="{'border-green-500/50': showResult && resultData?.type === 'success', 'border-red-500/50': showResult && resultData?.type === 'error'}">
+                                   class="w-full bg-[#1e1e1e] border border-white/5 rounded-xl pl-14 pr-4 py-4 text-base focus:border-blue-500 outline-none transition-all"
+                                   :class="{'border-green-500/50 ring-2 ring-green-500/10': showResult && resultData?.type === 'success', 'border-red-500/50 ring-2 ring-red-500/10': showResult && resultData?.type === 'error'}">
                         </div>
                         <button @click="verifyManualTicket()"
                                 :disabled="!selectedEventId || !manualTicketId"
                                 :class="!selectedEventId || !manualTicketId ? 'opacity-40 cursor-not-allowed' : 'hover:bg-blue-700 active:scale-95'"
-                                class="bg-blue-600 px-6 rounded-xl text-sm font-bold transition-all shadow-lg shadow-blue-600/20 whitespace-nowrap">
-                            <i class="fa-solid fa-check mr-1.5"></i> Cek
+                                class="bg-blue-600 px-8 rounded-xl text-sm font-bold transition-all shadow-lg shadow-blue-600/20 whitespace-nowrap">
+                            <i class="fa-solid fa-check mr-2"></i> Verifikasi
                         </button>
                     </div>
 
                     <template x-if="!selectedEventId">
-                        <div class="flex items-center gap-2 mt-4 text-[10px] text-gray-600">
+                        <div class="flex items-center justify-center gap-2 mt-5 text-xs text-gray-600">
                             <i class="fa-solid fa-circle-info"></i>
-                            <span>Pilih event terlebih dahulu</span>
+                            <span>Pilih event terlebih dahulu sebelum verifikasi</span>
                         </div>
                     </template>
                     <template x-if="selectedEventId && !manualTicketId">
-                        <div class="flex items-center gap-2 mt-4 text-[10px] text-gray-600">
+                        <div class="flex items-center justify-center gap-2 mt-5 text-xs text-gray-600">
                             <i class="fa-solid fa-keyboard"></i>
-                            <span>Ketik kode tiket lalu tekan Enter atau tombol Cek</span>
+                            <span>Ketik kode tiket lalu tekan Enter atau tombol Verifikasi</span>
                         </div>
                     </template>
-                </div>
 
-                {{-- RECENT CHECKINS (mobile) --}}
-                <div class="bg-[#121212] border border-white/5 rounded-[2rem] p-8 lg:hidden">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                            <i class="fa-solid fa-clock-rotate-left text-blue-500"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-sm font-bold">Checkin Terbaru</h3>
-                            <p class="text-[10px] text-gray-500">Peserta yang sudah terverifikasi</p>
-                        </div>
+                    <div class="flex items-center justify-center gap-6 mt-6 text-[10px] text-gray-600">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-hashtag text-[8px]"></i> Kode tiket ada di email</span>
+                        <span class="w-px h-3 bg-white/5"></span>
+                        <span class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-[8px]"></i> Real-time verification</span>
                     </div>
-                    <template x-if="filteredCheckins.length > 0">
-                        <div class="space-y-3">
-                            <template x-for="item in filteredCheckins" :key="item.id">
-                                <div class="flex items-center gap-3 p-3 bg-[#1e1e1e] rounded-xl">
-                                    <div class="w-9 h-9 rounded-full bg-green-500/20 text-green-500 flex items-center justify-center font-bold text-xs uppercase flex-shrink-0" x-text="item.initials"></div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-xs font-bold truncate" x-text="item.name"></p>
-                                        <div class="flex items-center gap-2 text-[10px] text-gray-500">
-                                            <span x-text="item.ticket_type"></span>
-                                            <span>•</span>
-                                            <span x-text="item.attended_at"></span>
-                                        </div>
-                                    </div>
-                                    <i class="fa-solid fa-check-circle text-green-500/60 text-xs"></i>
-                                </div>
-                            </template>
-                        </div>
-                    </template>
-                    <template x-if="filteredCheckins.length === 0 && selectedEventId">
-                        <div class="text-center py-12">
-                            <i class="fa-solid fa-user-check text-4xl text-gray-700 mb-4"></i>
-                            <p class="text-xs text-gray-500">Belum ada checkin</p>
-                            <p class="text-[10px] text-gray-600 mt-1">Verifikasi tiket pertama akan muncul di sini</p>
-                        </div>
-                    </template>
-                    <template x-if="!selectedEventId">
-                        <div class="text-center py-12">
-                            <i class="fa-solid fa-hand-pointer text-4xl text-gray-700 mb-4"></i>
-                            <p class="text-xs text-gray-500">Pilih event untuk melihat checkin</p>
-                        </div>
-                    </template>
                 </div>
-
             </div>
+        </div>
 
-            {{-- RIGHT: RESULT + STATS + CHECKINS --}}
-            <div class="lg:col-span-7 space-y-6">
+        {{-- ─── RESULT AREA ─── --}}
+        <div class="mb-8">
+            <template x-if="showResult && resultData">
+                <div x-cloak x-show="showResult" x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+                     x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                     :class="resultData.type === 'success' ? 'bg-green-500/5 border-green-500/30' : resultData.type === 'error' ? 'bg-red-500/5 border-red-500/30' : 'bg-yellow-500/5 border-yellow-500/30'"
+                     class="border rounded-[2rem] p-6 lg:p-8 relative overflow-hidden">
 
-                {{-- RESULT CARD --}}
-                <template x-if="showResult && resultData">
-                    <div x-cloak x-show="showResult" x-transition:enter="transition ease-out duration-300"
-                         x-transition:enter-start="opacity-0 translate-y-4 scale-95"
-                         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-                         :class="resultData.type === 'success' ? 'bg-green-500/5 border-green-500/30' : resultData.type === 'error' ? 'bg-red-500/5 border-red-500/30' : 'bg-yellow-500/5 border-yellow-500/30'"
-                         class="border rounded-[2rem] p-6 relative overflow-hidden">
+                    <div :class="resultData.type === 'success' ? 'bg-green-500' : resultData.type === 'error' ? 'bg-red-500' : 'bg-yellow-500'"
+                         class="absolute top-0 left-0 right-0 h-1.5"></div>
 
-                        {{-- Decorative top bar --}}
-                        <div :class="resultData.type === 'success' ? 'bg-green-500' : resultData.type === 'error' ? 'bg-red-500' : 'bg-yellow-500'"
-                             class="absolute top-0 left-0 right-0 h-1"></div>
+                    <div class="flex flex-col lg:flex-row lg:items-start gap-6 mt-2">
+                        <div :class="resultData.type === 'success' ? 'bg-green-500 shadow-lg shadow-green-500/30' : resultData.type === 'error' ? 'bg-red-500 shadow-lg shadow-red-500/30' : 'bg-yellow-500 shadow-lg shadow-yellow-500/30'"
+                             class="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-3xl flex-shrink-0 mx-auto lg:mx-0">
+                            <i :class="resultData.type === 'success' ? 'fa-solid fa-check-double' : resultData.type === 'error' ? 'fa-solid fa-xmark' : 'fa-solid fa-exclamation'"></i>
+                        </div>
+                        <div class="flex-1 min-w-0 text-center lg:text-left">
+                            <h4 :class="resultData.type === 'success' ? 'text-green-500' : resultData.type === 'error' ? 'text-red-500' : 'text-yellow-500'"
+                                class="font-black uppercase tracking-widest text-sm mb-1" x-text="resultData.message"></h4>
 
-                        <div class="flex items-start gap-5 mt-2">
-                            <div :class="resultData.type === 'success' ? 'bg-green-500 shadow-lg shadow-green-500/30' : resultData.type === 'error' ? 'bg-red-500 shadow-lg shadow-red-500/30' : 'bg-yellow-500 shadow-lg shadow-yellow-500/30'"
-                                 class="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl flex-shrink-0">
-                                <i :class="resultData.type === 'success' ? 'fa-solid fa-check-double' : resultData.type === 'error' ? 'fa-solid fa-xmark' : 'fa-solid fa-exclamation'"></i>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <h4 :class="resultData.type === 'success' ? 'text-green-500' : resultData.type === 'error' ? 'text-red-500' : 'text-yellow-500'"
-                                    class="font-black uppercase tracking-widest text-xs mb-1" x-text="resultData.message"></h4>
-
-                                <template x-if="resultData.data?.name">
-                                    <div class="mt-4 bg-white/[0.03] rounded-2xl p-5 border border-white/5">
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-12 h-12 rounded-full bg-blue-600/20 text-blue-500 flex items-center justify-center font-bold text-lg uppercase flex-shrink-0" x-text="(resultData.data.name || '?').charAt(0)"></div>
-                                            <div>
-                                                <p class="text-lg font-black" x-text="resultData.data.name"></p>
-                                                <div class="flex items-center gap-3 text-xs text-gray-400 mt-1">
-                                                    <span x-text="resultData.data.ticket_type"></span>
-                                                    <template x-if="resultData.data.email">
-                                                        <span class="flex items-center gap-1"><i class="fa-regular fa-envelope"></i> <span x-text="resultData.data.email"></span></span>
-                                                    </template>
-                                                </div>
-                                                <template x-if="resultData.data.event">
-                                                    <p class="text-[10px] text-gray-600 mt-1.5 flex items-center gap-1">
-                                                        <i class="fa-regular fa-calendar"></i> <span x-text="resultData.data.event"></span>
-                                                    </p>
+                            <template x-if="resultData.success && resultData.data?.name">
+                                <div class="mt-5 bg-white/[0.03] rounded-2xl p-6 border border-white/5">
+                                    <div class="flex flex-col lg:flex-row lg:items-center gap-5">
+                                        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center font-bold text-xl uppercase flex-shrink-0 shadow-lg mx-auto lg:mx-0"
+                                             x-text="(resultData.data.name || '?').charAt(0)"></div>
+                                        <div class="text-center lg:text-left">
+                                            <p class="text-xl font-black" x-text="resultData.data.name"></p>
+                                            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm text-gray-400 mt-1.5">
+                                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-tag text-[10px]"></i> <span x-text="resultData.data.ticket_type"></span></span>
+                                                <template x-if="resultData.data.email">
+                                                    <span class="flex items-center gap-1.5"><i class="fa-regular fa-envelope text-[10px]"></i> <span x-text="resultData.data.email"></span></span>
                                                 </template>
                                             </div>
+                                            <template x-if="resultData.data.event">
+                                                <p class="text-xs text-gray-600 mt-2 flex items-center justify-center lg:justify-start gap-1.5">
+                                                    <i class="fa-regular fa-calendar"></i> <span x-text="resultData.data.event"></span>
+                                                </p>
+                                            </template>
                                         </div>
                                     </div>
-                                </template>
+                                </div>
+                            </template>
 
+                            <template x-if="!resultData.success">
+                                <div class="mt-5 bg-white/[0.03] rounded-2xl p-5 border border-white/5">
+                                    <p class="text-sm text-gray-400 text-center lg:text-left" x-text="resultData.message"></p>
+                                </div>
+                            </template>
+
+                            <div class="flex flex-col lg:flex-row items-center gap-4 mt-5">
                                 <button @click="dismissResult()"
-                                        class="mt-4 text-[10px] font-bold text-gray-500 hover:text-white uppercase tracking-widest transition-all flex items-center gap-1.5">
-                                    <i class="fa-solid fa-rotate-right text-[8px]"></i> Verifikasi Lagi
+                                        class="text-xs font-bold text-gray-500 hover:text-white uppercase tracking-widest transition-all flex items-center gap-2">
+                                    <i class="fa-solid fa-rotate-right"></i> Verifikasi Tiket Lainnya
                                 </button>
                             </div>
                         </div>
                     </div>
-                </template>
+                </div>
+            </template>
+        </div>
 
-                {{-- STATS CARDS --}}
+        {{-- ─── STATS + CHECKINS ─── --}}
+        <div class="grid lg:grid-cols-12 gap-8">
+
+            {{-- Left: Stats + Progress --}}
+            <div class="lg:col-span-5 space-y-6">
+                {{-- Stats Cards --}}
                 <div class="grid grid-cols-3 gap-4">
-                    <div class="bg-[#121212] border border-white/5 rounded-2xl p-6 text-center">
-                        <i class="fa-solid fa-ticket text-blue-500/60 text-xl mb-3"></i>
-                        <p class="text-3xl font-black" x-text="statistics?.total_tickets ?? '-'"></p>
-                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Total Tiket</p>
+                    <div class="bg-[#121212] border border-white/5 rounded-2xl p-5 text-center">
+                        <div class="w-9 h-9 mx-auto rounded-xl bg-blue-500/10 flex items-center justify-center mb-3">
+                            <i class="fa-solid fa-ticket text-blue-500 text-sm"></i>
+                        </div>
+                        <p class="text-2xl font-black" x-text="statistics?.total_tickets ?? '-'"></p>
+                        <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1">Total</p>
                     </div>
-                    <div class="bg-[#121212] border border-white/5 rounded-2xl p-6 text-center">
-                        <i class="fa-solid fa-user-check text-green-500/60 text-xl mb-3"></i>
-                        <p class="text-3xl font-black text-green-500" x-text="statistics?.attended_tickets ?? '-'"></p>
-                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Hadir</p>
+                    <div class="bg-[#121212] border border-white/5 rounded-2xl p-5 text-center">
+                        <div class="w-9 h-9 mx-auto rounded-xl bg-green-500/10 flex items-center justify-center mb-3">
+                            <i class="fa-solid fa-user-check text-green-500 text-sm"></i>
+                        </div>
+                        <p class="text-2xl font-black text-green-500" x-text="statistics?.attended_tickets ?? '-'"></p>
+                        <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1">Hadir</p>
                     </div>
-                    <div class="bg-[#121212] border border-white/5 rounded-2xl p-6 text-center">
-                        <i class="fa-solid fa-chart-line text-blue-500/60 text-xl mb-3"></i>
-                        <p class="text-3xl font-black text-blue-500" x-text="statistics?.attendance_rate != null ? statistics.attendance_rate + '%' : '-'"></p>
-                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Rate</p>
+                    <div class="bg-[#121212] border border-white/5 rounded-2xl p-5 text-center">
+                        <div class="w-9 h-9 mx-auto rounded-xl bg-purple-500/10 flex items-center justify-center mb-3">
+                            <i class="fa-solid fa-chart-line text-purple-500 text-sm"></i>
+                        </div>
+                        <p class="text-2xl font-black text-purple-500" x-text="statistics?.attendance_rate != null ? statistics.attendance_rate + '%' : '-'"></p>
+                        <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1">Rate</p>
                     </div>
                 </div>
 
-                {{-- PROGRESS BAR --}}
+                {{-- Progress --}}
                 <template x-if="statistics && selectedEventId">
                     <div class="bg-[#121212] border border-white/5 rounded-2xl p-6">
                         <div class="flex justify-between items-center mb-3">
@@ -249,45 +225,68 @@
                             <span class="text-xs font-bold" x-text="statistics.attended_tickets + ' / ' + statistics.total_tickets"></span>
                         </div>
                         <div class="h-3 bg-[#1e1e1e] rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-blue-500 to-green-500 rounded-full transition-all duration-700 ease-out"
+                            <div class="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-green-500 rounded-full transition-all duration-700 ease-out"
                                  :style="{ width: statistics.attendance_rate + '%' }"></div>
                         </div>
                     </div>
                 </template>
 
-                {{-- RECENT CHECKINS (desktop) --}}
-                <div class="bg-[#121212] border border-white/5 rounded-[2rem] p-8 hidden lg:block">
+                {{-- Empty state --}}
+                <template x-if="!selectedEventId">
+                    <div class="bg-[#121212] border border-white/5 rounded-2xl p-8 text-center">
+                        <div class="w-14 h-14 mx-auto rounded-full bg-[#1e1e1e] flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-hand-pointer text-2xl text-gray-600"></i>
+                        </div>
+                        <p class="text-sm font-bold text-gray-400">Pilih Event</p>
+                        <p class="text-[10px] text-gray-600 mt-1">Pilih event untuk melihat statistik.</p>
+                    </div>
+                </template>
+            </div>
+
+            {{-- Right: Recent Checkins --}}
+            <div class="lg:col-span-7">
+                <div class="bg-[#121212] border border-white/5 rounded-[2rem] p-6 lg:p-8">
                     <div class="flex items-center justify-between mb-6">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                                <i class="fa-solid fa-clock-rotate-left text-blue-500"></i>
+                                <i class="fa-solid fa-clock-rotate-left text-blue-500 text-sm"></i>
                             </div>
                             <div>
                                 <h3 class="text-sm font-bold">Checkin Terbaru</h3>
-                                <p class="text-[10px] text-gray-500">Peserta yang sudah terverifikasi</p>
+                                <p class="text-[9px] text-gray-500">Peserta yang sudah terverifikasi</p>
                             </div>
                         </div>
                         <template x-if="filteredCheckins.length > 0">
-                            <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest" x-text="filteredCheckins.length + ' peserta'"></span>
+                            <span class="text-[10px] font-bold px-3 py-1.5 rounded-full bg-blue-500/10 text-blue-500" x-text="filteredCheckins.length + ' peserta'"></span>
                         </template>
                     </div>
 
                     <template x-if="filteredCheckins.length > 0">
-                        <div class="space-y-2">
-                            <template x-for="item in filteredCheckins" :key="item.id">
-                                <div class="flex items-center gap-4 p-4 rounded-xl hover:bg-white/[0.02] transition-all border border-transparent hover:border-white/5 group">
-                                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center font-bold text-sm uppercase flex-shrink-0" x-text="item.initials"></div>
+                        <div class="space-y-2 max-h-[520px] overflow-y-auto custom-scrollbar pr-1">
+                            <template x-for="(item, idx) in filteredCheckins" :key="item.id">
+                                <div x-data="{ hovered: false }"
+                                     @mouseenter="hovered = true" @mouseleave="hovered = false"
+                                     class="flex items-center gap-4 p-4 rounded-2xl transition-all duration-200"
+                                     :class="hovered ? 'bg-white/[0.03] border border-white/5' : 'bg-[#1e1e1e] border border-transparent'">
+                                    <div class="relative flex-shrink-0">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center font-bold text-xs uppercase shadow-lg"
+                                             x-text="item.initials">
+                                        </div>
+                                        <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-500 rounded-full border-2 border-[#1e1e1e] flex items-center justify-center">
+                                            <i class="fa-solid fa-check text-[6px] text-white"></i>
+                                        </div>
+                                    </div>
                                     <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-bold truncate group-hover:text-blue-400 transition-colors" x-text="item.name"></p>
-                                        <div class="flex items-center gap-3 text-[10px] text-gray-500 mt-0.5">
+                                        <p class="text-sm font-bold truncate" x-text="item.name"></p>
+                                        <div class="flex items-center gap-2 text-[10px] text-gray-500 mt-0.5">
                                             <span class="flex items-center gap-1"><i class="fa-solid fa-tag text-[8px]"></i> <span x-text="item.ticket_type"></span></span>
-                                            <span>•</span>
+                                            <span class="w-1 h-1 rounded-full bg-gray-600"></span>
                                             <span class="flex items-center gap-1"><i class="fa-regular fa-clock text-[8px]"></i> <span x-text="item.attended_at"></span></span>
                                         </div>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <span class="text-[9px] font-black px-2.5 py-1 rounded-full bg-green-500/10 text-green-500 uppercase tracking-wider">Hadir</span>
-                                        <i class="fa-solid fa-check-circle text-green-500/40 group-hover:text-green-500 transition-colors"></i>
+                                        <span class="text-[8px] font-black px-3 py-1.5 rounded-full bg-green-500/10 text-green-500 uppercase tracking-wider border border-green-500/20">Hadir</span>
+                                        <span class="text-[10px] text-gray-600 font-mono" x-text="'#' + (idx + 1)"></span>
                                     </div>
                                 </div>
                             </template>
@@ -296,25 +295,32 @@
 
                     <template x-if="filteredCheckins.length === 0 && selectedEventId">
                         <div class="text-center py-16">
-                            <div class="w-20 h-20 mx-auto rounded-full bg-[#1e1e1e] flex items-center justify-center mb-6">
+                            <div class="w-20 h-20 mx-auto rounded-full bg-[#1e1e1e] flex items-center justify-center mb-5">
                                 <i class="fa-solid fa-user-check text-3xl text-gray-600"></i>
                             </div>
-                            <p class="text-sm text-gray-400 font-medium">Belum Ada Checkin</p>
-                            <p class="text-xs text-gray-600 mt-2 max-w-xs mx-auto">Verifikasi tiket peserta dengan memasukkan kode tiket di panel sebelah kiri.</p>
+                            <p class="text-base text-gray-400 font-bold">Belum Ada Checkin</p>
+                            <p class="text-sm text-gray-600 mt-1 max-w-xs mx-auto">Verifikasi tiket pertama akan muncul di sini.</p>
+                            <template x-if="!showResult">
+                                <div class="mt-6 flex items-center justify-center gap-2 text-[10px] text-gray-600">
+                                    <i class="fa-solid fa-arrow-up text-blue-500/50"></i>
+                                    <span>Masukkan kode tiket di atas untuk memulai</span>
+                                </div>
+                            </template>
                         </div>
                     </template>
+
                     <template x-if="!selectedEventId">
                         <div class="text-center py-16">
-                            <div class="w-20 h-20 mx-auto rounded-full bg-[#1e1e1e] flex items-center justify-center mb-6">
+                            <div class="w-20 h-20 mx-auto rounded-full bg-[#1e1e1e] flex items-center justify-center mb-5">
                                 <i class="fa-solid fa-hand-pointer text-3xl text-gray-600"></i>
                             </div>
-                            <p class="text-sm text-gray-400 font-medium">Pilih Event</p>
-                            <p class="text-xs text-gray-600 mt-2">Pilih event terlebih dahulu untuk melihat daftar checkin.</p>
+                            <p class="text-base text-gray-400 font-bold">Pilih Event</p>
+                            <p class="text-sm text-gray-600 mt-1">Pilih event untuk melihat daftar checkin.</p>
                         </div>
                     </template>
                 </div>
-
             </div>
+
         </div>
 
         @else
@@ -408,13 +414,14 @@
 
                     if (data.success) {
                         this.loadStatistics();
+                        this.loadCheckins();
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     this.resultData = {
                         success: false,
-                        message: 'Terjadi kesalahan: ' + error.message,
+                        message: 'Terjadi kesalahan',
                         type: 'error',
                         data: { name: '', email: '', event: '', ticket_type: '' }
                     };
@@ -439,6 +446,20 @@
                         console.error('Error loading statistics:', error);
                         this.statistics = null;
                     });
+            },
+
+            loadCheckins() {
+                fetch(`{{ route("panitia.attendance-stats") }}?event_id=${this.selectedEventId}&checkins=1`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.checkins) {
+                            this.recentCheckins = data.checkins.map(item => ({
+                                ...item,
+                                initials: item.name ? item.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : '??'
+                            }));
+                        }
+                    })
+                    .catch(() => {});
             }
         }
     }
@@ -446,6 +467,8 @@
 
 <style>
     [x-cloak] { display: none !important; }
+    .custom-scrollbar::-webkit-scrollbar { width: 3px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 </style>
 
 <script>
