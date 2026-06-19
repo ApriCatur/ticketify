@@ -101,7 +101,8 @@ Route::middleware([RoleMiddleware::class . ':panitia'])->prefix('panitia')->grou
     Route::get('/my-events/{id}', [PanitiaEventController::class, 'show'])->name('panitia.events.show');
     Route::get('/my-events/{id}/edit', [PanitiaEventController::class, 'edit'])->name('panitia.events.edit');
     Route::put('/my-events/{id}', [PanitiaEventController::class, 'update'])->name('panitia.events.update');
-    Route::delete('/my-events/{id}', [PanitiaEventController::class, 'destroy'])->name('panitia.events.destroy');
+
+
     // ATTENDANCE
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('panitia.attendance');
     Route::post('/attendance/verify', [AttendanceController::class, 'verifyTicket'])->name('panitia.verify-ticket');

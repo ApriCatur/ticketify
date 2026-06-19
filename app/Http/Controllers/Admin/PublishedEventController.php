@@ -28,8 +28,10 @@ class PublishedEventController extends Controller
             $query->whereDate('date', $request->date);
         }
 
-        $publishedEvents = $query->orderBy('date', 'asc')->get();
-        $events          = Event::with('tickets')->where('status', 'published')->take(5)->get();
+        $publishedEvents = $query->orderBy('updated_at', 'desc')->get();
+        $events          = Event::with('tickets')->where('status', 'published')
+            ->orderBy('updated_at', 'desc')
+            ->take(5)->get();
         $upcomingEvents  = Event::with('tickets')->where('status', 'published')
             ->whereDate('date', '>=', $today)
             ->orderBy('date', 'asc')

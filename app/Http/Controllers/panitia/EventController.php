@@ -79,15 +79,4 @@ class EventController extends Controller
             ->with('success', 'Perubahan berhasil disimpan!');
     }
 
-    public function destroy($id)
-    {
-        $event = Event::where('id', $id)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
-
-        $this->eventService->deleteEvent($event);
-
-        return redirect()->route('panitia.myevent')
-            ->with('success', 'Event berhasil dihapus!');
-    }
 }

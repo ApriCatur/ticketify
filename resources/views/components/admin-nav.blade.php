@@ -1,6 +1,6 @@
 @props(['title' => 'Dashboard', 'subtitle' => null])
 
-<nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
+<nav class="glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
     <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
         <i class="fa-solid fa-bars-staggered text-2xl"></i>
     </button>

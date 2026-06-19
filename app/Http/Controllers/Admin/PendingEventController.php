@@ -15,10 +15,12 @@ class PendingEventController extends Controller
         $today = Carbon::today();
 
         $pendingEvents = Event::with('tickets')->where('status', 'pending')
-            ->orderBy('date', 'asc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
-        $events = Event::with('tickets')->where('status', 'pending')->take(5)->get();
+        $events = Event::with('tickets')->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->take(5)->get();
 
         $upcomingEvents = Event::with('tickets')->where('status', 'pending')
             ->whereDate('date', '>=', $today)
