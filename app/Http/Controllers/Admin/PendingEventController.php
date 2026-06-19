@@ -18,10 +18,6 @@ class PendingEventController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $events = Event::with('tickets')->where('status', 'pending')
-            ->orderBy('created_at', 'desc')
-            ->take(5)->get();
-
         $upcomingEvents = Event::with('tickets')->where('status', 'pending')
             ->whereDate('date', '>=', $today)
             ->orderBy('date', 'asc')
@@ -30,7 +26,7 @@ class PendingEventController extends Controller
 
         $categories = Category::all();
 
-        return view('Admin.PendingEvent', compact('pendingEvents', 'events', 'upcomingEvents', 'categories'));
+        return view('Admin.PendingEvent', compact('pendingEvents', 'upcomingEvents', 'categories'));
     }
 
     public function approve(Event $event)
