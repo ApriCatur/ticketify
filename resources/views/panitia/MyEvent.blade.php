@@ -123,6 +123,7 @@
                         <div class="flex items-center justify-end md:col-span-2 gap-2 flex-nowrap">
                             @php
                                 $canEdit = $event->status !== 'rejected' && $displayStatus !== 'completed';
+                                $canViewParticipants = $event->status !== 'rejected';
                             @endphp
 
                             @if($canEdit)
@@ -141,15 +142,16 @@
                                     </div>
                                     <span class="text-[9px] font-bold uppercase text-yellow-500">Edit</span>
                                 </a>
+                            @endif
 
-                                {{-- PESERTA --}}
+                            {{-- PESERTA — tetap tampil meskipun event completed --}}
+                            @if($canViewParticipants)
                                 <a href="{{ route('panitia.customerdata', $event->id) }}" class="flex flex-col items-center gap-1">
                                     <div class="flex items-center justify-center w-9 h-9 bg-blue-600/10 hover:bg-blue-600/20 text-blue-500 hover:text-blue-400 rounded-xl transition-colors border border-blue-500/10">
                                         <i class="fa-solid fa-table text-sm"></i>
                                     </div>
                                     <span class="text-[9px] font-bold uppercase text-blue-500/80">Peserta</span>
                                 </a>
-
                             @else
                                 <div class="flex items-center gap-1.5 text-[10px] text-zinc-600 font-bold uppercase tracking-wider bg-zinc-900/50 border border-zinc-800/50 px-3 py-2 rounded-xl">
                                     <i class="fa-solid fa-lock text-[9px]"></i> Locked

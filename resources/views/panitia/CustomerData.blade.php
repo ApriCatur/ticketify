@@ -32,18 +32,6 @@
             </div>
         </header>
 
-        <div class="bg-[#121212] p-4 rounded-2xl border border-white/5 mb-8 flex flex-col md:flex-row gap-4">
-            <div class="relative flex-1">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 text-xs"></i>
-                <input type="text" placeholder="Cari Nama, Email, atau Code..." class="w-full bg-[#18181b] border border-white/5 rounded-xl pl-10 pr-4 py-3 text-xs focus:border-blue-500 outline-none transition-all">
-            </div>
-            <select class="bg-[#18181b] border border-white/5 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest outline-none text-gray-400">
-                <option>Semua Kategori</option>
-                <option>VIP</option>
-                <option>Reguler</option>
-            </select>
-        </div>
-
         <div class="bg-[#121212] rounded-[2.5rem] border border-white/5 overflow-hidden">
             <table class="w-full text-left border-collapse">
                 <thead>
