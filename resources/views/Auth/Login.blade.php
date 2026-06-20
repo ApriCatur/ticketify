@@ -77,6 +77,10 @@
                     <span class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent"> Ticketify </span>
                 </div>
 
+                <a href="{{ route('guest.event') }}" class="inline-flex items-center gap-2 text-xs text-gray-600 hover:text-blue-400 transition mb-4 font-bold tracking-widest uppercase">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali ke Event
+                </a>
+
                 <div class="bg-[#141414] border border-white/[0.06] rounded-3xl p-8 md:p-10 glow-card">
                     <div class="mb-8">
                         <h2 class="text-2xl font-black tracking-tight mb-1">Selamat Datang</h2>
