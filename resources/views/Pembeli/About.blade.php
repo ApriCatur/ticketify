@@ -68,7 +68,7 @@
                         <div class="team-card bg-[#181818] border border-white/5 rounded-3xl p-8 text-center transition-all duration-500 group">
                             <div class="w-32 h-32 mx-auto mb-6 relative">
                                 <div class="absolute inset-0 bg-[#1DB954] rounded-full blur-2xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                                <img src="https://ui-avatars.com/api/?name=Fauzi+A&background=10b981&color=fff" class="w-full h-full rounded-full object-cover border-2 border-white/10 relative z-10">
+                                <img src="{{ asset('images/ari.jpeg') }}" class="w-full h-full rounded-full object-cover border-2 border-white/10 relative z-10">
                             </div>
                             <h3 class="font-black italic text-xl tracking-tight mb-1">M. Fauzi Azhari</h3>
                             <p class="text-[10px] font-bold text-[#1DB954] uppercase tracking-widest mb-4">Lead Fullstack Developer</p>
@@ -82,7 +82,7 @@
                         <div class="team-card bg-[#181818] border border-white/5 rounded-3xl p-8 text-center transition-all duration-500 group">
                             <div class="w-32 h-32 mx-auto mb-6 relative">
                                 <div class="absolute inset-0 bg-[#8b5cf6] rounded-full blur-2xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                                <img src="https://ui-avatars.com/api/?name=Syarifah+B&background=8b5cf6&color=fff" class="w-full h-full rounded-full object-cover border-2 border-white/10 relative z-10">
+                                <img src="{{ asset('images/sarah.jpeg') }}" class="w-full h-full rounded-full object-cover border-2 border-white/10 relative z-10">
                             </div>
                             <h3 class="font-black italic text-xl tracking-tight mb-1">Syarifah B. S.</h3>
                             <p class="text-[10px] font-bold text-[#8b5cf6] uppercase tracking-widest mb-4">Fullstack Developer</p>
@@ -96,7 +96,7 @@
                         <div class="team-card bg-[#181818] border border-white/5 rounded-3xl p-8 text-center transition-all duration-500 group">
                             <div class="w-32 h-32 mx-auto mb-6 relative">
                                 <div class="absolute inset-0 bg-[#f59e0b] rounded-full blur-2xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                                <img src="https://ui-avatars.com/api/?name=Apri+C&background=f59e0b&color=fff" class="w-full h-full rounded-full object-cover border-2 border-white/10 relative z-10">
+                                <img src="{{ asset('images/apri.jpeg') }}" class="w-full h-full rounded-full object-cover border-2 border-white/10 relative z-10">
                             </div>
                             <h3 class="font-black italic text-xl tracking-tight mb-1">Apri Catur P.</h3>
                             <p class="text-[10px] font-bold text-[#f59e0b] uppercase tracking-widest mb-4">Fullstack Developer</p>
