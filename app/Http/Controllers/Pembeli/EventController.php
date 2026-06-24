@@ -30,10 +30,10 @@ class EventController extends Controller
             $query->whereDate('date', $request->date);
         }
 
-        $publicEvents = $query->orderBy('date', 'asc')->get();
+        $publicEvents = $query->latest()->get();
 
         // 2. Query untuk carousel & sidebar
-        $events = Event::where('status', 'published')->take(5)->get();
+        $events = Event::where('status', 'published')->latest()->take(5)->get();
         $upcomingEvents = Event::where('status', 'published')
             ->whereDate('date', '>=', $today)
             ->orderBy('date', 'asc')

@@ -22,7 +22,7 @@ class EventController extends Controller
 
         $publicEvents = Event::with('tickets', 'category')
             ->where('status', 'published')
-            ->orderByDesc('date')
+            ->latest()
             ->get();
 
         $upcomingEvents = Event::where('status', 'published')

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Event;
+use App\Mail\EventUnpublishedMail;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Models\Event;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class PublishedEventController extends Controller
 {
@@ -62,6 +65,16 @@ class PublishedEventController extends Controller
         ]);
 
         $event->tickets()->whereNotNull('order_id')->update(['status' => 'Canceled']);
+
+        $buyers = User::whereHas('tickets', function ($q) use ($event) {
+            $q->where('event_id', $event->id)->whereNotNull('order_id');
+        })->get();
+
+        foreach ($buyers as $buyer) {
+            if ($buyer->email) {
+                Mail::to($buyer->email)->send(new EventUnpublishedMail($event, $buyer));
+            }
+        }
 
         return redirect()->route('admin.PublishedEvent')->with('success', 'Event berhasil di-unpublish dan tiket pembeli telah di-cancel.');
     }
