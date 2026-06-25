@@ -33,7 +33,7 @@
             </div>
 
 <section class="px-4 sm:px-6 lg:px-8 py-8">
-    <h1 class="px-2 py-9 text-3xl font-black tracking-tight uppercase italic text-blue-500">Event UKM yang Bisa Kamu Ikuti</h1>
+    
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         @forelse($publicEvents as $event)

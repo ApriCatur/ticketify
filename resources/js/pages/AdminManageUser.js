@@ -58,12 +58,12 @@ window.switchTab = function (active) {
             panel?.classList.remove('hidden');
 
             button.className =
-                'px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-white text-black';
+                'px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-blue-600 text-white';
         } else {
             panel?.classList.add('hidden');
 
             button.className =
-                'px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-white/5 text-gray-400 hover:bg-white/10';
+                'px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-gray-100 text-gray-500 hover:bg-gray-200';
         }
     });
 

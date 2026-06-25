@@ -23,7 +23,7 @@
                 </div>
             </div>
         @empty
-            <div class="swiper-slide relative h-[400px] bg-gray-100 flex flex-col items-center justify-center">
+            <div class="swiper-slide relative h-[440px] bg-gray-100 flex flex-col items-center justify-center">
                 <i class="fa-solid fa-calendar-xmark text-4xl text-gray-300 mb-3"></i>
                 <p class="text-gray-400 text-sm">Belum ada event unggulan.</p>
             </div>

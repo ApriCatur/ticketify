@@ -7,26 +7,19 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
     @stack('styles')
 </head>
-<body class="bg-[#0f0f0f] text-white antialiased">
+<body class="bg-[#F8FAFC] text-gray-900 flex flex-col min-h-screen antialiased">
 
-    <div class="flex w-full min-h-screen border-x border-gray-800 bg-[#121212] shadow-2xl">
-        @include('layouts.sidebar-admin')
+    @include('components.admin-navbar')
 
-        <div class="flex-1 flex flex-col min-w-0{{ $hasRightSidebar ?? false ? ' border-r border-white/5' : '' }}">
-            @if(($showNav ?? true))
-                <x-admin-nav :title="$navTitle ?? $title ?? 'Dashboard'" :subtitle="$navSubtitle ?? null" />
-            @endif
-            @yield('content')
-        </div>
-
-        @hasSection('right-sidebar')
-        <aside class="w-80 hidden xl:flex flex-col sticky top-0 h-screen p-8 space-y-8 bg-[#121212] overflow-y-auto">
-            @yield('right-sidebar')
-        </aside>
-        @endif
-    </div>
+    <main class="flex-1 overflow-y-auto">
+        @yield('content')
+    </main>
 
     @stack('scripts')
 </body>

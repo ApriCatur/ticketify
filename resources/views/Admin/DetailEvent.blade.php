@@ -1,91 +1,87 @@
-@php $showNav = false; @endphp
 @extends('layouts.admin')
 
 @section('title', 'Statistik ' . ($event->name ?? ''))
 
 @section('content')
 
-<nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 flex justify-between items-center">
-    <button id="open-sidebar" class="lg:hidden text-gray-400 hover:text-blue-500 transition-colors">
-        <i class="fa-solid fa-bars-staggered text-2xl"></i>
-    </button>
+<nav class="sticky top-0 z-50 bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center">
     <div class="flex items-center gap-2 text-xs text-gray-500 font-bold tracking-widest">
-        <a href="{{ route('admin.event-statistics') }}" class="hover:text-blue-500">
+        <a href="{{ route('admin.event-statistics') }}" class="hover:text-blue-600">
             <i class="fa-solid fa-arrow-left mr-1"></i> KEMBALI
         </a>
     </div>
 </nav>
 
-<div class="p-8">
+<div class="px-8 mt-6">
 
     <header class="mb-10 flex justify-between items-end">
         <div>
-            <h1 class="text-3xl font-black tracking-tight">Statistik Penjualan</h1>
+            <h1 class="text-3xl font-black tracking-tight text-gray-900">Statistik Penjualan</h1>
             <p class="text-gray-500 text-sm mt-2">Pantau pendapatan dan penjualan tiket event.</p>
         </div>
-        <div class="bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest text-blue-500">
+        <div class="bg-white border border-gray-200 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest text-blue-600 shadow-sm">
             {{ $event->name }}
         </div>
     </header>
 
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-        <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
+        <div class="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm">
             <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Total Pendapatan</p>
-            <h2 class="text-2xl font-black text-blue-500">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h2>
-            <p class="text-[10px] text-green-500 mt-2"><i class="fa-solid fa-arrow-up"></i> Real-time</p>
+            <h2 class="text-2xl font-black text-blue-600">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h2>
+            <p class="text-[10px] text-emerald-600 mt-2"><i class="fa-solid fa-arrow-up"></i> Real-time</p>
         </div>
 
-        <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
+        <div class="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm">
             <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Tiket Terjual</p>
-            <h2 class="text-2xl font-black text-white">{{ $tiketTerjual }} <span class="text-gray-600 text-lg">/ {{ $totalKuota }}</span></h2>
+            <h2 class="text-2xl font-black text-gray-900">{{ $tiketTerjual }} <span class="text-gray-400 text-lg">/ {{ $totalKuota }}</span></h2>
             <p class="text-[10px] text-gray-500 mt-2">Sisa stok: {{ max(0, $totalKuota - $tiketTerjual) }} tiket</p>
         </div>
 
-        <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
+        <div class="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm">
             <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Kehadiran</p>
-            <h2 class="text-2xl font-black text-purple-500">{{ $totalHadir }} <span class="text-gray-600 text-lg">Hadir</span></h2>
+            <h2 class="text-2xl font-black text-purple-600">{{ $totalHadir }} <span class="text-gray-400 text-lg">Hadir</span></h2>
             <p class="text-[10px] text-gray-500 mt-2">
                 {{ $tiketTerjual > 0 ? round(($totalHadir / $tiketTerjual) * 100) : 0 }}% tingkat kehadiran
             </p>
         </div>
 
-        <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
+        <div class="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm">
             <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Penyelenggara</p>
-            <h2 class="text-lg font-black text-amber-500 truncate">{{ $event->user?->name ?? '-' }}</h2>
+            <h2 class="text-lg font-black text-amber-600 truncate">{{ $event->user?->name ?? '-' }}</h2>
             <p class="text-[10px] text-gray-500 mt-2">{{ $event->user?->role ?? '-' }}</p>
         </div>
     </div>
 
     <div class="grid lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2 bg-[#121212] p-8 rounded-[2.5rem] border border-white/5">
-            <h3 class="text-sm font-black uppercase tracking-widest mb-6">Tren Penjualan (7 Hari Terakhir)</h3>
+        <div class="lg:col-span-2 bg-white p-8 rounded-[2.5rem] border border-gray-200 shadow-sm">
+            <h3 class="text-sm font-black uppercase tracking-widest text-gray-900 mb-6">Tren Penjualan (7 Hari Terakhir)</h3>
             <canvas id="salesChart" height="150"></canvas>
         </div>
 
-        <div class="bg-[#121212] p-8 rounded-[2.5rem] border border-white/5">
-            <h3 class="text-sm font-black uppercase tracking-widest mb-6">Kategori Tiket</h3>
+        <div class="bg-white p-8 rounded-[2.5rem] border border-gray-200 shadow-sm">
+            <h3 class="text-sm font-black uppercase tracking-widest text-gray-900 mb-6">Kategori Tiket</h3>
             <canvas id="categoryChart"></canvas>
         </div>
     </div>
 
-    <div class="mt-8 bg-[#121212] p-8 rounded-[2.5rem] border border-white/5">
-        <h3 class="text-sm font-black uppercase tracking-widest mb-4">Informasi Event</h3>
+    <div class="mt-8 bg-white p-8 rounded-[2.5rem] border border-gray-200 shadow-sm">
+        <h3 class="text-sm font-black uppercase tracking-widest text-gray-900 mb-4">Informasi Event</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
             <div>
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Tanggal</p>
-                <p class="text-white font-bold mt-1">{{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</p>
+                <p class="text-gray-900 font-bold mt-1">{{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</p>
             </div>
             <div>
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Waktu</p>
-                <p class="text-white font-bold mt-1">{{ \Carbon\Carbon::parse($event->time_start)->format('H:i') }} - {{ \Carbon\Carbon::parse($event->time_end)->format('H:i') }} WIB</p>
+                <p class="text-gray-900 font-bold mt-1">{{ \Carbon\Carbon::parse($event->time_start)->format('H:i') }} - {{ \Carbon\Carbon::parse($event->time_end)->format('H:i') }} WIB</p>
             </div>
             <div>
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Lokasi</p>
-                <p class="text-white font-bold mt-1 truncate">{{ $event->location }}</p>
+                <p class="text-gray-900 font-bold mt-1 truncate">{{ $event->location }}</p>
             </div>
             <div>
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Status</p>
-                <p class="text-white font-bold mt-1 capitalize">{{ $event->status }}</p>
+                <p class="text-gray-900 font-bold mt-1 capitalize">{{ $event->status }}</p>
             </div>
         </div>
     </div>
@@ -130,7 +126,7 @@
                     scales: {
                         y: {
                             min: 0,
-                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            grid: { color: 'rgba(0,0,0,0.06)' },
                             ticks: { color: '#666', precision: 0 }
                         },
                         x: {
@@ -159,7 +155,7 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: { color: '#fff', padding: 20, font: { size: 10, weight: 'bold' } }
+                            labels: { color: '#666', padding: 20, font: { size: 10, weight: 'bold' } }
                         }
                     }
                 }
