@@ -41,12 +41,8 @@
 
     {{-- TABS --}}
     <div class="flex gap-2 mb-6 flex-wrap">
-        <button onclick="switchTab('admin')" id="tab-admin"
-            class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-white text-black">
-            <i class="fa-solid fa-shield-halved mr-1.5"></i> Admin
-        </button>
         <button onclick="switchTab('pembeli')" id="tab-pembeli"
-            class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-white/5 text-gray-400 hover:bg-white/10">
+            class="px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-white text-black">
             <i class="fa-solid fa-users mr-1.5"></i> Pembeli
         </button>
         <button onclick="switchTab('panitia')" id="tab-panitia"
@@ -86,59 +82,9 @@
     @endif
 
     {{-- ═══════════════════════════════════════ --}}
-    {{-- TAB: ADMIN                              --}}
-    {{-- ═══════════════════════════════════════ --}}
-    <div id="panel-admin">
-        <div class="bg-[#1e1e1e] rounded-2xl border border-white/5 p-6">
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b border-white/5 text-left text-gray-500 text-sm">
-                            <th class="py-4 font-semibold">No</th>
-                            <th class="py-4 font-semibold">Name</th>
-                            <th class="py-4 font-semibold">NIM</th>
-                            <th class="py-4 font-semibold">Phone Number</th>
-                            <th class="py-4 font-semibold text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-white/5">
-                        @forelse ($admins as $i => $user)
-                            <tr class="hover:bg-white/5 transition-colors">
-                                <td class="py-4 text-gray-500 text-sm">{{ $i + 1 }}</td>
-                                <td class="py-4 font-medium text-sm text-white">{{ $user->name }}</td>
-                                <td class="py-4 text-gray-400 text-sm">{{ $user->nim }}</td>
-                                <td class="py-4 text-gray-400 text-sm">{{ $user->phone_number ?? '-' }}</td>
-                                <td class="py-4">
-                                    <div class="flex justify-center gap-2">
-                                        <button onclick="openEditUser({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->nim }}', '{{ $user->phone_number }}', '{{ $user->role }}')"
-                                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors text-xs font-semibold">
-                                            <i class="fa-solid fa-pen-to-square text-[11px]"></i> Edit
-                                        </button>
-                                        <button onclick="openDeleteUser({{ $user->id }}, '{{ addslashes($user->name) }}')"
-                                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors text-xs font-semibold">
-                                            <i class="fa-solid fa-trash text-[11px]"></i> Delete
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="py-12 text-center text-gray-500 text-sm">
-                                    <i class="fa-solid fa-users-slash text-2xl mb-3 block"></i>
-                                    Tidak ada admin ditemukan.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    {{-- ═══════════════════════════════════════ --}}
     {{-- TAB: PEMBELI                            --}}
     {{-- ═══════════════════════════════════════ --}}
-    <div id="panel-pembeli" class="hidden">
+    <div id="panel-pembeli">
         <div class="bg-[#1e1e1e] rounded-2xl border border-white/5 p-6">
             <div class="overflow-x-auto">
                 <table class="w-full">
@@ -160,11 +106,11 @@
                                 <td class="py-4 text-gray-400 text-sm">{{ $user->phone_number ?? '-' }}</td>
                                 <td class="py-4">
                                     <div class="flex justify-center gap-2">
-                                        <button onclick="openEditUser({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->nim }}', '{{ $user->phone_number }}', '{{ $user->role }}')"
+                                        <button onclick="openEditUser('{{ $user->nim }}', '{{ addslashes($user->name) }}', '{{ $user->nim }}', '{{ $user->phone_number }}', '{{ $user->role }}')"
                                             class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors text-xs font-semibold">
                                             <i class="fa-solid fa-pen-to-square text-[11px]"></i> Edit
                                         </button>
-                                        <button onclick="openDeleteUser({{ $user->id }}, '{{ addslashes($user->name) }}')"
+                                        <button onclick="openDeleteUser('{{ $user->nim }}', '{{ addslashes($user->name) }}')"
                                             class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors text-xs font-semibold">
                                             <i class="fa-solid fa-trash text-[11px]"></i> Delete
                                         </button>
@@ -214,11 +160,11 @@
                                 <td class="py-4 text-gray-400 text-sm">{{ $user->approvedApplication?->nomor_rekening ?? '-' }}</td>
                                 <td class="py-4">
                                     <div class="flex justify-center gap-2">
-                                        <button onclick="openEditUser({{ $user->id }}, '{{ addslashes($user->name) }}', '{{ $user->nim }}', '{{ $user->phone_number }}', '{{ $user->role }}')"
+                                        <button onclick="openEditUser('{{ $user->nim }}', '{{ addslashes($user->name) }}', '{{ $user->nim }}', '{{ $user->phone_number }}', '{{ $user->role }}')"
                                             class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors text-xs font-semibold">
                                             <i class="fa-solid fa-pen-to-square text-[11px]"></i> Edit
                                         </button>
-                                        <button onclick="openDeleteUser({{ $user->id }}, '{{ addslashes($user->name) }}')"
+                                        <button onclick="openDeleteUser('{{ $user->nim }}', '{{ addslashes($user->name) }}')"
                                             class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors text-xs font-semibold">
                                             <i class="fa-solid fa-trash text-[11px]"></i> Delete
                                         </button>
@@ -276,14 +222,14 @@
                                 </td>
                                 <td class="py-4">
                                     <div class="flex justify-center gap-2">
-                                        <form action="{{ route('admin.users.restore', $user->id) }}" method="POST">
+                                        <form action="{{ route('admin.users.restore', $user->nim) }}" method="POST">
                                             @csrf
                                             <button type="submit"
                                                 class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500/20 transition-colors text-xs font-semibold">
                                                 <i class="fa-solid fa-rotate-left text-[11px]"></i> Pulihkan
                                             </button>
                                         </form>
-                                        <form action="{{ route('admin.users.force-delete', $user->id) }}" method="POST"
+                                        <form action="{{ route('admin.users.force-delete', $user->nim) }}" method="POST"
                                             onsubmit="return confirm('Hapus permanen? Data tidak bisa dikembalikan!')">
                                             @csrf
                                             @method('DELETE')

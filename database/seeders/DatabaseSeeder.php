@@ -13,20 +13,34 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory()->create([
+            'name' => 'Admin User',
+            'nim' => '3312501067',
+            'email' => 'admin@ticketify.test',
+            'password' => bcrypt('123456789'),
+            'role' => 'admin',
+        ]);
 
-        // Diubah menggunakan NIM agar sinkron dengan perubahan model User sebelumnya
-      User::factory()->create([
-            'name' => 'Test User',
-            'nim' => '3312501066', // Gunakan NIM contoh milikmu
-            'password' => bcrypt('password'), // atau Hash::make()
-            // HAPUS BARIS 'email' => 'test@example.com' dari sini!
-]);
+        User::factory()->create([
+            'name' => 'Panitia User',
+            'nim' => '3312501066',
+            'email' => 'panitia@ticketify.test',
+            'password' => bcrypt('123456789'),
+            'role' => 'panitia',
+        ]);
 
-        // Panggil seeder untuk data master UKM dan pengaturan role
+        User::factory()->create([
+            'name' => 'Pembeli User',
+            'nim' => '3312501065',
+            'email' => 'pembeli@ticketify.test',
+            'password' => bcrypt('123456789'),
+            'role' => 'pembeli',
+        ]);
+
         $this->call([
-            UkmSeeder::class,          // Tambahan seeder baru kita
-            RoleSettingsSeeder::class,  // Bawaan proyekmu sebelumnya
+            UkmSeeder::class,
+            RoleSettingsSeeder::class,
+            CategorySeeder::class,
             DummyPendingEventsSeeder::class,
             PanitiaProfileSeeder::class,
         ]);

@@ -20,6 +20,8 @@ class PaymentController extends Controller
         Config::$isProduction = config('midtrans.is_production');
         Config::$isSanitized  = config('midtrans.is_sanitized');
         Config::$is3ds        = config('midtrans.is_3ds');
+        Config::$curlOptions[CURLOPT_IPRESOLVE] = CURL_IPRESOLVE_V4;
+        Config::$curlOptions[CURLOPT_HTTPHEADER] = [];
     }
 
     public function createSnapToken(CreateSnapTokenRequest $request, Event $event)
@@ -53,7 +55,7 @@ class PaymentController extends Controller
         }
 
         $order = Order::create([
-            'user_id'      => $user->id,
+            'user_id'      => $user->getKey(),
             'event_id'     => $event->id,
             'order_code'   => $orderCode,
             'total_amount' => $totalAmount,

@@ -27,7 +27,7 @@ class AttendanceController extends Controller
         if ($userEvents->count() > 0) {
             $recentAttendances = Ticket::whereIn('event_id', $userEvents->pluck('id'))
                 ->where('is_attended', true)
-                ->with('user:id,name')
+                ->with('user:nim,name')
                 ->orderBy('attended_at', 'desc')
                 ->take(20)
                 ->get();
@@ -73,7 +73,7 @@ class AttendanceController extends Controller
 
         $attendees = Ticket::where('event_id', $id)
             ->whereNotNull('order_id')
-            ->with('user:id,name,email,phone_number')
+            ->with('user:nim,name,email,phone_number')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
@@ -86,7 +86,7 @@ class AttendanceController extends Controller
 
         $attendees = Ticket::where('event_id', $id)
             ->whereNotNull('order_id')
-            ->with('user:id,name,email,phone_number')
+            ->with('user:nim,name,email,phone_number')
             ->orderBy('created_at', 'desc')
             ->get();
 

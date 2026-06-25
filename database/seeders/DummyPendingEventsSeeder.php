@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Event;
 use App\Models\Ticket;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
@@ -11,6 +12,14 @@ class DummyPendingEventsSeeder extends Seeder
 {
     public function run(): void
     {
+        $panitiaNims = User::where('role', 'panitia')->pluck('nim')->toArray();
+        if (empty($panitiaNims)) {
+            $this->command->warn('No panitia users found. Create at least one panitia first.');
+            return;
+        }
+
+        $cats = \App\Models\Category::pluck('id', 'name');
+
         $banners = [
             'banner_1780059079.jpg',
             'banner_1780060795.jpg',
@@ -21,9 +30,9 @@ class DummyPendingEventsSeeder extends Seeder
 
         $dummies = [
             [
-                'user_id' => 5,
+                'user_id' => $panitiaNims[array_rand($panitiaNims)],
                 'name' => 'Seminar Furab 2026',
-                'category_id' => 1,
+                'category_id' => $cats['Seminar'] ?? 1,
                 'location' => 'Gedung Utama Lt. 7, Politeknik Negeri Batam',
                 'date' => '2026-07-15',
                 'time_start' => '09:00:00',
@@ -37,9 +46,9 @@ class DummyPendingEventsSeeder extends Seeder
                 ],
             ],
             [
-                'user_id' => 7,
+                'user_id' => $panitiaNims[array_rand($panitiaNims)],
                 'name' => 'Workshop UI/UX Design',
-                'category_id' => 1,
+                'category_id' => $cats['Workshop'] ?? 1,
                 'location' => 'Creative Hub, Batam Center',
                 'date' => '2026-07-20',
                 'time_start' => '13:00:00',
@@ -52,9 +61,9 @@ class DummyPendingEventsSeeder extends Seeder
                 ],
             ],
             [
-                'user_id' => 5,
+                'user_id' => $panitiaNims[array_rand($panitiaNims)],
                 'name' => 'Konser Amal Gemuruh Nusantara',
-                'category_id' => 2,
+                'category_id' => $cats['Konser'] ?? 2,
                 'location' => 'Lapangan Parkir Polda Kepri, Batam',
                 'date' => '2026-08-10',
                 'time_start' => '19:00:00',
@@ -68,9 +77,9 @@ class DummyPendingEventsSeeder extends Seeder
                 ],
             ],
             [
-                'user_id' => 7,
+                'user_id' => $panitiaNims[array_rand($panitiaNims)],
                 'name' => 'Hackathon AI 2026',
-                'category_id' => 3,
+                'category_id' => $cats['Lomba'] ?? 3,
                 'location' => 'Politeknik Negeri Batam, Gedung Teknik',
                 'date' => '2026-08-25',
                 'time_start' => '08:00:00',
@@ -82,9 +91,9 @@ class DummyPendingEventsSeeder extends Seeder
                 ],
             ],
             [
-                'user_id' => 5,
+                'user_id' => $panitiaNims[array_rand($panitiaNims)],
                 'name' => 'Pameran Startup & Inovasi Digital',
-                'category_id' => 1,
+                'category_id' => $cats['Pameran'] ?? 1,
                 'location' => 'Nagoya Hill Mall, Batam',
                 'date' => '2026-09-05',
                 'time_start' => '10:00:00',

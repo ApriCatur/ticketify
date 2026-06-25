@@ -23,7 +23,7 @@ class DummyTestUnpublishSeeder extends Seeder
                 'role' => 'pembeli',
             ]
         );
-        $this->command->info("Pembeli: {$pembeli->id} - {$pembeli->email}");
+        $this->command->info("Pembeli: {$pembeli->getKey()} - {$pembeli->email}");
 
         $event = Event::where('status', 'published')->first();
         if (!$event) {
@@ -40,7 +40,7 @@ class DummyTestUnpublishSeeder extends Seeder
             $cat = Category::first() ?? Category::create(['name' => 'Umum']);
 
             $event = Event::create([
-                'user_id' => $panitia->id,
+                'user_id' => $panitia->getKey(),
                 'name' => 'Test Event untuk Simulasi',
                 'category_id' => $cat->id,
                 'location' => 'Gedung Serbaguna',
@@ -55,7 +55,7 @@ class DummyTestUnpublishSeeder extends Seeder
             ]);
 
             Ticket::create([
-                'user_id' => $panitia->id,
+                'user_id' => $panitia->getKey(),
                 'event_id' => $event->id,
                 'ticket_type' => 'Reguler',
                 'price' => 50000,
@@ -67,7 +67,7 @@ class DummyTestUnpublishSeeder extends Seeder
 
         $order = Order::firstOrCreate(
             [
-                'user_id' => $pembeli->id,
+                'user_id' => $pembeli->getKey(),
                 'event_id' => $event->id,
                 'status' => 'paid',
             ],
@@ -84,7 +84,7 @@ class DummyTestUnpublishSeeder extends Seeder
 
         Ticket::firstOrCreate(
             [
-                'user_id' => $pembeli->id,
+                'user_id' => $pembeli->getKey(),
                 'event_id' => $event->id,
                 'order_id' => $order->id,
                 'ticket_type' => 'Reguler',
@@ -98,7 +98,7 @@ class DummyTestUnpublishSeeder extends Seeder
         );
         Ticket::firstOrCreate(
             [
-                'user_id' => $pembeli->id,
+                'user_id' => $pembeli->getKey(),
                 'event_id' => $event->id,
                 'order_id' => $order->id,
                 'ticket_type' => 'Reguler',

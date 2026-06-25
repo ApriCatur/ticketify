@@ -43,7 +43,7 @@ class Event extends Model
     // Hubungan balik ke User (Panitia)
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function tickets()

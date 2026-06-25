@@ -11,7 +11,7 @@ class AttendanceService
     {
         $ticket = Ticket::where('qr_code', $qrCode)
             ->where('event_id', $eventId)
-            ->with(['user:id,name,email', 'event:id,name'])
+            ->with(['user:nim,name,email', 'event:id,name'])
             ->first();
 
         if (!$ticket) {

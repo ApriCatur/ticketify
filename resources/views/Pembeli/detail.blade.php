@@ -8,9 +8,9 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    {{-- Midtrans Snap JS (Sandbox) --}}
+    {{-- Midtrans Snap JS (local — hosted lokal untuk hindari masalah IPv6) --}}
     <script type="text/javascript"
-        src="https://app.sandbox.midtrans.com/snap/snap.js"
+        src="{{ asset('js/snap.js') }}"
         data-client-key="{{ config('midtrans.client_key') }}">
     </script>
 
@@ -342,6 +342,12 @@
 
                     const orderId   = data.order_id;
                     const snapToken = data.snap_token;
+
+                    if (typeof window.snap === 'undefined') {
+                        alert('Gagal memuat pembayaran. Coba refresh halaman.');
+                        this.isLoading = false;
+                        return;
+                    }
 
                     window.snap.pay(snapToken, {
                         onSuccess: async (result) => {

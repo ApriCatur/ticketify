@@ -55,7 +55,7 @@ class EventStatisticController extends Controller
 
         $attendees = Ticket::where('event_id', $id)
             ->whereNotNull('order_id')
-            ->with('user:id,name,nim,phone_number')
+            ->with('user:nim,name,phone_number')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 

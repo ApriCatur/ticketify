@@ -24,12 +24,12 @@ class TicketSeeder extends Seeder
 
         if ($events->count() < 2) {
             // Jika tidak ada events, buat dummy events
-            $events = Event::factory(2)->create(['status' => 'published', 'user_id' => User::where('role', 'panitia')->first()?->id ?? 1]);
+            $events = Event::factory(2)->create(['status' => 'published', 'user_id' => User::where('role', 'panitia')->first()?->getKey() ?? User::factory()->create(['role' => 'panitia'])->getKey()]);
         }
 
         // Buat 2 tickets dengan status berbeda
         Ticket::create([
-            'user_id' => $user->id,
+            'user_id' => $user->getKey(),
             'event_id' => $events->first()->id,
             'ticket_type' => 'VIP',
             'status' => 'Active',
@@ -39,7 +39,7 @@ class TicketSeeder extends Seeder
         ]);
 
         Ticket::create([
-            'user_id' => $user->id,
+            'user_id' => $user->getKey(),
             'event_id' => $events->last()->id,
             'ticket_type' => 'Regular',
             'status' => 'Used',

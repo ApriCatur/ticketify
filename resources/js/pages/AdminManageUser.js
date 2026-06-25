@@ -45,7 +45,6 @@ window.openDeleteUser = function (id, name) {
 
 window.switchTab = function (active) {
     const tabs = [
-        'admin',
         'pembeli',
         'panitia',
         'deleted'

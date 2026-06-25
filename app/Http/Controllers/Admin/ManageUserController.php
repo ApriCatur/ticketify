@@ -47,7 +47,7 @@ class ManageUserController extends Controller
     {
         $request->validate([
             'name'         => 'nullable|string|max:255',
-            'nim'          => 'nullable|string|max:255|unique:users,nim,' . $user->id,
+            'nim'          => 'nullable|string|max:255|unique:users,nim,' . $user->getKey(),
             'phone_number' => 'nullable|string|max:20',
             'role'         => 'nullable|in:pembeli,panitia,admin',
             'password'     => 'nullable|string|min:8',
@@ -77,9 +77,14 @@ class ManageUserController extends Controller
     // Soft delete — data tidak hilang, hanya ditandai deleted_at
     public function destroy(User $user)
 {
-    if ((int) $user->id === (int) Auth::id()) {
+    if ($user->getKey() === (string) Auth::id()) {
         return redirect()->route('admin.users')
             ->with('error', 'Tidak bisa menghapus akun sendiri!');
+    }
+
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.users')
+            ->with('error', 'Tidak bisa menghapus admin lain!');
     }
 
     $user->delete();
