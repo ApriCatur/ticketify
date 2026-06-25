@@ -116,7 +116,7 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center justify-end md:col-span-2 gap-2 flex-nowrap">
+                        <div class="flex items-center justify-end md:col-span-2 gap-1 flex-nowrap">
                             @php
                                 $canEdit = $event->status !== 'rejected' && $displayStatus !== 'completed';
                                 $canViewParticipants = $event->status !== 'rejected';
@@ -137,6 +137,13 @@
                                         <i class="fa-solid fa-pen-to-square text-sm"></i>
                                     </div>
                                     <span class="text-[9px] font-bold uppercase text-yellow-500">Edit</span>
+                                </a>
+
+                                <a href="{{ route('panitia.statistic.detail', $event->id) }}" class="flex flex-col items-center gap-1">
+                                    <div class="flex items-center justify-center w-9 h-9 bg-purple-50 hover:bg-purple-100 text-purple-500 hover:text-purple-600 rounded-xl transition-colors border border-purple-200">
+                                        <i class="fa-solid fa-pen-to-square text-sm"></i>
+                                    </div>
+                                    <span class="text-[9px] font-bold uppercase text-purple-500">Stats</span>
                                 </a>
                             @endif
 

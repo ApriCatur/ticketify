@@ -11,10 +11,6 @@
                    class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pembeli.event') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
                     Event
                 </a>
-                <a href="{{ route('pembeli.about') }}"
-                   class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pembeli.about') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
-                    About Us
-                </a>
                 <a href="{{ route('pembeli.myticket') }}"
                    class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pembeli.myticket') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
                     My Tickets

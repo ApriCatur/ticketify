@@ -19,7 +19,7 @@
     <main class="flex-1 p-10 overflow-y-auto">
 
         <div class="mb-6">
-            <a href="{{ route('panitia.statistic') }}"
+            <a href="{{ route('panitia.myevent') }}"
                 class="inline-flex items-center gap-2 text-gray-400 hover:text-blue-500 transition-all duration-200 group">
                 <i class="fa-solid fa-arrow-left text-sm group-hover:-translate-x-1 transition-transform"></i>
                 <span class="text-sm font-semibold">Back</span>

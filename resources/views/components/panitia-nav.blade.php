@@ -9,24 +9,21 @@
             <div class="hidden md:flex items-center gap-1">
                 <a href="{{ route('panitia.event') }}"
                    class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('panitia.event') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
-                    Event
+                    <i class="fa-solid fa-list-ul mr-1.5"></i>Event
                 </a>
                 <a href="{{ route('panitia.create') }}"
                    class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('panitia.create') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
-                    Buat Event
+                    <i class="fa-solid fa-plus mr-1.5"></i>Create Event
                 </a>
                 <a href="{{ route('panitia.myevent') }}"
                    class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('panitia.myevent') || request()->routeIs('panitia.customerdata') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
-                    My Event
+                    <i class="fa-solid fa-ticket mr-1.5"></i>My Event
                 </a>
                 <a href="{{ route('panitia.attendance') }}"
                    class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('panitia.attendance') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
-                    Attendance
+                    <i class="fa-solid fa-user-tie mr-1.5"></i>Attandance
                 </a>
-                <a href="{{ route('panitia.statistic') }}"
-                   class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->is('panitia/statistic*') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
-                    Statistik
-                </a>
+                
             </div>
         </div>
 

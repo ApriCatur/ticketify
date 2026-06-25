@@ -50,7 +50,7 @@
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
             @else
             @endif
-            <div class="absolute inset-0 bg-gradient-to-t from-white/80 via-white/20 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t"></div>
 
             @php
                 $displayStatus = $item->getDisplayStatus();
@@ -64,7 +64,7 @@
                 $config = $statusConfig[$displayStatus] ?? $statusConfig['published'];
             @endphp
 
-            <div class="absolute top-4 right-4 backdrop-blur-md border rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-widest shadow-lg shadow-black/30 {{ $config['bg'] }} {{ $config['border'] }} {{ $config['text'] }}">
+            <div class="absolute top-4 right-4 border rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-widest shadow-sm {{ $config['bg'] }} {{ $config['border'] }} {{ $config['text'] }}">
                 {{ $config['label'] }}
             </div>
         </div>
