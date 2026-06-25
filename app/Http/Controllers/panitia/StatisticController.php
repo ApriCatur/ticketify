@@ -29,7 +29,6 @@ class StatisticController extends Controller
     {
         $event = Event::where('id', $id)
             ->where('user_id', Auth::id())
-            ->where('status', 'published')
             ->firstOrFail();
 
         $stats = $this->statisticsService->getEventStats($id);
