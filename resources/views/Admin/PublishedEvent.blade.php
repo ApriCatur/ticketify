@@ -20,6 +20,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 px-8 pb-8 mt-6">
     @forelse($publishedEvents as $event)
         <x-event-card
+            dark
             :image="$event->banner ? asset('images/events/' . $event->banner) : asset('images/events/banner_1779635248.jpg')"
             :day="\Carbon\Carbon::parse($event->date)->format('d')"
             :month="\Carbon\Carbon::parse($event->date)->translatedFormat('M')"

@@ -7,16 +7,23 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
 
-<body class="bg-[#09090b] text-white min-h-screen p-6 md:p-10" x-data="{ tab: 'ticket' }">
-<div class="max-w-6xl mx-auto space-y-8">
+<body class="bg-[#F8FAFC] text-gray-900 min-h-screen" x-data="{ tab: 'ticket' }">
+
+@include('components.panitia-nav')
+
+<div class="max-w-6xl mx-auto space-y-8 p-6 md:p-10">
 
     {{-- ===== HEADER ===== --}}
     <header class="flex items-center justify-between">
         <div class="flex items-center gap-4">
             <button onclick="window.history.back()"
-                class="bg-[#18181b] hover:bg-white hover:text-black transition-all px-4 py-2 rounded-lg text-xs font-bold border border-white/5 flex items-center gap-2 cursor-pointer">
+                class="bg-gray-100 hover:bg-gray-200 hover:text-black transition-all px-4 py-2 rounded-lg text-xs font-bold border border-gray-200 flex items-center gap-2 cursor-pointer">
                 <i class="fa-solid fa-arrow-left"></i> Back
             </button>
             <div>
@@ -29,7 +36,7 @@
     </header>
 
     {{-- ===== TAB NAVIGATION ===== --}}
-    <nav class="border-b border-white/5 flex justify-center">
+    <nav class="border-b border-gray-200 flex justify-center">
         <div class="flex gap-2">
             @php
                 $tabs = [
@@ -43,7 +50,7 @@
                 <button @click="tab = '{{ $key }}'"
                         :class="tab === '{{ $key }}'
                             ? 'border-b-2 border-blue-500 text-blue-500'
-                            : 'text-gray-500 hover:text-gray-300'"
+                            : 'text-gray-500 hover:text-gray-700'"
                         class="pb-4 px-4 font-bold text-sm transition-all flex items-center gap-2">
                     <i class="fa-solid {{ $item['icon'] }}"></i>
                     {{ $item['label'] }}
@@ -53,23 +60,23 @@
     </nav>
 
     {{-- ===== TAB CONTENT ===== --}}
-    <main class="bg-[#121212] rounded-3xl p-8 border border-white/5 shadow-2xl">
+    <main class="bg-white rounded-3xl p-8 border border-gray-200 shadow-2xl">
 
         {{-- TAB: TICKET --}}
         <div x-show="tab === 'ticket'" x-transition>
-            <div class="grid md:grid-cols-2 gap-10 mb-10 pb-10 border-b border-white/5">
-                <div class="rounded-2xl overflow-hidden border border-white/10 shadow-lg aspect-video">
+            <div class="grid md:grid-cols-2 gap-10 mb-10 pb-10 border-b border-gray-200">
+                <div class="rounded-2xl overflow-hidden border border-gray-200 shadow-lg aspect-video">
                     <img src="{{ $event->banner ? asset('images/events/' . $event->banner) : asset('images/kmipn.jpeg') }}"
                          alt="Banner {{ $event->name }}"
                          class="w-full h-full object-cover">
                 </div>
 
                 <div class="space-y-4">
-                    <div class="bg-[#18181b] p-4 rounded-xl border border-white/5 flex items-center gap-3">
-                        <i class="fa-solid fa-qrcode text-blue-500"></i>
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex items-center gap-3">
+                        <i class="fa-solid fa-qrcode text-blue-600"></i>
                         @if ($event->social_link)
                             <a href="{{ $event->social_link }}" target="_blank" rel="noopener"
-                               class="text-sm font-bold text-blue-400 hover:text-blue-300 truncate">
+                               class="text-sm font-bold text-blue-600 hover:text-blue-700 truncate">
                                 Open Event Social Media
                             </a>
                         @else
@@ -77,11 +84,11 @@
                         @endif
                     </div>
 
-                    <div class="bg-[#18181b] p-5 rounded-2xl border border-white/5">
-                        <h4 class="text-blue-500 font-bold text-sm mb-2">
+                    <div class="bg-gray-50 p-5 rounded-2xl border border-gray-200">
+                        <h4 class="text-blue-600 font-bold text-sm mb-2">
                             <i class="fa-solid fa-location-dot text-red-500 mr-2"></i>Location
                         </h4>
-                        <p class="text-xs text-gray-300 font-bold leading-relaxed">{{ $event->location }}</p>
+                        <p class="text-xs text-gray-700 font-bold leading-relaxed">{{ $event->location }}</p>
                     </div>
 
                     <p class="text-sm font-bold text-gray-400">
@@ -94,14 +101,14 @@
 
             <div class="space-y-4 max-w-4xl mx-auto">
                 @forelse ($event->tickets->whereNull('order_id') as $ticket)
-                    <div class="bg-[#18181b] p-6 rounded-2xl border border-white/5 flex items-center justify-between">
-                        <h3 class="font-bold">
-                            <i class="fa-solid fa-ticket text-blue-500 mr-2"></i>
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200 flex items-center justify-between">
+                        <h3 class="font-bold text-gray-900">
+                            <i class="fa-solid fa-ticket text-blue-600 mr-2"></i>
                             {{ $ticket->ticket_type }}
                         </h3>
                         <div class="text-right">
                             <span class="text-[10px] text-gray-600 block">Stock: {{ $ticket->stock }}</span>
-                            <span class="font-black text-blue-400">
+                            <span class="font-black text-blue-600">
                                 IDR {{ number_format($ticket->price, 0, ',', '.') }}
                             </span>
                         </div>
@@ -115,20 +122,20 @@
         {{-- TAB: DETAILS --}}
         <div x-show="tab === 'details'" x-transition style="display:none">
             <div class="space-y-6">
-                <div class="bg-[#18181b] p-8 rounded-3xl border border-white/5">
-                    <h3 class="text-center font-bold text-blue-500 mb-4 text-sm">
+                <div class="bg-gray-50 p-8 rounded-3xl border border-gray-200">
+                    <h3 class="text-center font-bold text-blue-600 mb-4 text-sm">
                         <i class="fa-solid fa-align-left mr-2"></i>Description
                     </h3>
-                    <p class="text-sm text-gray-300 leading-relaxed text-justify">
+                    <p class="text-sm text-gray-700 leading-relaxed text-justify">
                         {!! nl2br(e($event->description)) !!}
                     </p>
                 </div>
 
-                <div class="bg-[#18181b] p-8 rounded-3xl border border-white/5">
-                    <h3 class="text-center font-bold text-blue-500 mb-6 text-sm">
+                <div class="bg-gray-50 p-8 rounded-3xl border border-gray-200">
+                    <h3 class="text-center font-bold text-blue-600 mb-6 text-sm">
                         <i class="fa-solid fa-file-lines mr-2"></i>Terms and Conditions
                     </h3>
-                    <div class="text-xs text-gray-300 leading-relaxed whitespace-pre-line">
+                    <div class="text-xs text-gray-700 leading-relaxed whitespace-pre-line">
                         {{ $event->terms }}
                     </div>
                 </div>
@@ -138,20 +145,20 @@
         {{-- TAB: ORGANISER --}}
         <div x-show="tab === 'organiser'" x-transition style="display:none">
             <div class="space-y-6">
-                <div class="bg-[#18181b] p-10 rounded-3xl border border-white/5 text-center">
-                    <i class="fa-solid fa-users text-blue-500 text-3xl mb-6"></i>
-                    <p class="max-w-2xl mx-auto text-sm text-gray-400 leading-relaxed italic">
+                <div class="bg-gray-50 p-10 rounded-3xl border border-gray-200 text-center">
+                    <i class="fa-solid fa-users text-blue-600 text-3xl mb-6"></i>
+                    <p class="max-w-2xl mx-auto text-sm text-gray-600 leading-relaxed italic">
                         {{ $event->organiser_description ?? 'Belum ada deskripsi organiser.' }}
                     </p>
                 </div>
 
-                <div class="bg-[#18181b] p-8 rounded-3xl border border-white/5 text-center">
-                    <h3 class="font-bold mb-6 text-white uppercase tracking-widest text-sm">
+                <div class="bg-gray-50 p-8 rounded-3xl border border-gray-200 text-center">
+                    <h3 class="font-bold mb-6 text-gray-900 uppercase tracking-widest text-sm">
                         Organizing Committee
                     </h3>
                     <img src="{{ $event->organiser_photo ? asset('images/organizers/' . $event->organiser_photo) : asset('images/panitia_kmipn.jpeg') }}"
                          alt="Organizing Committee"
-                         class="w-full rounded-2xl border border-white/10">
+                         class="w-full rounded-2xl border border-gray-200">
                 </div>
             </div>
         </div>

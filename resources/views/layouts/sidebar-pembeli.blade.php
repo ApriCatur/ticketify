@@ -1,6 +1,6 @@
-<div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[40] hidden lg:hidden transition-opacity duration-300"></div>
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[40] hidden transition-opacity duration-300"></div>
 
-<aside id="main-sidebar" class="fixed inset-y-0 left-0 w-64 -translate-x-full lg:translate-x-0 lg:sticky lg:flex flex-col h-screen border-r border-white/5 p-6 bg-[#09090b]/90 lg:bg-[#09090b] backdrop-blur-xl lg:backdrop-blur-none z-[50] transition-transform duration-300 ease-in-out">
+<aside id="main-sidebar" class="fixed inset-y-0 left-0 w-64 -translate-x-full flex flex-col h-screen border-r border-white/5 p-6 bg-[#09090b]/90 backdrop-blur-xl z-[50] transition-transform duration-300 ease-in-out">
 
     <div class="flex items-center justify-between mb-8">
         <div class="flex items-center gap-2">

@@ -7,10 +7,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-[#09090b] text-white flex">
+<body class="bg-[#F8FAFC] text-gray-900 flex flex-col min-h-screen">
 
-    @include('layouts.sidebar-panitia')
+    @include('components.panitia-nav')
 
     <main class="flex-1 p-10 overflow-y-auto">
 
@@ -27,25 +31,25 @@
                 <h1 class="text-3xl font-black tracking-tight">Statistik Penjualan</h1>
                 <p class="text-gray-500 text-sm mt-2">Pantau pendapatan dan pertumbuhan peserta secara real-time.</p>
             </div>
-            <div class="bg-[#121212] border border-white/5 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest text-blue-500">
+            <div class="bg-white border border-gray-200 rounded-xl px-4 py-3 text-[10px] font-black uppercase tracking-widest text-blue-600">
                 {{ $event->name }}
             </div>
         </header>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
+            <div class="bg-white p-6 rounded-3xl border border-gray-200">
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Total Pendapatan</p>
-                <h2 class="text-2xl font-black text-blue-500">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h2>
+                <h2 class="text-2xl font-black text-blue-600">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h2>
                 <p class="text-[10px] text-green-500 mt-2"><i class="fa-solid fa-arrow-up"></i> Real-time</p>
             </div>
 
-            <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
+            <div class="bg-white p-6 rounded-3xl border border-gray-200">
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Tiket Terjual</p>
-                <h2 class="text-2xl font-black text-white">{{ $tiketTerjual }} <span class="text-gray-600 text-lg">/ {{ $totalKuota }}</span></h2>
+                <h2 class="text-2xl font-black text-gray-900">{{ $tiketTerjual }} <span class="text-gray-600 text-lg">/ {{ $totalKuota }}</span></h2>
                 <p class="text-[10px] text-gray-500 mt-2">Sisa stok: {{ max(0, $totalKuota - $tiketTerjual) }} tiket</p>
             </div>
 
-            <div class="bg-[#121212] p-6 rounded-3xl border border-white/5">
+            <div class="bg-white p-6 rounded-3xl border border-gray-200">
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Kehadiran (Scan)</p>
                 <h2 class="text-2xl font-black text-purple-500">{{ $totalHadir }} <span class="text-gray-600 text-lg">Hadir</span></h2>
                 <p class="text-[10px] text-gray-500 mt-2">
@@ -55,12 +59,12 @@
         </div>
 
         <div class="grid lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 bg-[#121212] p-8 rounded-[2.5rem] border border-white/5">
+            <div class="lg:col-span-2 bg-white p-8 rounded-[2.5rem] border border-gray-200">
                 <h3 class="text-sm font-black uppercase tracking-widest mb-6">Tren Penjualan (7 Hari Terakhir)</h3>
                 <canvas id="salesChart" height="150"></canvas>
             </div>
 
-            <div class="bg-[#121212] p-8 rounded-[2.5rem] border border-white/5">
+            <div class="bg-white p-8 rounded-[2.5rem] border border-gray-200">
                 <h3 class="text-sm font-black uppercase tracking-widest mb-6">Kategori Tiket</h3>
                 <canvas id="categoryChart"></canvas>
             </div>
@@ -112,7 +116,7 @@
                     y: {
                         min: 0,
                         grid: {
-                            color: 'rgba(255,255,255,0.05)'
+                            color: 'rgba(0,0,0,0.06)'
                         },
                         ticks: {
                             color: '#666',
@@ -159,7 +163,7 @@
                     legend: {
                         position: 'bottom',
                         labels: {
-                            color: '#fff',
+                            color: '#666',
                             padding: 20,
                             font: {
                                 size: 10,
