@@ -118,53 +118,42 @@
 
                         <div class="flex items-center justify-end md:col-span-2 gap-1 flex-nowrap">
                             @php
-                                $canEdit = $event->status !== 'rejected' && $displayStatus !== 'completed' && $displayStatus !== 'unpublished';
-                                $canViewParticipants = $event->status !== 'rejected' && $displayStatus !== 'unpublished';
+                                $isRejected = $event->status === 'rejected';
+                                $hideDetailEdit = $displayStatus === 'completed' || $displayStatus === 'unpublished';
                             @endphp
 
-                            @if($displayStatus === 'unpublished')
-                                <div class="flex items-center gap-1.5 text-[10px] text-gray-500 font-bold uppercase tracking-wider bg-gray-100 border border-gray-200 px-3 py-2 rounded-xl">
-                                    <i class="fa-solid fa-lock text-[9px]"></i> Locked
-                                </div>
-                            @else
-                                @if($canEdit)
-                                    {{-- DETAIL EVENT --}}
-                                    <a href="{{ route('panitia.events.show', $event->id) }}" class="flex flex-col items-center gap-1">
-                                        <div class="flex items-center justify-center w-9 h-9 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 rounded-xl transition-colors border border-emerald-500/10">
-                                            <i class="fa-solid fa-eye text-sm"></i>
-                                        </div>
-                                        <span class="text-[9px] font-bold uppercase text-emerald-500">Detail</span>
-                                    </a>
-
-                                    {{-- EDIT --}}
-                                    <a href="{{ route('panitia.events.edit', $event->id) }}" class="flex flex-col items-center gap-1">
-                                        <div class="flex items-center justify-center w-9 h-9 bg-yellow-50 hover:bg-yellow-100 text-yellow-500 hover:text-yellow-600 rounded-xl transition-colors border border-yellow-200">
-                                            <i class="fa-solid fa-pen-to-square text-sm"></i>
-                                        </div>
-                                        <span class="text-[9px] font-bold uppercase text-yellow-500">Edit</span>
-                                    </a>
-
-                                    <a href="{{ route('panitia.statistic.detail', $event->id) }}" class="flex flex-col items-center gap-1">
-                                        <div class="flex items-center justify-center w-9 h-9 bg-purple-50 hover:bg-purple-100 text-purple-500 hover:text-purple-600 rounded-xl transition-colors border border-purple-200">
-                                            <i class="fa-solid fa-pen-to-square text-sm"></i>
-                                        </div>
-                                        <span class="text-[9px] font-bold uppercase text-purple-500">Stats</span>
-                                    </a>
-                                @endif
-
-                                {{-- PESERTA — tetap tampil meskipun event completed --}}
-                                @if($canViewParticipants)
-                                    <a href="{{ route('panitia.customerdata', $event->id) }}" class="flex flex-col items-center gap-1">
-                                        <div class="flex items-center justify-center w-9 h-9 bg-blue-600/10 hover:bg-blue-600/20 text-blue-500 hover:text-blue-400 rounded-xl transition-colors border border-blue-500/10">
-                                            <i class="fa-solid fa-table text-sm"></i>
-                                        </div>
-                                        <span class="text-[9px] font-bold uppercase text-blue-500/80">Peserta</span>
-                                    </a>
-                                @else
-                                    <div class="flex items-center gap-1.5 text-[10px] text-gray-500 font-bold uppercase tracking-wider bg-gray-100 border border-gray-200 px-3 py-2 rounded-xl">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Locked
+                            @if(!$isRejected && !$hideDetailEdit)
+                                {{-- DETAIL EVENT --}}
+                                <a href="{{ route('panitia.events.show', $event->id) }}" class="flex flex-col items-center gap-1">
+                                    <div class="flex items-center justify-center w-9 h-9 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 rounded-xl transition-colors border border-emerald-500/10">
+                                        <i class="fa-solid fa-eye text-sm"></i>
                                     </div>
-                                @endif
+                                    <span class="text-[9px] font-bold uppercase text-emerald-500">Detail</span>
+                                </a>
+
+                                {{-- EDIT --}}
+                                <a href="{{ route('panitia.events.edit', $event->id) }}" class="flex flex-col items-center gap-1">
+                                    <div class="flex items-center justify-center w-9 h-9 bg-yellow-50 hover:bg-yellow-100 text-yellow-500 hover:text-yellow-600 rounded-xl transition-colors border border-yellow-200">
+                                        <i class="fa-solid fa-pen-to-square text-sm"></i>
+                                    </div>
+                                    <span class="text-[9px] font-bold uppercase text-yellow-500">Edit</span>
+                                </a>
+                            @endif
+
+                            @if(!$isRejected)
+                                <a href="{{ route('panitia.statistic.detail', $event->id) }}" class="flex flex-col items-center gap-1">
+                                    <div class="flex items-center justify-center w-9 h-9 bg-purple-50 hover:bg-purple-100 text-purple-500 hover:text-purple-600 rounded-xl transition-colors border border-purple-200">
+                                        <i class="fa-solid fa-chart-simple text-sm"></i>
+                                    </div>
+                                    <span class="text-[9px] font-bold uppercase text-purple-500">Stats</span>
+                                </a>
+
+                                <a href="{{ route('panitia.customerdata', $event->id) }}" class="flex flex-col items-center gap-1">
+                                    <div class="flex items-center justify-center w-9 h-9 bg-blue-600/10 hover:bg-blue-600/20 text-blue-500 hover:text-blue-400 rounded-xl transition-colors border border-blue-500/10">
+                                        <i class="fa-solid fa-table text-sm"></i>
+                                    </div>
+                                    <span class="text-[9px] font-bold uppercase text-blue-500/80">Peserta</span>
+                                </a>
                             @endif
                         </div>
 
