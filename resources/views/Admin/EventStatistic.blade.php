@@ -33,81 +33,71 @@
         </form>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-
+    <div class="space-y-4">
         @forelse($events as $item)
             @php
                 $kuota = $item->tickets->sum('stock');
                 $terjual = $item->tickets_sold ?? 0;
                 $persentase = $kuota > 0 ? ($terjual / $kuota) * 100 : 0;
+                $displayStatus = $item->getDisplayStatus();
+                $statusConfig = [
+                    'published' => ['bg' => 'bg-emerald-50 text-emerald-600 border-emerald-200', 'label' => 'Active'],
+                    'completed' => ['bg' => 'bg-blue-50 text-blue-600 border-blue-200', 'label' => 'Completed'],
+                    'pending' => ['bg' => 'bg-amber-50 text-amber-600 border-amber-200', 'label' => 'Pending'],
+                    'rejected' => ['bg' => 'bg-red-50 text-red-600 border-red-200', 'label' => 'Rejected'],
+                ];
+                $config = $statusConfig[$displayStatus] ?? $statusConfig['published'];
             @endphp
 
-            <div class="bg-white rounded-[2rem] overflow-hidden border border-gray-200 shadow-sm flex flex-col group hover:shadow-md transition-all duration-300">
-
-                <div class="relative aspect-video overflow-hidden">
-                    @if($item->banner)
-                        <img src="{{ asset('images/events/' . $item->banner) }}"
-                             alt="Poster {{ $item->name }}"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    @endif
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
-
-                    @php
-                        $displayStatus = $item->getDisplayStatus();
-                        $statusConfig = [
-                            'published' => ['bg' => 'bg-emerald-50', 'border' => 'border-emerald-200', 'text' => 'text-emerald-600', 'label' => 'Active'],
-                            'completed' => ['bg' => 'bg-blue-50', 'border' => 'border-blue-200', 'text' => 'text-blue-600', 'label' => 'Completed'],
-                            'pending' => ['bg' => 'bg-amber-50', 'border' => 'border-amber-200', 'text' => 'text-amber-600', 'label' => 'Pending'],
-                            'rejected' => ['bg' => 'bg-red-50', 'border' => 'border-red-200', 'text' => 'text-red-600', 'label' => 'Rejected'],
-                        ];
-                        $config = $statusConfig[$displayStatus] ?? $statusConfig['published'];
-                    @endphp
-
-                    <div class="absolute top-4 right-4 backdrop-blur-md border rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-widest shadow-lg shadow-black/30 {{ $config['bg'] }} {{ $config['border'] }} {{ $config['text'] }}">
-                        {{ $config['label'] }}
+            <div class="bg-white border border-gray-200 shadow-sm rounded-2xl p-5 transition-all duration-300 hover:shadow-md">
+                <div class="flex flex-wrap md:flex-nowrap items-center gap-6">
+                    <div class="w-full md:w-36 h-20 rounded-xl overflow-hidden border border-gray-200 flex-shrink-0">
+                        @if($item->banner)
+                            <img src="{{ asset('images/events/' . $item->banner) }}" class="w-full h-full object-cover" alt="Poster">
+                        @else
+                            <div class="w-full h-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+                                <i class="fa-solid fa-chart-pie text-2xl text-white/50"></i>
+                            </div>
+                        @endif
                     </div>
-                </div>
 
-                <div class="p-8 flex flex-col flex-1 justify-between space-y-6">
-                    <div>
-                        <h3 class="text-lg font-black text-gray-900 truncate mb-1" title="{{ $item->name }}">
-                            {{ $item->name }}
-                        </h3>
-                        <p class="text-xs text-gray-500 flex items-center gap-2">
-                            <i class="fa-solid fa-calendar-day text-blue-500"></i>
-                            {{ \Carbon\Carbon::parse($item->date)->format('d F Y') }}, {{ substr($item->time_start, 0, 5) }} - {{ substr($item->time_end, 0, 5) }} WIB
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="inline-block px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-tight border {{ $config['bg'] }}">{{ $config['label'] }}</span>
+                        </div>
+                        <h3 class="text-base font-black tracking-tight text-gray-900 truncate">{{ $item->name }}</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">
+                            <i class="fa-solid fa-calendar mr-1.5"></i>{{ \Carbon\Carbon::parse($item->date)->format('d M Y') }}, {{ substr($item->time_start, 0, 5) }} - {{ substr($item->time_end, 0, 5) }} WIB
                         </p>
                     </div>
 
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-end">
-                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Penjualan Tiket</span>
-                            <span class="text-xs font-bold text-gray-900">
-                                {{ $terjual }} <span class="text-gray-500">/ {{ $kuota }}</span>
-                            </span>
+                    <div class="flex-1 max-w-xs">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Penjualan</span>
+                            <span class="text-xs font-bold text-gray-900">{{ $terjual }} / {{ $kuota }}</span>
                         </div>
                         <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full bg-blue-500 rounded-full shadow-lg transition-all duration-500"
-                                 style="width: {{ $persentase }}%"></div>
+                            <div class="h-full bg-blue-500 rounded-full transition-all duration-500" style="width: {{ $persentase }}%"></div>
                         </div>
                     </div>
 
-                    <div class="flex gap-3">
+                    <div class="flex gap-2">
                         <a href="{{ route('admin.event-statistics.detail', $item->id) }}"
-                           class="flex-1 text-center bg-gray-100 hover:bg-blue-600 hover:text-white text-gray-700 font-bold text-xs py-3 px-4 rounded-xl transition-all shadow-sm">
-                            STATISTIK
+                           class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl text-[10px] uppercase transition-all shadow-sm inline-block text-center">
+                            <i class="fa-solid fa-chart-simple mr-1"></i> Statistik
                         </a>
                         <a href="{{ route('admin.event-statistics.attendees', $item->id) }}"
-                           class="flex-1 text-center bg-gray-100 hover:bg-purple-600 hover:text-white text-gray-700 font-bold text-xs py-3 px-4 rounded-xl transition-all shadow-sm">
-                            PESERTA
+                           class="px-5 py-2.5 bg-gray-100 hover:bg-purple-600 hover:text-white text-gray-700 font-black rounded-xl text-[10px] uppercase transition-all inline-block text-center">
+                            <i class="fa-solid fa-users mr-1"></i> Peserta
                         </a>
                     </div>
                 </div>
             </div>
         @empty
-            <div class="col-span-full flex flex-col items-center justify-center py-20 text-gray-500">
-                <i class="fa-solid fa-chart-pie text-5xl mb-4 text-gray-200"></i>
-                <p class="text-sm">Belum ada event untuk melihat statistik.</p>
+            <div class="flex flex-col items-center justify-center py-16 text-center bg-white border border-gray-200 shadow-sm rounded-2xl">
+                <i class="fa-solid fa-chart-pie text-5xl text-gray-200 mb-4"></i>
+                <p class="text-gray-500 font-semibold mb-2">Belum ada event</p>
+                <p class="text-gray-400 text-sm">Event yang dipublikasikan akan muncul di sini beserta statistiknya.</p>
             </div>
         @endforelse
     </div>
