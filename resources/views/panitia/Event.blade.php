@@ -63,6 +63,8 @@
 </section>
 
             @include('components.event-timeline')
+
+            @include('components.footer')
         </div>
     </div>
 

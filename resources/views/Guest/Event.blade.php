@@ -148,18 +148,7 @@
 
     @include('components.event-timeline')
 
-    {{-- FOOTER --}}
-    <footer class="bg-white border-t border-gray-100 mt-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-2">
-                    <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center font-extrabold text-white text-xs">T</div>
-                    <span class="font-bold text-gray-900">Ticketify</span>
-                </div>
-                <p class="text-sm text-gray-500">&copy; {{ date('Y') }} Teknik Informatika — Politeknik Negeri Batam</p>
-            </div>
-        </div>
-    </footer>
+    @include('components.footer')
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
