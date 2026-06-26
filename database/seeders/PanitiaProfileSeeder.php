@@ -22,17 +22,16 @@ class PanitiaProfileSeeder extends Seeder
                 ->first();
 
             if ($application) {
-                $ukm = Ukm::find($application->ukm_id);
                 PanitiaProfile::create([
                     'user_id' => $user->getKey(),
-                    'asal_ukm' => $ukm?->nama_ukm ?? 'HMTI',
+                    'ukm_id' => $application->ukm_id,
                     'no_rekening' => $application->nomor_rekening,
                 ]);
             } else {
-                $ukms = Ukm::pluck('nama_ukm')->toArray();
+                $ukmIds = Ukm::pluck('id')->toArray();
                 PanitiaProfile::create([
                     'user_id' => $user->getKey(),
-                    'asal_ukm' => $ukms[array_rand($ukms)],
+                    'ukm_id' => $ukmIds[array_rand($ukmIds)],
                     'no_rekening' => '109002' . str_pad(mt_rand(1, 9999999), 7, '0', STR_PAD_LEFT),
                 ]);
             }

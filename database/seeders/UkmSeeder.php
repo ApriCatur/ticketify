@@ -13,6 +13,7 @@ class UkmSeeder extends Seeder
     public function run(): void
     {
         $ukms = [
+            ['nama_ukm' => 'HMTI'],
             ['nama_ukm' => 'PAHAM (Pecinta Alam & Hijau Almamater)'],
             ['nama_ukm' => 'KORPS (Kerohanian Islam)'],
             ['nama_ukm' => 'Polibatam English Club (PEC)'],

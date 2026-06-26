@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PanitiaProfile;
 use App\Models\Ukm;
 use App\Models\RoleApplication;
 use App\Models\User;
@@ -111,6 +112,13 @@ class RoleApplicationController extends Controller
         // Ubah role jadi organiser
         $user->update([
             'role' => 'panitia'
+        ]);
+
+        // Buat profil panitia
+        PanitiaProfile::create([
+            'user_id' => $roleApp->user_id,
+            'ukm_id' => $roleApp->ukm_id,
+            'no_rekening' => $roleApp->nomor_rekening,
         ]);
 
         return redirect()->back()->with(
