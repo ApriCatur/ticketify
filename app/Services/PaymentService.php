@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class PaymentService
@@ -14,6 +15,10 @@ class PaymentService
 
         foreach ($order->ticket_items as $item) {
             for ($i = 0; $i < $item['quantity']; $i++) {
+                do {
+                    $qrCode = Str::random(12);
+                } while (Ticket::where('qr_code', $qrCode)->exists());
+
                 $ticket = Ticket::create([
                     'user_id' => $order->user_id,
                     'event_id' => $order->event_id,
@@ -21,7 +26,7 @@ class PaymentService
                     'ticket_type' => $item['ticket_type'],
                     'status' => 'Active',
                     'purchase_date' => now(),
-                    'qr_code' => Str::random(12),
+                    'qr_code' => $qrCode,
                 ]);
 
                 $tickets[] = $ticket;
@@ -35,13 +40,16 @@ class PaymentService
 
     public function decrementStock(int $eventId, string $ticketType, int $quantity): void
     {
-        $template = Ticket::where('event_id', $eventId)
-            ->where('ticket_type', $ticketType)
-            ->whereNull('order_id')
-            ->first();
+        DB::transaction(function () use ($eventId, $ticketType, $quantity) {
+            $template = Ticket::where('event_id', $eventId)
+                ->where('ticket_type', $ticketType)
+                ->whereNull('order_id')
+                ->lockForUpdate()
+                ->first();
 
-        if ($template) {
-            $template->decrement('stock', $quantity);
-        }
+            if ($template && (int) $template->stock >= $quantity) {
+                $template->decrement('stock', $quantity);
+            }
+        });
     }
 }

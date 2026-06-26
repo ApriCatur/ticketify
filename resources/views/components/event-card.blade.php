@@ -46,9 +46,13 @@
             <span class="truncate">{{ $location }}</span>
         </div>
 
-        <div class="pt-2 flex items-center justify-between border-t {{ $dark ? 'border-white/5' : 'border-gray-50' }}">
-            <span class="text-xs font-bold text-blue-600">{{ $price }}</span>
-            {{ $slot ?? '' }}
+        <div class="pt-2 border-t {{ $dark ? 'border-white/5' : 'border-gray-50' }}">
+            <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-blue-600">{{ $price }}</span>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    {{ $slot ?? '' }}
+                </div>
+            </div>
         </div>
     </div>
 </a>

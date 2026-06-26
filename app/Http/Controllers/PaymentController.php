@@ -6,7 +6,9 @@ use App\Http\Requests\CreateSnapTokenRequest;
 use App\Http\Requests\HandleSuccessRequest;
 use App\Models\Order;
 use App\Models\Event;
+use App\Models\Ticket;
 use App\Services\PaymentService;
+use Illuminate\Support\Facades\DB;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Notification;
@@ -26,8 +28,29 @@ class PaymentController extends Controller
 
     public function createSnapToken(CreateSnapTokenRequest $request, Event $event)
     {
+        if ($event->status !== 'published') {
+            return response()->json(['error' => 'Event tidak tersedia untuk pembelian.'], 400);
+        }
+
+        if ($event->date < now()->format('Y-m-d')) {
+            return response()->json(['error' => 'Event sudah lewat. Tidak dapat membeli tiket.'], 400);
+        }
+
         $user      = auth()->user();
         $items     = $request->items;
+
+        $templateTickets = $event->tickets()->whereNull('order_id')->get()->keyBy('ticket_type');
+
+        foreach ($items as $item) {
+            $template = $templateTickets->get($item['ticket_type']);
+            if (!$template) {
+                return response()->json(['error' => 'Tipe tiket ' . $item['ticket_type'] . ' tidak ditemukan.'], 400);
+            }
+            if ((int) $item['quantity'] > (int) $template->stock) {
+                return response()->json(['error' => 'Stok tiket ' . $item['ticket_type'] . ' tidak mencukupi. Tersedia: ' . $template->stock], 400);
+            }
+        }
+
         $orderCode = Order::generateOrderCode();
 
         $totalAmount = 0;
@@ -97,28 +120,45 @@ class PaymentController extends Controller
 
     public function handleSuccess(HandleSuccessRequest $request)
     {
-        $order = Order::where('id', $request->order_id)
-            ->where('user_id', auth()->id())
-            ->firstOrFail();
+        return DB::transaction(function () use ($request) {
+            $order = Order::where('id', $request->order_id)
+                ->where('user_id', auth()->id())
+                ->lockForUpdate()
+                ->firstOrFail();
 
-        if ($order->status === 'paid') {
-            return response()->json(['success' => true, 'already_paid' => true]);
-        }
+            if ($order->status === 'paid') {
+                return response()->json(['success' => true, 'already_paid' => true]);
+            }
 
-        $order->update([
-            'status'         => 'paid',
-            'transaction_id' => $request->transaction_id,
-            'payment_type'   => $request->payment_type,
-            'paid_at'        => now(),
-        ]);
+            $templateTickets = Ticket::where('event_id', $order->event_id)
+                ->whereNull('order_id')
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('ticket_type');
 
-        $tickets = $this->paymentService->createTickets($order);
+            foreach ($order->ticket_items as $item) {
+                $template = $templateTickets->get($item['ticket_type']);
+                if (!$template || (int) $template->stock < (int) $item['quantity']) {
+                    $order->update(['status' => 'failed']);
+                    return response()->json(['error' => 'Stok tiket ' . $item['ticket_type'] . ' sudah habis.'], 400);
+                }
+            }
 
-        return response()->json([
-            'success'    => true,
-            'order_code' => $order->order_code,
-            'tickets'    => $tickets,
-        ]);
+            $order->update([
+                'status'         => 'paid',
+                'transaction_id' => $request->transaction_id,
+                'payment_type'   => $request->payment_type,
+                'paid_at'        => now(),
+            ]);
+
+            $tickets = $this->paymentService->createTickets($order);
+
+            return response()->json([
+                'success'    => true,
+                'order_code' => $order->order_code,
+                'tickets'    => $tickets,
+            ]);
+        });
     }
 
     public function notification()
@@ -132,36 +172,56 @@ class PaymentController extends Controller
             $paymentType       = $notification->payment_type;
             $transactionId     = $notification->transaction_id;
 
-            $order = Order::where('order_code', $orderId)->first();
+            return DB::transaction(function () use ($orderId, $transactionStatus, $fraudStatus, $paymentType, $transactionId) {
+                $order = Order::where('order_code', $orderId)->lockForUpdate()->first();
 
-            if (!$order) {
-                return response()->json(['message' => 'Order not found'], 404);
-            }
+                if (!$order) {
+                    return response()->json(['message' => 'Order not found'], 404);
+                }
 
-            if ($transactionStatus === 'capture') {
-                $status = ($fraudStatus === 'accept') ? 'paid' : 'failed';
-            } elseif ($transactionStatus === 'settlement') {
-                $status = 'paid';
-            } elseif (in_array($transactionStatus, ['cancel', 'deny', 'expire'])) {
-                $status = $transactionStatus === 'expire' ? 'expired' : 'failed';
-            } elseif ($transactionStatus === 'pending') {
-                $status = 'pending';
-            } else {
-                $status = 'failed';
-            }
+                if ($transactionStatus === 'capture') {
+                    $status = ($fraudStatus === 'accept') ? 'paid' : 'failed';
+                } elseif ($transactionStatus === 'settlement') {
+                    $status = 'paid';
+                } elseif (in_array($transactionStatus, ['cancel', 'deny', 'expire'])) {
+                    $status = $transactionStatus === 'expire' ? 'expired' : 'failed';
+                } elseif ($transactionStatus === 'pending') {
+                    $status = 'pending';
+                } else {
+                    $status = 'failed';
+                }
 
-            $order->update([
-                'status'         => $status,
-                'transaction_id' => $transactionId,
-                'payment_type'   => $paymentType,
-                'paid_at'        => $status === 'paid' ? now() : null,
-            ]);
+                if ($status === 'paid' && $order->tickets()->count() > 0) {
+                    return response()->json(['message' => 'OK, already processed']);
+                }
 
-            if ($status === 'paid' && $order->tickets()->count() === 0) {
-                $this->paymentService->createTickets($order);
-            }
+                $order->update([
+                    'status'         => $status,
+                    'transaction_id' => $transactionId,
+                    'payment_type'   => $paymentType,
+                    'paid_at'        => $status === 'paid' ? now() : null,
+                ]);
 
-            return response()->json(['message' => 'OK']);
+                if ($status === 'paid') {
+                    $templateTickets = Ticket::where('event_id', $order->event_id)
+                        ->whereNull('order_id')
+                        ->lockForUpdate()
+                        ->get()
+                        ->keyBy('ticket_type');
+
+                    foreach ($order->ticket_items as $item) {
+                        $template = $templateTickets->get($item['ticket_type']);
+                        if (!$template || (int) $template->stock < (int) $item['quantity']) {
+                            $order->update(['status' => 'failed']);
+                            return response()->json(['message' => 'Stok habis'], 400);
+                        }
+                    }
+
+                    $this->paymentService->createTickets($order);
+                }
+
+                return response()->json(['message' => 'OK']);
+            });
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

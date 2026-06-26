@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\Category;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PendingEventController extends Controller
 {
@@ -33,6 +34,10 @@ class PendingEventController extends Controller
     {
         if ($event->status !== 'pending') {
             return redirect()->back()->with('error', 'Hanya event dengan status pending yang bisa disetujui.');
+        }
+
+        if ($event->date < Carbon::today()->format('Y-m-d')) {
+            return redirect()->back()->with('error', 'Tidak bisa menyetujui event yang tanggalnya sudah lewat.');
         }
 
         $event->update(['status' => 'published']);

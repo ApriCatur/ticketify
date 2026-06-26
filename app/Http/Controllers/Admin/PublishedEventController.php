@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class PublishedEventController extends Controller
@@ -72,7 +73,11 @@ class PublishedEventController extends Controller
 
         foreach ($buyers as $buyer) {
             if ($buyer->email) {
-                Mail::to($buyer->email)->send(new EventUnpublishedMail($event, $buyer));
+                try {
+                    Mail::to($buyer->email)->send(new EventUnpublishedMail($event, $buyer));
+                } catch (\Exception $e) {
+                    Log::error('Gagal kirim email unpublish ke ' . $buyer->email . ': ' . $e->getMessage());
+                }
             }
         }
 

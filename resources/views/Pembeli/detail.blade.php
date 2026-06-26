@@ -40,9 +40,11 @@
                 </div>
             </div>
 
-            <div class="bg-blue-50 border border-blue-200 px-4 py-2 rounded-lg">
-                <span class="text-blue-700 text-xs font-bold uppercase tracking-wider">
-                    <i class="fa-solid fa-check-circle mr-1"></i> Tersedia
+            @php $displayStatus = $event->getDisplayStatus(); @endphp
+            <div class="px-4 py-2 rounded-lg border {{ $displayStatus === 'published' ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200' }}">
+                <span class="text-xs font-bold uppercase tracking-wider {{ $displayStatus === 'published' ? 'text-emerald-700' : 'text-red-700' }}">
+                    <i class="fa-solid {{ $displayStatus === 'published' ? 'fa-check-circle' : 'fa-exclamation-circle' }} mr-1"></i>
+                    {{ $displayStatus === 'published' ? 'Tersedia' : ucfirst($displayStatus) }}
                 </span>
             </div>
         </header>
