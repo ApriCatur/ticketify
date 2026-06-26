@@ -7,33 +7,37 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
 
-<body class="bg-[#09090b] text-white min-h-screen p-6 md:p-10" x-data="{ tab: 'ticket' }">
+<body class="bg-[#F8FAFC] text-gray-900 min-h-screen p-6 md:p-10" x-data="{ tab: 'ticket' }">
 <div class="max-w-6xl mx-auto space-y-8">
 
-    {{-- ===== HEADER ===== --}}
+    {{-- HEADER --}}
     <header class="flex items-center justify-between">
         <div class="flex items-center gap-4">
             <button onclick="window.history.back()"
-                class="bg-[#18181b] hover:bg-white hover:text-black transition-all px-4 py-2 rounded-lg text-xs font-bold border border-white/5 flex items-center gap-2 cursor-pointer">
+                class="bg-white hover:bg-gray-50 text-gray-700 transition-all px-4 py-2 rounded-lg text-xs font-bold border border-gray-200 flex items-center gap-2 cursor-pointer shadow-sm">
                 <i class="fa-solid fa-arrow-left"></i> Kembali
             </button>
             <div>
-                <h1 class="text-2xl font-black uppercase">{{ $event->name }}</h1>
+                <h1 class="text-2xl font-black uppercase text-gray-900">{{ $event->name }}</h1>
                 <p class="text-xs text-gray-500 mt-1">{{ $event->category?->name ?? 'Umum' }}</p>
             </div>
         </div>
 
-        <div class="bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-lg">
-            <span class="text-blue-400 text-xs font-bold uppercase tracking-wider">
+        <div class="bg-blue-50 border border-blue-200 px-4 py-2 rounded-lg">
+            <span class="text-blue-700 text-xs font-bold uppercase tracking-wider">
                 <i class="fa-solid fa-check-circle mr-1"></i> Tersedia
             </span>
         </div>
     </header>
 
-    {{-- ===== TAB NAVIGATION ===== --}}
-    <nav class="border-b border-white/5 flex justify-center">
+    {{-- TAB NAVIGATION --}}
+    <nav class="border-b border-gray-200 flex justify-center">
         <div class="flex gap-2">
             @php
                 $tabs = [
@@ -46,8 +50,8 @@
             @foreach ($tabs as $key => $item)
                 <button @click="tab = '{{ $key }}'"
                         :class="tab === '{{ $key }}'
-                            ? 'border-b-2 border-blue-500 text-blue-500'
-                            : 'text-gray-500 hover:text-gray-300'"
+                            ? 'border-b-2 border-blue-600 text-blue-600'
+                            : 'text-gray-500 hover:text-gray-700'"
                         class="pb-4 px-4 font-bold text-sm transition-all flex items-center gap-2">
                     <i class="fa-solid {{ $item['icon'] }}"></i>
                     {{ $item['label'] }}
@@ -56,40 +60,40 @@
         </div>
     </nav>
 
-    {{-- ===== TAB CONTENT ===== --}}
-    <main class="bg-[#121212] rounded-3xl p-8 border border-white/5 shadow-2xl">
+    {{-- TAB CONTENT --}}
+    <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm">
 
         {{-- TAB: TICKET --}}
         <div x-show="tab === 'ticket'" x-transition>
-            <div class="grid md:grid-cols-2 gap-10 mb-10 pb-10 border-b border-white/5">
-                <div class="rounded-2xl overflow-hidden border border-white/10 shadow-lg aspect-video">
+            <div class="grid md:grid-cols-2 gap-10 mb-10 pb-10 border-b border-gray-100">
+                <div class="rounded-2xl overflow-hidden border border-gray-200 shadow-sm aspect-video">
                     <img src="{{ $event->banner ? asset('images/events/' . $event->banner) : asset('images/kmipn.jpeg') }}"
                          alt="Banner {{ $event->name }}"
                          class="w-full h-full object-cover">
                 </div>
 
                 <div class="space-y-4">
-                    <div class="bg-[#18181b] p-4 rounded-xl border border-white/5 flex items-center gap-3">
-                        <i class="fa-solid fa-qrcode text-blue-500"></i>
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 flex items-center gap-3">
+                        <i class="fa-solid fa-qrcode text-blue-600"></i>
                         @if ($event->social_link)
                             <a href="{{ $event->social_link }}" target="_blank" rel="noopener"
-                               class="text-sm font-bold text-blue-400 hover:text-blue-300 truncate">
+                               class="text-sm font-bold text-blue-600 hover:text-blue-700 truncate">
                                Open Event Social Media
                             </a>
                         @else
-                            <span class="text-sm font-bold text-gray-500">Social media not available</span>
+                            <span class="text-sm font-bold text-gray-400">Social media not available</span>
                         @endif
                     </div>
 
-                    <div class="bg-[#18181b] p-5 rounded-2xl border border-white/5">
-                        <h4 class="text-blue-500 font-bold text-sm mb-2">
+                    <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100">
+                        <h4 class="text-blue-600 font-bold text-sm mb-2">
                             <i class="fa-solid fa-location-dot text-red-500 mr-2"></i>Location
                         </h4>
-                        <p class="text-xs text-gray-300 font-bold leading-relaxed">{{ $event->location }}</p>
+                        <p class="text-xs text-gray-700 font-bold leading-relaxed">{{ $event->location }}</p>
                     </div>
 
-                    <p class="text-sm font-bold text-gray-400">
-                        <i class="fa-solid fa-calendar-days mr-2 text-blue-500"></i>
+                    <p class="text-sm font-bold text-gray-500">
+                        <i class="fa-solid fa-calendar-days mr-2 text-blue-600"></i>
                         {{ \Carbon\Carbon::parse($event->date)->format('d F Y') }},
                         {{ substr($event->time_start, 0, 5) }} WIB
                     </p>
@@ -99,61 +103,60 @@
             {{-- Form Pembelian Tiket --}}
             <form action="#" method="POST" class="space-y-4 max-w-4xl mx-auto" x-data="{ tickets: {} }">
                 @csrf
-                <h3 class="font-bold text-lg mb-4">Pilih Tipe Tiket</h3>
+                <h3 class="font-bold text-lg text-gray-900 mb-4">Pilih Tipe Tiket</h3>
                 @forelse ($event->tickets->whereNull('order_id') as $index => $ticket)
                     <div x-init="tickets[{{ $index }}] = 0"
-                         class="bg-[#18181b] p-6 rounded-2xl border border-white/5 flex items-center justify-between hover:border-blue-500/30 transition-all">
+                         class="bg-gray-50 p-6 rounded-2xl border border-gray-100 flex items-center justify-between hover:border-blue-300 transition-all">
                         <div>
-                            <h3 class="font-bold"><i class="fa-solid fa-ticket text-blue-500 mr-2"></i> {{ $ticket->ticket_type }}</h3>
+                            <h3 class="font-bold text-gray-900"><i class="fa-solid fa-ticket text-blue-600 mr-2"></i> {{ $ticket->ticket_type }}</h3>
                             <span class="text-[10px] text-gray-500">Stock: {{ $ticket->stock }}</span>
                         </div>
                         <div class="flex items-center gap-6">
-                            <span class="font-black text-blue-400">IDR {{ number_format($ticket->price, 0, ',', '.') }}</span>
+                            <span class="font-black text-blue-600">IDR {{ number_format($ticket->price, 0, ',', '.') }}</span>
 
                             {{-- Counter Plus/Minus --}}
-                            <div class="flex items-center bg-[#09090b] rounded-lg border border-white/10">
+                            <div class="flex items-center bg-white rounded-lg border border-gray-200">
                                 <button type="button" @click="if(tickets[{{ $index }}] > 0) tickets[{{ $index }}]--"
-                                        class="px-3 py-1 hover:text-blue-400">-</button>
-                                <span class="px-3 font-bold text-sm" x-text="tickets[{{ $index }}]">0</span>
+                                        class="px-3 py-1 text-gray-600 hover:text-blue-600 font-bold">-</button>
+                                <span class="px-3 font-bold text-sm text-gray-900" x-text="tickets[{{ $index }}]">0</span>
                                 <input type="hidden" name="tickets[{{ $index }}][qty]" :value="tickets[{{ $index }}]">
                                 <input type="hidden" name="tickets[{{ $index }}][name]" value="{{ $ticket->ticket_type }}">
                                 <button type="button" @click="if(tickets[{{ $index }}] < {{ $ticket->stock }}) tickets[{{ $index }}]++"
-                                        class="px-3 py-1 hover:text-blue-400">+</button>
+                                        class="px-3 py-1 text-gray-600 hover:text-blue-600 font-bold">+</button>
                             </div>
                         </div>
                     </div>
                 @empty
-                    <p class="text-center text-gray-500 py-6">Tidak ada tipe tiket yang tersedia.</p>
+                    <p class="text-center text-gray-400 py-6">Tidak ada tipe tiket yang tersedia.</p>
                 @endforelse
 
-        <div class="pt-6 border-t border-white/5 flex justify-center">
-            <button type="button"
-                    onclick="window.location.href='{{ route('register') }}'"
-                    class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-xl font-bold transition flex items-center gap-2">
-                <i class="fa-solid fa-cart-shopping"></i> Beli Tiket
-            </button>
-        </div>
-
+                <div class="pt-6 border-t border-gray-100 flex justify-center">
+                    <button type="button"
+                            onclick="window.location.href='{{ route('register') }}'"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold transition flex items-center gap-2 shadow-lg shadow-blue-600/10">
+                        <i class="fa-solid fa-cart-shopping"></i> Beli Tiket
+                    </button>
+                </div>
             </form>
         </div>
 
         {{-- TAB: DETAILS --}}
         <div x-show="tab === 'details'" x-transition style="display:none">
             <div class="space-y-6">
-                <div class="bg-[#18181b] p-8 rounded-3xl border border-white/5">
-                    <h3 class="text-center font-bold text-blue-500 mb-4 text-sm">
+                <div class="bg-gray-50 p-8 rounded-3xl border border-gray-100">
+                    <h3 class="text-center font-bold text-blue-600 mb-4 text-sm">
                         <i class="fa-solid fa-align-left mr-2"></i>Description
                     </h3>
-                    <p class="text-sm text-gray-300 leading-relaxed text-justify">
+                    <p class="text-sm text-gray-700 leading-relaxed text-justify">
                         {!! nl2br(e($event->description)) !!}
                     </p>
                 </div>
 
-                <div class="bg-[#18181b] p-8 rounded-3xl border border-white/5">
-                    <h3 class="text-center font-bold text-blue-500 mb-6 text-sm">
+                <div class="bg-gray-50 p-8 rounded-3xl border border-gray-100">
+                    <h3 class="text-center font-bold text-blue-600 mb-6 text-sm">
                         <i class="fa-solid fa-file-lines mr-2"></i>Terms and Conditions
                     </h3>
-                    <div class="text-xs text-gray-300 leading-relaxed whitespace-pre-line">
+                    <div class="text-xs text-gray-700 leading-relaxed whitespace-pre-line">
                         {{ $event->terms }}
                     </div>
                 </div>
@@ -163,25 +166,25 @@
         {{-- TAB: ORGANISER --}}
         <div x-show="tab === 'organiser'" x-transition style="display:none">
             <div class="space-y-6">
-                <div class="bg-[#18181b] p-10 rounded-3xl border border-white/5 text-center">
-                    <i class="fa-solid fa-users text-blue-500 text-3xl mb-6"></i>
-                    <p class="max-w-2xl mx-auto text-sm text-gray-400 leading-relaxed italic">
+                <div class="bg-gray-50 p-10 rounded-3xl border border-gray-100 text-center">
+                    <i class="fa-solid fa-users text-blue-600 text-3xl mb-6"></i>
+                    <p class="max-w-2xl mx-auto text-sm text-gray-600 leading-relaxed italic">
                         {{ $event->organiser_description ?? 'Belum ada deskripsi organiser.' }}
                     </p>
                 </div>
 
-                <div class="bg-[#18181b] p-8 rounded-3xl border border-white/5 text-center">
-                    <h3 class="font-bold mb-6 text-white uppercase tracking-widest text-sm">
+                <div class="bg-gray-50 p-8 rounded-3xl border border-gray-100 text-center">
+                    <h3 class="font-bold mb-6 text-gray-900 uppercase tracking-widest text-sm">
                         Organizing Committee
                     </h3>
                     <img src="{{ $event->organiser_photo ? asset('images/organizers/' . $event->organiser_photo) : asset('images/panitia_kmipn.jpeg') }}"
                          alt="Organizing Committee"
-                         class="w-full rounded-2xl border border-white/10">
+                         class="w-full rounded-2xl border border-gray-200">
                 </div>
             </div>
         </div>
 
-    </main>
+    </div>
 
 </div>
 </body>
