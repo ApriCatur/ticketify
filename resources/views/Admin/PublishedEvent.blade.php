@@ -60,7 +60,7 @@
     @endforelse
 </div>
 
-@include('components.event-upcoming')
+@include('components.event-upcoming', ['events' => $upcomingEvents])
 
 <div id="detailModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50 p-4">
     <div class="bg-white w-full max-w-5xl max-h-[90vh] rounded-3xl border border-gray-200 overflow-hidden shadow-2xl">

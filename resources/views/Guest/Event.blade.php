@@ -146,7 +146,7 @@
         </div>
     </section>
 
-    @include('components.event-upcoming')
+    @include('components.event-upcoming', ['events' => $upcomingEvents])
 
     @include('components.footer')
 

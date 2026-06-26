@@ -40,7 +40,7 @@ class PublishedEventController extends Controller
         $upcomingEvents  = Event::with('tickets')->where('status', 'published')
             ->whereDate('date', '>=', $today)
             ->orderBy('date', 'asc')
-            ->take(3)
+            ->take(4)
             ->get();
 
         $categories = Category::all();

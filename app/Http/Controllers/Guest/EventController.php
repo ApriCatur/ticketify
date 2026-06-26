@@ -38,7 +38,7 @@ class EventController extends Controller // Pastikan class dibuka di sini
         $upcomingEvents = Event::with('tickets')->where('status', 'published')
             ->whereDate('date', '>=', $today)
             ->orderBy('date', 'asc')
-            ->take(3)
+            ->take(4)
             ->get();
 
         // 4. Query untuk kategori

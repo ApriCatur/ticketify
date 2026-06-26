@@ -29,7 +29,7 @@ class EventController extends Controller
         $upcomingEvents = Event::where('status', 'published')
             ->whereDate('date', '>=', Carbon::today())
             ->orderBy('date')
-            ->take(5)
+            ->take(4)
             ->get();
 
         $events = $publicEvents;

@@ -12,7 +12,7 @@
         <div class="absolute left-[25px] top-2 bottom-0 w-0.5 bg-gray-200"></div>
 
         @if($events && $events->count() > 0)
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 @foreach($events as $upEvent)
                     @php $eventDate = \Carbon\Carbon::parse($upEvent->date); @endphp
 
