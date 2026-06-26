@@ -8,25 +8,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-
-        .swiper-button-prev, .swiper-button-next {
-            transform: scale(0.8);
-        }
-        .swiper-pagination-bullet {
-            background: white;
-            opacity: 0.5;
-        }
-        .swiper-pagination-bullet-active {
-            background: #2563EB;
-            opacity: 1;
-            width: 24px;
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-    </style>
+    @include('components.fonts')
 </head>
 <body class="bg-[#F8FAFC] text-gray-900 antialiased">
 

@@ -6,41 +6,7 @@
     <title>Ticketify | Daftar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        * { font-family: 'Inter', sans-serif; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-        @keyframes fadeSlide {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(59,130,246,0.15); }
-            50% { box-shadow: 0 0 40px rgba(59,130,246,0.3); }
-        }
-        .animate-float { animation: float 6s ease-in-out infinite; }
-        .animate-form { animation: fadeSlide 0.6s ease-out; }
-        .glow-card { animation: pulseGlow 4s ease-in-out infinite; }
-        .bg-grid {
-            background-image:
-                linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-        .brand-gradient {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        input:-webkit-autofill,
-        input:-webkit-autofill:focus {
-            transition: background-color 0s 600000s, color 0s 600000s;
-        }
-    </style>
+    @include('components.fonts')
 </head>
 <body class="bg-[#F8FAFC] text-gray-900 antialiased overflow-x-hidden">
     <div class="flex w-full min-h-screen">

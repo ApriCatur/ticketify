@@ -6,14 +6,7 @@
     <title>Ticketify | About Us</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
-        .glass { background: rgba(18, 18, 18, 0.7); backdrop-filter: blur(15px); }
-        .team-card:hover { transform: translateY(-10px); border-color: #1DB954; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .spotify-gradient { background: linear-gradient(180deg, #121212 0%, #1db95420 100%); }
-        .text-glow { text-shadow: 0 0 15px rgba(29, 185, 84, 0.3); }
-    </style>
+    @include('components.fonts')
 </head>
 <body class="bg-[#0f0f0f] text-white antialiased">
 
