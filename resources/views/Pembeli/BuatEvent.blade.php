@@ -150,6 +150,29 @@
         </main>
     </div>
 
+    {{-- SUCCESS MODAL --}}
+    <div id="success-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/30 backdrop-blur-sm">
+        <div class="bg-white border border-gray-200 rounded-3xl p-10 max-w-md w-full mx-4 text-center shadow-2xl">
+            <div class="w-20 h-20 rounded-full bg-green-100 border-2 border-green-500 flex items-center justify-center mx-auto mb-6">
+                <i class="fa-solid fa-check text-green-600 text-3xl"></i>
+            </div>
+
+            <h2 class="text-2xl font-black text-gray-900 mb-2">Pengajuan Berhasil Dikirim!</h2>
+            <p class="text-gray-500 text-sm mb-4 leading-relaxed">
+                Pengajuanmu sebagai <span class="text-blue-600 font-semibold">Panitia (Organiser)</span> telah masuk ke sistem. Silakan menunggu Admin memvalidasi data kamu.
+            </p>
+
+            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-200 mb-6">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                Status: Menunggu Validasi
+            </div>
+
+            <button onclick="closeSuccessModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold text-sm transition">
+                OK, Saya Mengerti
+            </button>
+        </div>
+    </div>
+
     <script>
         lucide.createIcons();
 
@@ -174,55 +197,21 @@
                 }
             });
         }
+
+        @if(session('success'))
+            document.addEventListener('DOMContentLoaded', function() {
+                const modal = document.getElementById('success-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
+        @endif
+
+        function closeSuccessModal() {
+            const modal = document.getElementById('success-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
     </script>
-
-    @if(session('success'))
-        <script>alert("{{ session('success') }}");</script>
-    @endif
-
-    @if(session('error'))
-        <script>alert("{{ session('error') }}");</script>
-    @endif
 
 </body>
 </html>
-
-<script>
-    // Inisialisasi Lucide Icons
-    lucide.createIcons();
-
-    // Jalankan skrip interaksi tombol hanya jika form render di halaman
-    const checkbox = document.getElementById('agreeCheck');
-    const button = document.getElementById('submitBtn');
-
-    if (checkbox && button) {
-        checkbox.addEventListener('change', () => {
-            if (checkbox.checked) {
-                button.classList.remove('opacity-50', 'cursor-not-allowed');
-                button.classList.add('hover:bg-blue-700', 'active:scale-[0.98]');
-            } else {
-                button.classList.add('opacity-50', 'cursor-not-allowed');
-                button.classList.remove('hover:bg-blue-700', 'active:scale-[0.98]');
-            }
-        });
-
-        button.addEventListener('click', (e) => {
-            if (!checkbox.checked) {
-                e.preventDefault();
-                alert("Kamu harus menyetujui aturan terlebih dahulu.");
-            }
-        });
-    }
-</script>
-
-@if(session('success'))
-    <script>
-        alert("{{ session('success') }}");
-    </script>
-@endif
-
-@if(session('error'))
-    <script>
-        alert("{{ session('error') }}");
-    </script>
-@endif
