@@ -68,21 +68,18 @@
                             <td class="py-4">
                                 <div class="flex justify-center gap-2">
                                     @if ($app->status === 'pending')
-                                        <form action="{{ route('admin.role-applications.approve', $app->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            <button type="submit"
-                                                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors text-xs font-semibold">
-                                                <i class="fa-solid fa-check text-[11px]"></i> Approve
-                                            </button>
-                                        </form>
-                                        <form action="{{ route('admin.role-applications.reject', $app->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            <button type="submit"
-                                                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors text-xs font-semibold"
-                                                onclick="return confirm('Apakah Anda yakin ingin menolak pengajuan ini?')">
-                                                <i class="fa-solid fa-times text-[11px]"></i> Reject
-                                            </button>
-                                        </form>
+                                        <button type="button"
+                                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors text-xs font-semibold"
+                                            data-app='@json($app)'
+                                            onclick="openApproveModal(this)">
+                                            <i class="fa-solid fa-check text-[11px]"></i> Approve
+                                        </button>
+                                        <button type="button"
+                                            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors text-xs font-semibold"
+                                            data-app='@json($app)'
+                                            onclick="openRejectModal(this)">
+                                            <i class="fa-solid fa-times text-[11px]"></i> Reject
+                                        </button>
                                     @else
                                         <span class="text-gray-400 text-xs italic">No actions available</span>
                                     @endif
@@ -103,6 +100,53 @@
     </div>
 </div>
 
+{{-- APPROVE MODAL --}}
+<div id="approveModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-md border border-gray-200 shadow-2xl text-center">
+        <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa-solid fa-check text-emerald-500 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-black text-gray-900 mb-2">Setujui Pengajuan Panitia?</h3>
+        <p class="text-gray-500 text-sm mb-1" id="approveUserName"></p>
+        <p class="text-gray-400 text-xs mb-6" id="approveUserDetail"></p>
+        <form id="approveForm" method="POST">
+            @csrf
+            <div class="flex gap-3">
+                <button type="button" onclick="closeModal('approveModal')"
+                    class="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-gray-50 transition">Batal</button>
+                <button type="submit"
+                    class="flex-1 py-2.5 bg-emerald-500 text-white rounded-xl text-sm font-bold hover:bg-emerald-600 transition">
+                    Ya, Setujui
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{-- REJECT MODAL --}}
+<div id="rejectModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-md border border-gray-200 shadow-2xl text-center">
+        <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa-solid fa-xmark text-red-500 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-black text-gray-900 mb-2">Tolak Pengajuan Panitia?</h3>
+        <p class="text-gray-500 text-sm mb-1" id="rejectUserName"></p>
+        <p class="text-gray-400 text-xs mb-6" id="rejectUserDetail"></p>
+        <form id="rejectForm" method="POST">
+            @csrf
+            <div class="flex gap-3">
+                <button type="button" onclick="closeModal('rejectModal')"
+                    class="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-gray-50 transition">Batal</button>
+                <button type="submit"
+                    class="flex-1 py-2.5 bg-red-500 text-white rounded-xl text-sm font-bold hover:bg-red-600 transition">
+                    <i class="fa-solid fa-xmark mr-1"></i> Ya, Tolak
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@push('scripts')
 <script>
     document.getElementById('searchInput').addEventListener('keyup', function(e) {
         const searchTerm = e.target.value.toLowerCase();
@@ -112,6 +156,30 @@
             row.style.display = text.includes(searchTerm) ? '' : 'none';
         });
     });
+
+    function closeModal(id) {
+        document.getElementById(id).classList.add('hidden');
+        document.getElementById(id).classList.remove('flex');
+    }
+
+    function openApproveModal(btn) {
+        const app = JSON.parse(btn.getAttribute('data-app'));
+        document.getElementById('approveUserName').textContent = app.user?.name || 'Unknown';
+        document.getElementById('approveUserDetail').textContent = (app.user?.nim || '-') + ' — ' + (app.ukm?.nama_ukm || 'N/A');
+        document.getElementById('approveForm').action = '{{ url("admin/role-applications") }}/' + app.id + '/approve';
+        document.getElementById('approveModal').classList.remove('hidden');
+        document.getElementById('approveModal').classList.add('flex');
+    }
+
+    function openRejectModal(btn) {
+        const app = JSON.parse(btn.getAttribute('data-app'));
+        document.getElementById('rejectUserName').textContent = app.user?.name || 'Unknown';
+        document.getElementById('rejectUserDetail').textContent = (app.user?.nim || '-') + ' — ' + (app.ukm?.nama_ukm || 'N/A');
+        document.getElementById('rejectForm').action = '{{ url("admin/role-applications") }}/' + app.id + '/reject';
+        document.getElementById('rejectModal').classList.remove('hidden');
+        document.getElementById('rejectModal').classList.add('flex');
+    }
 </script>
+@endpush
 
 @endsection
