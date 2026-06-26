@@ -22,13 +22,19 @@ class RoleApplicationController extends Controller
         // Ambil semua data UKM
         $ukms = Ukm::all();
 
-        // Cek apakah user sudah pernah mengajukan
+        // Cek apakah user sudah pernah mengajukan (pending)
         $application = RoleApplication::where('user_id', Auth::id())
             ->where('status', 'pending')
             ->first();
 
+        // Ambil pengajuan terakhir yang ditolak (untuk lihat alasan)
+        $rejectedApplication = RoleApplication::where('user_id', Auth::id())
+            ->where('status', 'rejected')
+            ->latest()
+            ->first();
+
         // Tampilkan halaman Blade
-        return view('Pembeli.BuatEvent', compact('ukms', 'application'));
+        return view('Pembeli.BuatEvent', compact('ukms', 'application', 'rejectedApplication'));
     }
 
     // Menyimpan pengajuan panitia
@@ -119,14 +125,20 @@ class RoleApplicationController extends Controller
      * =========================================================
      */
 
-    public function reject($application)
+    public function reject(Request $request, $application)
     {
+        // Validasi input
+        $request->validate([
+            'alasan_ditolak' => 'required|string|min:10|max:500',
+        ]);
+
         // Cari data pengajuan
         $roleApp = RoleApplication::findOrFail($application);
 
-        // Update status
+        // Update status dan simpan alasan
         $roleApp->update([
-            'status' => 'rejected'
+            'status' => 'rejected',
+            'alasan_ditolak' => $request->alasan_ditolak,
         ]);
 
         return redirect()->back()->with(

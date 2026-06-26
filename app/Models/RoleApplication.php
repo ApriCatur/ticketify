@@ -17,6 +17,7 @@ class RoleApplication extends Model
     'user_id',
     'ukm_id',
     'nomor_rekening',
+    'alasan_ditolak',
     'status',
 ];
 

@@ -125,21 +125,37 @@
 
 {{-- REJECT MODAL --}}
 <div id="rejectModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-2xl p-6 w-full max-w-md border border-gray-200 shadow-2xl text-center">
-        <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <i class="fa-solid fa-xmark text-red-500 text-2xl"></i>
+    <div class="bg-white rounded-2xl p-6 w-full max-w-lg border border-gray-200 shadow-2xl">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0">
+                <i class="fa-solid fa-triangle-exclamation text-red-500"></i>
+            </div>
+            <div>
+                <h2 class="text-base font-bold text-gray-900">Tolak Pengajuan Panitia</h2>
+                <p class="text-xs text-gray-500" id="rejectUserInfo"></p>
+            </div>
         </div>
-        <h3 class="text-xl font-black text-gray-900 mb-2">Tolak Pengajuan Panitia?</h3>
-        <p class="text-gray-500 text-sm mb-1" id="rejectUserName"></p>
-        <p class="text-gray-400 text-xs mb-6" id="rejectUserDetail"></p>
         <form id="rejectForm" method="POST">
             @csrf
+            <div class="mb-4">
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">
+                    Alasan Penolakan <span class="text-red-500">*</span>
+                </label>
+                <textarea name="alasan_ditolak" id="rejectReason" rows="3"
+                    placeholder="Jelaskan alasan mengapa pengajuan ini ditolak... (min. 10 karakter)"
+                    class="w-full bg-white border border-gray-200 rounded-xl p-3 text-sm text-gray-900 outline-none focus:border-red-500 transition resize-none placeholder:text-gray-400"
+                    maxlength="500"></textarea>
+                <div class="flex justify-between mt-1">
+                    <p id="rejectReasonError" class="text-xs text-red-500 hidden">Alasan minimal 10 karakter.</p>
+                    <p class="text-xs text-gray-400 ml-auto"><span id="rejectReasonCount">0</span>/500</p>
+                </div>
+            </div>
             <div class="flex gap-3">
                 <button type="button" onclick="closeModal('rejectModal')"
                     class="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-700 hover:bg-gray-50 transition">Batal</button>
                 <button type="submit"
                     class="flex-1 py-2.5 bg-red-500 text-white rounded-xl text-sm font-bold hover:bg-red-600 transition">
-                    <i class="fa-solid fa-xmark mr-1"></i> Ya, Tolak
+                    <i class="fa-solid fa-xmark mr-1"></i> Tolak
                 </button>
             </div>
         </form>
@@ -173,12 +189,29 @@
 
     function openRejectModal(btn) {
         const app = JSON.parse(btn.getAttribute('data-app'));
-        document.getElementById('rejectUserName').textContent = app.user?.name || 'Unknown';
-        document.getElementById('rejectUserDetail').textContent = (app.user?.nim || '-') + ' — ' + (app.ukm?.nama_ukm || 'N/A');
+        document.getElementById('rejectUserInfo').textContent = (app.user?.name || 'Unknown') + ' — ' + (app.user?.nim || '-');
+        document.getElementById('rejectReason').value = '';
+        document.getElementById('rejectReasonCount').textContent = '0';
+        document.getElementById('rejectReasonError').classList.add('hidden');
         document.getElementById('rejectForm').action = '{{ url("admin/role-applications") }}/' + app.id + '/reject';
         document.getElementById('rejectModal').classList.remove('hidden');
         document.getElementById('rejectModal').classList.add('flex');
     }
+
+    document.getElementById('rejectReason')?.addEventListener('input', function() {
+        document.getElementById('rejectReasonCount').textContent = this.value.length;
+        if (this.value.length >= 10) {
+            document.getElementById('rejectReasonError').classList.add('hidden');
+        }
+    });
+
+    document.getElementById('rejectForm')?.addEventListener('submit', function(e) {
+        const reason = document.getElementById('rejectReason').value;
+        if (reason.length < 10) {
+            e.preventDefault();
+            document.getElementById('rejectReasonError').classList.remove('hidden');
+        }
+    });
 </script>
 @endpush
 
