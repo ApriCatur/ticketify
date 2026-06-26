@@ -60,6 +60,8 @@
                     @endforelse
                 </div>
             </section>
+
+            @include('components.event-timeline')
         </main>
     </div>
 
