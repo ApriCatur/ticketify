@@ -18,7 +18,7 @@ class PublishedEventController extends Controller
     {
         $today = Carbon::today();
 
-        $query = Event::with('tickets')->where('status', 'published');
+        $query = Event::with('tickets')->where('status', 'published')->whereDate('date', '>=', $today);
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
@@ -34,6 +34,7 @@ class PublishedEventController extends Controller
 
         $publishedEvents = $query->orderBy('updated_at', 'desc')->get();
         $events          = Event::with('tickets')->where('status', 'published')
+            ->whereDate('date', '>=', $today)
             ->orderBy('updated_at', 'desc')
             ->take(5)->get();
         $upcomingEvents  = Event::with('tickets')->where('status', 'published')
