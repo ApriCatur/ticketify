@@ -105,7 +105,7 @@
         </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
         @if(!empty($events) && (is_array($events) || is_object($events)) && count($events) > 0)
 

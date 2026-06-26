@@ -146,7 +146,7 @@
         </div>
     </section>
 
-    @include('components.event-timeline')
+    @include('components.event-upcoming')
 
     @include('components.footer')
 

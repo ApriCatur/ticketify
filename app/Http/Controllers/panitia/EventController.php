@@ -22,6 +22,7 @@ class EventController extends Controller
 
         $publicEvents = Event::with('tickets', 'category')
             ->where('status', 'published')
+            ->whereDate('date', '>=', Carbon::today())
             ->latest()
             ->get();
 

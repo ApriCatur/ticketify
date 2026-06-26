@@ -11,7 +11,7 @@
                     Platform tiket digital untuk seluruh kegiatan kemahasiswaan Politeknik Negeri Batam. Mudah, cepat, dan terpercaya.
                 </p>
                 <div class="flex items-center gap-2">
-                    <img src="{{ asset('images/polibatam.png') }}" alt="Polibatam" class="h-10">
+                    <img src="{{ asset('images/polibatam.png') }}" alt="Polibatam" class="h-14">
                 </div>
             </div>
 
@@ -46,7 +46,7 @@
                 <div>
                     <h4 class="font-bold text-sm text-gray-900 mb-4">Pembayaran</h4>
                     <div class="flex items-center">
-                        <img src="{{ asset('images/midtrans.png') }}" alt="Midtrans" class="h-8">
+                        <img src="{{ asset('images/midtranss.jpg') }}" alt="Midtrans" class="h-17">
                     </div>
                 </div>
                 <div>
@@ -73,4 +73,4 @@
             <p class="text-xs text-gray-400">&copy; {{ date('Y') }} Ticketify. All rights reserved. Developed by Informatics Engineering — Politeknik Negeri Batam.</p>
         </div>
     </div>
-</footer>   
+</footer>
