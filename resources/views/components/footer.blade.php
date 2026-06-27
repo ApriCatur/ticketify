@@ -68,46 +68,51 @@
         </div>
     </div>
 
-    {{-- Modal Nomor Kontak Developer --}}
-    <div x-show="contactOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4"
-         @keydown.escape.window="contactOpen = false">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="contactOpen = false"></div>
-        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto border border-gray-200"
-             @click.outside="contactOpen = false">
-            <button @click="contactOpen = false" class="absolute top-4 right-4 z-10 w-9 h-9 bg-white border border-gray-200 rounded-xl flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all shadow-sm">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div class="p-8 text-center">
-                <h2 class="text-2xl font-black text-gray-900 mb-2">Hubungi Team Developer</h2>
-                <p class="text-gray-500 text-sm mb-8">Untuk informasi lebih lanjut, silakan hubungi kami</p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    @php
-                        $developers = [
-                            ['name' => 'M. Fauzi Azhari', 'phone' => '0878-4008-7034', 'ig' => '@fauziazhari'],
-                            ['name' => 'Syarifah B. S.', 'phone' => '0852-0000-0000', 'ig' => '@syarifahbs'],
-                            ['name' => 'Apri Catur P.', 'phone' => '0852-0000-0000', 'ig' => '@apricatur'],
-                        ];
-                    @endphp
-                    @foreach($developers as $dev)
-                        <div class="flex flex-col items-center gap-3 p-5 bg-gray-50 border border-gray-200 rounded-2xl">
-                            <div class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-white font-black text-2xl shadow-lg">
-                                {{ strtoupper(substr($dev['name'], 0, 1)) }}
-                            </div>
-                            <h3 class="font-bold text-sm text-gray-900">{{ $dev['name'] }}</h3>
-                            <div class="flex items-center gap-2 text-sm">
-                                <i class="fa-brands fa-whatsapp text-green-500"></i>
-                                <span class="text-gray-600">{{ $dev['phone'] }}</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-sm">
-                                <i class="fa-brands fa-instagram text-pink-500"></i>
-                                <span class="text-gray-600">{{ $dev['ig'] }}</span>
-                            </div>
+{{-- Modal Nomor Kontak Developer --}}
+<div x-show="contactOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4"
+     @keydown.escape.window="contactOpen = false">
+
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="contactOpen = false"></div>
+    <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto border border-gray-200"
+         @click.outside="contactOpen = false">
+        <button @click="contactOpen = false" class="absolute top-4 right-4 z-10 w-9 h-9 bg-white border border-gray-200 rounded-xl flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all shadow-sm">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="p-8 text-center">
+            <h2 class="text-2xl md:text-3xl font-black text-gray-900 mb-2">UNTUK INFORMASI LAINNYA</h2>
+            <p class="text-gray-500 mb-10">SILAHKAN HUBUNGI TEAM WEB DEVELOPER</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @php
+                    $developers = [
+                        ['name' => 'M. Fauzi Azhari', 'phone' => '0878-4008-7034', 'ig' => '@muhammadfazhari.0', 'img' => 'ari.jpeg'],
+                        ['name' => 'Syarifah B. S.', 'phone' => '0878-4008-7034', 'ig' => '@username', 'img' => 'sarah.jpeg'],
+                        ['name' => 'Apri Catur P.', 'phone' => '0878-4008-7034', 'ig' => '@username', 'img' => 'apri.jpeg'],
+                    ];
+                @endphp
+                @foreach($developers as $dev)
+                    <div class="flex flex-col items-center gap-3 p-5 bg-gray-50 border border-gray-200 rounded-2xl hover:border-blue-400 hover:shadow-md transition-all">
+                        <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 shadow-sm">
+                            <img src="{{ asset('images/' . $dev['img']) }}" class="w-full h-full object-cover" alt="{{ $dev['name'] }}">
                         </div>
-                    @endforeach
-                </div>
+                        <h3 class="font-bold text-sm text-gray-900">{{ $dev['name'] }}</h3>
+                        <div class="flex flex-col gap-2 w-full text-xs">
+                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $dev['phone']) }}" target="_blank"
+                               class="flex items-center justify-center gap-2 bg-green-50 border border-green-200 text-green-700 hover:bg-green-100 py-2 rounded-xl transition-colors font-semibold">
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <span>{{ $dev['phone'] }}</span>
+                            </a>
+                            <a href="https://instagram.com/{{ ltrim($dev['ig'], '@') }}" target="_blank"
+                               class="flex items-center justify-center gap-2 bg-pink-50 border border-pink-200 text-pink-700 hover:bg-pink-100 py-2 rounded-xl transition-colors font-semibold">
+                                <i class="fa-brands fa-instagram"></i>
+                                <span>{{ $dev['ig'] }}</span>
+                            </a>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
+</div>
 
     {{-- Modal Tentang Kami --}}
     <div x-show="aboutOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4"
