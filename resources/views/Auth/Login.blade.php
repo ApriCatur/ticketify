@@ -16,7 +16,7 @@
             <div class="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
 
             <div class="relative z-10 text-center px-12">
-                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/20 animate-float">
+                <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br bg-green-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/20 animate-float">
                     <i class="fa-solid fa-ticket text-3xl text-white"></i>
                 </div>
                 <h1 class="text-4xl font-black tracking-tight mb-3">

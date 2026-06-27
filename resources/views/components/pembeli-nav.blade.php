@@ -2,7 +2,7 @@
     <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-6">
             <a href="{{ route('pembeli.event') }}" class="flex items-center gap-2 flex-shrink-0">
-                <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center font-extrabold text-white text-xs">T</div>
+                <div class="w-7 h-7 bg-green-600 rounded-lg flex items-center justify-center font-extrabold text-white text-xs">T</div>
                 <span class="font-extrabold text-lg tracking-tight text-gray-900">Ticketify</span>
             </a>
 

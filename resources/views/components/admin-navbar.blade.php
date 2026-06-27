@@ -2,7 +2,7 @@
     <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-6">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 flex-shrink-0">
-                <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center font-extrabold text-white text-xs">T</div>
+                <div class="w-7 h-7 bg-green-600 rounded-lg flex items-center justify-center font-extrabold text-white text-xs">T</div>
                 <span class="font-extrabold text-lg tracking-tight text-gray-900">Ticketify</span>
             </a>
 
@@ -48,7 +48,7 @@
             <div class="flex items-center gap-3 pl-3 border-l border-gray-200">
                 <div class="text-right leading-tight hidden sm:block">
                     <p class="text-sm font-bold text-gray-900">{{ auth()->user()->name }}</p>
-                    <p class="text-[10px] font-semibold text-blue-600 uppercase tracking-wider">Admin</p>
+                    <p class="text-[10px] font-semibold text-orange-600 uppercase tracking-wider">Admin</p>
                 </div>
                 <a href="{{ route('admin.Settings') }}" class="flex-shrink-0">
                     <div class="w-9 h-9 rounded-full overflow-hidden border-2 border-gray-200 hover:border-blue-400 transition-colors">

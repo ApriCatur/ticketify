@@ -19,7 +19,7 @@
 
                 {{-- Logo --}}
                 <a href="{{ route('guest.event') }}" class="flex items-center gap-2 flex-shrink-0">
-                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-extrabold text-white text-sm">T</div>
+                    <div class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center font-extrabold text-white text-sm">T</div>
                     <span class="font-extrabold text-lg tracking-tight text-gray-900">Ticketify</span>
                 </a>
 

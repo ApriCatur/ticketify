@@ -4,8 +4,8 @@
 
             <div class="lg:col-span-1 space-y-5">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-9 h-9 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center font-extrabold text-white text-sm shadow-lg shadow-blue-500/20">T</div>
-                    <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">Ticketify</span>
+                    <div class="w-9 h-9 bg-gradient-to-br bg-green-600 rounded-xl flex items-center justify-center font-extrabold text-white text-sm shadow-lg shadow-blue-500/20">T</div>
+                    <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r bg-green-600 bg-clip-text text-transparent">Ticketify</span>
                 </div>
                 <p class="text-sm text-gray-500 leading-relaxed">
                     Platform tiket digital untuk seluruh kegiatan kemahasiswaan Politeknik Negeri Batam. Mudah, cepat, dan terpercaya.
@@ -18,7 +18,7 @@
             <div>
                 <h4 class="font-bold text-sm text-gray-900 mb-5">Tentang</h4>
                 <ul class="space-y-3">
-                    @foreach(['Tentang Kami', 'Cara Kerja', 'Blog', 'Karir'] as $link)
+                    @foreach(['Tentang Kami'] as $link)
                         <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">{{ $link }}</a></li>
                     @endforeach
                 </ul>
@@ -27,7 +27,7 @@
             <div>
                 <h4 class="font-bold text-sm text-gray-900 mb-5">Dukungan</h4>
                 <ul class="space-y-3">
-                    @foreach(['Pusat Bantuan', 'Syarat & Ketentuan', 'Kebijakan Privasi', 'Hubungi Kami'] as $link)
+                    @foreach(['Manual Book'] as $link)
                         <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">{{ $link }}</a></li>
                     @endforeach
                 </ul>
@@ -52,16 +52,16 @@
                 <div>
                     <h4 class="font-bold text-sm text-gray-900 mb-4">Ikuti Kami</h4>
                     <div class="flex gap-3">
-                        <a href="#" class="w-9 h-9 bg-gray-100 hover:bg-blue-100 rounded-xl flex items-center justify-center text-gray-500 hover:text-blue-600 transition-all">
+                        <a href="#" class="w-9 h-9 bg-gray-100 hover:bg-blue-100 rounded-xl flex items-center justify-center text-gray-500 hover:text-red-600 transition-all">
                             <i class="fa-brands fa-instagram"></i>
                         </a>
-                        <a href="#" class="w-9 h-9 bg-gray-100 hover:bg-blue-100 rounded-xl flex items-center justify-center text-gray-500 hover:text-blue-600 transition-all">
+                        <a href="#" class="w-9 h-9 bg-gray-100 hover:bg-blue-100 rounded-xl flex items-center justify-center text-gray-500 hover:text-black transition-all">
                             <i class="fa-brands fa-tiktok"></i>
                         </a>
-                        <a href="#" class="w-9 h-9 bg-gray-100 hover:bg-blue-100 rounded-xl flex items-center justify-center text-gray-500 hover:text-blue-600 transition-all">
+                        <a href="#" class="w-9 h-9 bg-gray-100 hover:bg-blue-100 rounded-xl flex items-center justify-center text-gray-500 hover:text-red-600 transition-all">
                             <i class="fa-brands fa-youtube"></i>
                         </a>
-                        <a href="#" class="w-9 h-9 bg-gray-100 hover:bg-blue-100 rounded-xl flex items-center justify-center text-gray-500 hover:text-blue-600 transition-all">
+                        <a href="#" class="w-9 h-9 bg-gray-100 hover:bg-blue-100 rounded-xl flex items-center justify-center text-gray-500 hover:text-red-600 transition-all">
                             <i class="fa-regular fa-envelope"></i>
                         </a>
                     </div>

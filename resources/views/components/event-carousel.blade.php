@@ -30,8 +30,8 @@
         @endforelse
     </div>
 
-    <div class="swiper-button-prev !text-white !w-10 !h-10 !bg-black/20 hover:!bg-black/40 !rounded-full !backdrop-blur-sm after:!text-sm"></div>
-    <div class="swiper-button-next !text-white !w-10 !h-10 !bg-black/20 hover:!bg-black/40 !rounded-full !backdrop-blur-sm after:!text-sm"></div>
+    <div class="swiper-button-prev !text-white !w-12 !h-12 !bg-black/40 hover:!bg-blue-600/80 !rounded-full !backdrop-blur-md after:!text-base !shadow-lg !shadow-black/20 !transition-all !duration-300 !border !border-white/10 hover:!scale-110 !-left-4 md:!left-2"></div>
+    <div class="swiper-button-next !text-white !w-12 !h-12 !bg-black/40 hover:!bg-blue-600/80 !rounded-full !backdrop-blur-md after:!text-base !shadow-lg !shadow-black/20 !transition-all !duration-300 !border !border-white/10 hover:!scale-110 !-right-4 md:!right-2"></div>
 
     <div class="swiper-pagination !bottom-4"></div>
 </div>
