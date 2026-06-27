@@ -17,7 +17,7 @@
                 </a>
                 <a href="{{ route('pembeli.buatevent') }}"
                    class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pembeli.buatevent') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
-                    Ajukan Event
+                    Request Becomes Orginizer
                 </a>
             </div>
         </div>

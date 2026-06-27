@@ -83,7 +83,6 @@ class RoleApplicationController extends Controller
     public function index()
     {
         $applications = RoleApplication::with(['user', 'ukm'])
-            ->where('status', 'pending')
             ->orderBy('created_at', 'desc')
             ->get();
 
