@@ -26,16 +26,13 @@
                 <h4 class="font-bold text-sm text-gray-900 mb-5">Dukungan</h4>
                 <ul class="space-y-3">
                     <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Manual Book</a></li>
-                    <li><a href="#" @click.prevent="contactOpen = true" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Nomor Kontak Developer</a></li>
                 </ul>
             </div>
 
             <div>
                 <h4 class="font-bold text-sm text-gray-900 mb-5">Layanan</h4>
                 <ul class="space-y-3">
-                    @foreach(['Nomor Kontak Developer'] as $link)
-                        <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">{{ $link }}</a></li>
-                    @endforeach
+                    <li><a href="#" @click.prevent="contactOpen = true" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Kontak Developer</a></li>
                 </ul>
             </div>
 
