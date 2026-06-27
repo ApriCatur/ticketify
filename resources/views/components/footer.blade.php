@@ -34,7 +34,7 @@
             <div>
                 <h4 class="font-bold text-sm text-gray-900 mb-5">Layanan</h4>
                 <ul class="space-y-3">
-                    @foreach(['Buat Event', 'Kelola Tiket', 'Check-in QR', 'Laporan'] as $link)
+                    @foreach(['Nomor Kontak Developer'] as $link)
                         <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">{{ $link }}</a></li>
                     @endforeach
                 </ul>
@@ -83,7 +83,7 @@
             </button>
             <div class="p-8">
                 <div class="text-center mb-10">
-                    <h1 class="text-3xl lg:text-5xl font-black tracking-tight text-gray-900 mb-3">More Than <span class="text-blue-600">Just Code.</span></h1>
+                    <h1 class="text-3xl lg:text-5xl font-black tracking-tight text-gray-900 mb-3">More Than <span class="text-green-600">Just Code.</span></h1>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left mt-10">
                         <div>
                             <h2 class="text-blue-600 font-bold uppercase tracking-widest text-xs mb-3">// The Genesis</h2>
@@ -121,7 +121,7 @@
                                     <img src="{{ asset('images/' . $member['img']) }}" class="w-full h-full rounded-full object-cover border-2 border-gray-200" alt="{{ $member['name'] }}">
                                 </div>
                                 <h3 class="font-bold text-sm text-gray-900 mb-0.5">{{ $member['name'] }}</h3>
-                                <p class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">{{ $member['role'] }}</p>
+                                <p class="text-[10px] font-bold text-green-600 uppercase tracking-widest">{{ $member['role'] }}</p>
                             </div>
                         @endforeach
                     </div>
