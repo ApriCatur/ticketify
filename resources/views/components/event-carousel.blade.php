@@ -34,4 +34,10 @@
     <div class="swiper-button-next !text-white !w-12 !h-12 !bg-black/40 hover:!bg-blue-600/80 !rounded-full !backdrop-blur-md after:!text-base !shadow-lg !shadow-black/20 !transition-all !duration-300 !border !border-white/10 hover:!scale-110 !-right-4 md:!right-2"></div>
 
     <div class="swiper-pagination !bottom-4"></div>
+
+    <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show" x-transition:leave="ease-in duration-1000"
+         class="absolute right-6 top-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-1.5 pointer-events-none animate-pulse">
+        <span class="text-[9px] font-bold text-white/60 uppercase tracking-widest">Geser</span>
+        <div class="w-5 h-5 border-r-2 border-b-2 border-white/50 rotate-[-45deg] animate-bounce"></div>
+    </div>
 </div>
