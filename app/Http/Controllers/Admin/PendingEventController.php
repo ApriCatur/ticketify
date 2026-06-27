@@ -13,21 +13,13 @@ class PendingEventController extends Controller
 {
     public function index()
     {
-        $today = Carbon::today();
-
         $pendingEvents = Event::with('tickets')->where('status', 'pending')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $upcomingEvents = Event::with('tickets')->where('status', 'pending')
-            ->whereDate('date', '>=', $today)
-            ->orderBy('date', 'asc')
-            ->take(4)
-            ->get();
-
         $categories = Category::all();
 
-        return view('Admin.PendingEvent', compact('pendingEvents', 'upcomingEvents', 'categories'));
+        return view('Admin.PendingEvent', compact('pendingEvents', 'categories'));
     }
 
     public function approve(Event $event)
