@@ -37,7 +37,7 @@
 
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show" x-transition:leave="ease-in duration-1000"
          class="absolute right-6 top-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-1.5 pointer-events-none animate-pulse">
-        <span class="text-[9px] font-bold text-white/60 uppercase tracking-widest">Geser</span>
+        <span class="text-[9px] font-bold text-white/60 uppercase tracking-widest"></span>
         <div class="w-5 h-5 border-r-2 border-b-2 border-white/50 rotate-[-45deg] animate-bounce"></div>
     </div>
 </div>
