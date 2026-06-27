@@ -1,4 +1,4 @@
-<footer class="bg-white border-t border-gray-100" x-data="{ aboutOpen: false }">
+<footer class="bg-white border-t border-gray-100" x-data="{ aboutOpen: false, contactOpen: false }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
 
@@ -25,9 +25,8 @@
             <div>
                 <h4 class="font-bold text-sm text-gray-900 mb-5">Dukungan</h4>
                 <ul class="space-y-3">
-                    @foreach(['Manual Book'] as $link)
-                        <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">{{ $link }}</a></li>
-                    @endforeach
+                    <li><a href="#" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Manual Book</a></li>
+                    <li><a href="#" @click.prevent="contactOpen = true" class="text-sm text-gray-500 hover:text-blue-600 transition-colors">Nomor Kontak Developer</a></li>
                 </ul>
             </div>
 
@@ -69,6 +68,47 @@
 
         <div class="mt-12 pt-6 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
             <p class="text-xs text-gray-400">&copy; {{ date('Y') }} Ticketify. All rights reserved. Developed by Informatics Engineering — Politeknik Negeri Batam.</p>
+        </div>
+    </div>
+
+    {{-- Modal Nomor Kontak Developer --}}
+    <div x-show="contactOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4"
+         @keydown.escape.window="contactOpen = false">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="contactOpen = false"></div>
+        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto border border-gray-200"
+             @click.outside="contactOpen = false">
+            <button @click="contactOpen = false" class="absolute top-4 right-4 z-10 w-9 h-9 bg-white border border-gray-200 rounded-xl flex items-center justify-center text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all shadow-sm">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="p-8 text-center">
+                <h2 class="text-2xl font-black text-gray-900 mb-2">Hubungi Team Developer</h2>
+                <p class="text-gray-500 text-sm mb-8">Untuk informasi lebih lanjut, silakan hubungi kami</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    @php
+                        $developers = [
+                            ['name' => 'M. Fauzi Azhari', 'phone' => '0878-4008-7034', 'ig' => '@fauziazhari'],
+                            ['name' => 'Syarifah B. S.', 'phone' => '0852-0000-0000', 'ig' => '@syarifahbs'],
+                            ['name' => 'Apri Catur P.', 'phone' => '0852-0000-0000', 'ig' => '@apricatur'],
+                        ];
+                    @endphp
+                    @foreach($developers as $dev)
+                        <div class="flex flex-col items-center gap-3 p-5 bg-gray-50 border border-gray-200 rounded-2xl">
+                            <div class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center text-white font-black text-2xl shadow-lg">
+                                {{ strtoupper(substr($dev['name'], 0, 1)) }}
+                            </div>
+                            <h3 class="font-bold text-sm text-gray-900">{{ $dev['name'] }}</h3>
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fa-brands fa-whatsapp text-green-500"></i>
+                                <span class="text-gray-600">{{ $dev['phone'] }}</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-sm">
+                                <i class="fa-brands fa-instagram text-pink-500"></i>
+                                <span class="text-gray-600">{{ $dev['ig'] }}</span>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
         </div>
     </div>
 
