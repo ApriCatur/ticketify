@@ -49,6 +49,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             // Ambil data user yang baru saja berhasil login
+            /** @var \App\Models\User $user */
             $user = Auth::user();
 
             // Pengecekan Role untuk Pengalihan Halaman (Redirect)

@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Event;
 use App\Models\Ticket;
 use App\Services\PaymentService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Midtrans\Config;
 use Midtrans\Snap;
@@ -36,7 +37,8 @@ class PaymentController extends Controller
             return response()->json(['error' => 'Event sudah lewat. Tidak dapat membeli tiket.'], 400);
         }
 
-        $user      = auth()->user();
+        /** @var \App\Models\User $user */
+        $user      = Auth::user();
         $items     = $request->items;
 
         $templateTickets = $event->tickets()->whereNull('order_id')->get()->keyBy('ticket_type');
@@ -122,7 +124,7 @@ class PaymentController extends Controller
     {
         return DB::transaction(function () use ($request) {
             $order = Order::where('id', $request->order_id)
-                ->where('user_id', auth()->id())
+                ->where('user_id', Auth::id())
                 ->lockForUpdate()
                 ->firstOrFail();
 

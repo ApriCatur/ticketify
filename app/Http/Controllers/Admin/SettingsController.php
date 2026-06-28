@@ -14,12 +14,14 @@ class SettingsController extends Controller
 {
     public function index()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         return view('Admin.Settings', compact('user'));
     }
 
     public function updateProfile(Request $request)
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $request->validate([
@@ -54,6 +56,7 @@ class SettingsController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         if (!Hash::check($request->current_password, $user->password)) {
