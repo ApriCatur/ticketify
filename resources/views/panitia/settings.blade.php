@@ -90,7 +90,7 @@
                             <label class="block text-[10px] text-gray-400 font-black uppercase tracking-widest mb-2">NIM</label>
                             <input type="text" name="nim" value="{{ old('nim', $user->nim) }}"
                                    placeholder="Enter your NIM"
-                                   class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-400 opacity-60">
+                                   class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-400 opacity-60" readonly>
                             @error('nim') <span class="text-xs text-red-500 mt-1 block font-medium">{{ $message }}</span> @enderror
                         </div>
                     </div>
