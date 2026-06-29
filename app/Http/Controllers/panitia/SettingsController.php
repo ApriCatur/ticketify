@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use App\Models\RoleApplication;
 use App\Models\User;
 
 class SettingsController extends Controller
@@ -18,9 +19,9 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        // Mengambil data user login beserta relasi application dan ukm-nya
-        $user = User::with('latestApplication.ukm')->find(Auth::id());
-        return view('panitia.settings', compact('user'));
+        $user = User::find(Auth::id());
+        $application = RoleApplication::where('user_id', $user->getKey())->with('ukm')->orderBy('id', 'desc')->first();
+        return view('panitia.settings', compact('user', 'application'));
     }
 
     /**
@@ -69,15 +70,14 @@ class SettingsController extends Controller
         $user->save();
 
         // 4. Simpan Perubahan Nomor Rekening ke Tabel Role Applications
-        if ($user->latestApplication) {
-            $user->latestApplication->update([
-                'nomor_rekening' => $request->nomor_rekening
-            ]);
-        }
+        RoleApplication::where('user_id', $user->getKey())
+            ->orderBy('id', 'desc')
+            ->limit(1)
+            ->update(['nomor_rekening' => $request->nomor_rekening]);
 
-        Auth::setUser($user);
-
-        return redirect()->back()->with('success', 'Informasi profil berhasil diperbarui!');
+        return redirect()->route('panitia.settings')
+            ->with('success', 'Informasi profil berhasil diperbarui!')
+            ->with('updated_nomor_rekening', $request->nomor_rekening);
     }
 
     /**
