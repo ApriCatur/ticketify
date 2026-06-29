@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @include('components.fonts')
 </head>
-<body class="bg-[#F8FAFC] text-gray-900 antialiased overflow-hidden">
+<body class="bg-[#F8FAFC] text-gray-900 antialiased overflow-x-hidden">
     <div class="flex w-full min-h-screen">
         <div class="hidden lg:flex w-1/2 relative items-center justify-center overflow-hidden bg-white">
             <div class="absolute inset-0 bg-grid opacity-30"></div>

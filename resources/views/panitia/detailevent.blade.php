@@ -17,14 +17,14 @@
 <div class="max-w-6xl mx-auto space-y-8 p-6 md:p-10">
 
     {{-- ===== HEADER ===== --}}
-    <header class="flex items-center justify-between">
+    <header class="flex items-center justify-between flex-wrap">
         <div class="flex items-center gap-4">
             <button onclick="window.history.back()"
                 class="bg-gray-100 hover:bg-gray-200 hover:text-black transition-all px-4 py-2 rounded-lg text-xs font-bold border border-gray-200 flex items-center gap-2 cursor-pointer">
                 <i class="fa-solid fa-arrow-left"></i> Back
             </button>
             <div>
-                <h1 class="text-2xl font-black uppercase">{{ $event->name }}</h1>
+                <h1 class="text-2xl font-black uppercase truncate">{{ $event->name }}</h1>
                 <p class="text-xs text-gray-500 mt-1">{{ $event->category?->name }}</p>
             </div>
         </div>
@@ -33,8 +33,8 @@
     </header>
 
     {{-- ===== TAB NAVIGATION ===== --}}
-    <nav class="border-b border-gray-200 flex justify-center">
-        <div class="flex gap-2">
+    <nav class="border-b border-gray-200 flex justify-center overflow-x-auto">
+        <div class="flex gap-2 flex-nowrap">
             @php
                 $tabs = [
                     'ticket'    => ['icon' => 'fa-ticket',       'label' => 'Ticket'],

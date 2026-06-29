@@ -112,7 +112,7 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center justify-end md:col-span-2 gap-1 flex-nowrap">
+                        <div class="flex items-center justify-end md:col-span-2 gap-1 flex-wrap">
                             @php
                                 $isRejected = $event->status === 'rejected';
                                 $hideDetailEdit = $displayStatus === 'completed' || $displayStatus === 'unpublished';
@@ -165,7 +165,7 @@
 
     {{-- ✅ TAMBAHAN: Modal Alasan Rejected --}}
     <div id="rejectReasonModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-2xl w-[440px] border border-red-200 overflow-hidden shadow-2xl">
+        <div class="bg-white rounded-2xl w-full max-w-md border border-red-200 overflow-hidden shadow-2xl">
 
             {{-- Header --}}
             <div class="bg-red-50 border-b border-red-200 px-6 py-4 flex items-center gap-3">

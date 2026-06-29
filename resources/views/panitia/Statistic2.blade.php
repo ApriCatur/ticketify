@@ -23,7 +23,7 @@
             </a>
         </div>
 
-        <header class="mb-10 flex justify-between items-end">
+        <header class="mb-10 flex justify-between items-end flex-wrap">
             <div>
                 <h1 class="text-3xl font-black tracking-tight">Statistik Penjualan</h1>
                 <p class="text-gray-500 text-sm mt-2">Pantau pendapatan dan pertumbuhan peserta secara real-time.</p>

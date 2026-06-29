@@ -1,4 +1,4 @@
-<nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+<nav x-data="{ mobileOpen: false }" class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
     <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-6">
             <a href="{{ route('pembeli.event') }}" class="flex items-center gap-2 flex-shrink-0">
@@ -20,6 +20,11 @@
                     Request Becomes Orginizer
                 </a>
             </div>
+
+            <button @click="mobileOpen = !mobileOpen" class="md:hidden p-2 text-gray-500 hover:text-blue-600 rounded-lg transition-colors" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars text-lg" x-show="!mobileOpen"></i>
+                <i class="fa-solid fa-xmark text-lg" x-show="mobileOpen"></i>
+            </button>
         </div>
 
         <div class="flex items-center gap-3">
@@ -53,6 +58,23 @@
                 </a>
             </div>
             <form action="{{ route('logout') }}" method="POST" id="logout-form-nav" class="hidden">@csrf</form>
+        </div>
+    </div>
+
+    <div x-show="mobileOpen" x-cloak class="md:hidden border-t border-gray-100 bg-white">
+        <div class="px-4 py-3 space-y-1">
+            <a href="{{ route('pembeli.event') }}"
+               class="block px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pembeli.event') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
+                Event
+            </a>
+            <a href="{{ route('pembeli.myticket') }}"
+               class="block px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pembeli.myticket') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
+                My Tickets
+            </a>
+            <a href="{{ route('pembeli.buatevent') }}"
+               class="block px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pembeli.buatevent') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
+                Request Becomes Orginizer
+            </a>
         </div>
     </div>
 </nav>

@@ -13,7 +13,7 @@
 
     @include('components.pembeli-nav')
 
-    <main class="flex-1 p-10 overflow-y-auto" x-data="{ activeTab: 'profile' }">
+    <main class="flex-1 p-6 lg:p-10 overflow-y-auto" x-data="{ activeTab: 'profile' }">
         <header class="mb-10">
             <h1 class="text-3xl font-black tracking-tight">Account Settings</h1>
             <p class="text-gray-500 text-sm mt-2">Kelola informasi profil dan keamanan akun kamu.</p>

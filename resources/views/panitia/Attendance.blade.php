@@ -194,7 +194,7 @@
             {{-- Left: Stats + Progress --}}
             <div class="lg:col-span-5 space-y-6">
                 {{-- Stats Cards --}}
-                <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-white border border-gray-200 rounded-2xl p-5 text-center shadow-sm">
                         <div class="w-9 h-9 mx-auto rounded-xl bg-blue-50 flex items-center justify-center mb-3">
                             <i class="fa-solid fa-ticket text-blue-500 text-sm"></i>

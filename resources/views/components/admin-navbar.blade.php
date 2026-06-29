@@ -1,4 +1,4 @@
-<nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
+<nav x-data="{ mobileOpen: false }" class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
     <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-6">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 flex-shrink-0">
@@ -36,6 +36,11 @@
                     <i class="fa-solid fa-chart-pie mr-1.5"></i>Statistik
                 </a>
             </div>
+
+            <button @click="mobileOpen = !mobileOpen" class="md:hidden p-2 text-gray-500 hover:text-blue-600 rounded-lg transition-colors" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars text-lg" x-show="!mobileOpen"></i>
+                <i class="fa-solid fa-xmark text-lg" x-show="mobileOpen"></i>
+            </button>
         </div>
 
         <div class="flex items-center gap-3">
@@ -69,6 +74,39 @@
                 </a>
             </div>
             <form action="{{ route('logout') }}" method="POST" id="logout-form-admin-nav" class="hidden">@csrf</form>
+        </div>
+    </div>
+
+    <div x-show="mobileOpen" x-cloak class="md:hidden border-t border-gray-100 bg-white">
+        <div class="px-4 py-3 space-y-1">
+            <a href="{{ route('admin.dashboard') }}"
+               class="block px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.dashboard') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
+                <i class="fa-solid fa-chart-line mr-1.5"></i>Dashboard
+            </a>
+            <a href="{{ route('admin.PublishedEvent') }}"
+               class="block px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.PublishedEvent') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
+                <i class="fa-solid fa-calendar-check mr-1.5"></i>Published
+            </a>
+            <a href="{{ route('admin.PendingEvent') }}"
+               class="block px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.PendingEvent') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
+                <i class="fa-solid fa-clock mr-1.5"></i>Pending
+            </a>
+            <a href="{{ route('admin.users') }}"
+               class="block px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.users') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
+                <i class="fa-solid fa-users mr-1.5"></i>Users
+            </a>
+            <a href="{{ route('admin.role-applications') }}"
+               class="block px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.role-applications') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
+                <i class="fa-solid fa-user-tie mr-1.5"></i>Roles
+            </a>
+            <a href="{{ route('admin.categories') }}"
+               class="block px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.categories') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
+                <i class="fa-solid fa-layer-group mr-1.5"></i>Categories
+            </a>
+            <a href="{{ route('admin.event-statistics') }}"
+               class="block px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.event-statistics*') ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50' }}">
+                <i class="fa-solid fa-chart-pie mr-1.5"></i>Statistik
+            </a>
         </div>
     </div>
 </nav>

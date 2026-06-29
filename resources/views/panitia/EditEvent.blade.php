@@ -86,7 +86,7 @@ x-data='{
             <p class="text-gray-500 text-sm mt-2 font-medium">Perbarui informasi untuk event: <span class="text-blue-600">{{ $event->name }}</span></p>
         </header>
 
-        <div class="flex gap-8 mb-8 border-b border-gray-200">
+        <div class="flex gap-8 mb-8 border-b border-gray-200 overflow-x-auto flex-nowrap">
             <button type="button" @click="activeTab = 'ticket'" :class="activeTab === 'ticket' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'" class="pb-4 font-bold text-sm transition-all flex items-center gap-2">
                 <span class="w-6 h-6 rounded-full bg-gray-50 flex items-center justify-center text-[10px]">1</span> Ticket
             </button>
@@ -107,7 +107,7 @@ x-data='{
                 <div class="grid md:grid-cols-2 gap-8">
                     <div class="space-y-4">
                         <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Poster Event</label>
-                        <div class="border-2 border-dashed border-gray-200 rounded-3xl p-[110px] text-center hover:border-blue-500 transition-colors bg-gray-50 group relative overflow-hidden" :class="bannerPreview ? 'p-4' : 'p-[110px]'">
+                        <div class="border-2 border-dashed border-gray-200 rounded-3xl p-8 sm:p-[110px] text-center hover:border-blue-500 transition-colors bg-gray-50 group relative overflow-hidden" :class="bannerPreview ? 'p-4' : 'p-8 sm:p-[110px]'">
                             <template x-if="!bannerPreview">
                                 <div class="flex flex-col items-center justify-center">
                                     <i class="fa-solid fa-image text-4xl text-gray-300 group-hover:text-blue-500 transition-colors mb-4 block"></i>
@@ -149,7 +149,7 @@ x-data='{
                              <input type="text" name="location" value="{{ old('location', $event->location) }}" placeholder="Masukkan lokasi event (contoh: Batam, Kepulauan Riau)" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 outline-none transition-all" required>
                         </div>
 
-                        <div class="grid grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal</label>
                                 <input type="date" name="date" value="{{ old('date', $event->date) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 outline-none transition-all" required>

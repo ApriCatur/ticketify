@@ -30,6 +30,7 @@
         </header>
 
         <div class="bg-white rounded-[2.5rem] border border-gray-200 overflow-hidden">
+            <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="border-b border-gray-100 bg-gray-50/50">
@@ -86,6 +87,7 @@
                     @endforelse
                 </tbody>
             </table>
+            </div>
 
             <div class="p-6 bg-gray-50/50 border-t border-gray-100 flex flex-col sm:flex-row gap-4 justify-between items-center">
                 <p class="text-[10px] font-black text-gray-600 uppercase tracking-widest">
