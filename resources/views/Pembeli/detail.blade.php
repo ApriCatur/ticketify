@@ -104,7 +104,7 @@
 
                         <p class="text-sm font-bold text-gray-500">
                             <i class="fa-solid fa-calendar-days mr-2 text-blue-600"></i>
-                            {{ \Carbon\Carbon::parse($event->date)->format('d F Y') }},
+                            {{ $event->date_range }},
                             {{ substr($event->time_start, 0, 5) }} WIB
                         </p>
                     </div>
@@ -232,7 +232,7 @@
                 </div>
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-500">Tanggal</span>
-                    <span class="font-bold text-gray-900">{{ \Carbon\Carbon::parse($event->date)->format('d F Y') }}</span>
+                    <span class="font-bold text-gray-900">{{ $event->date_range }}</span>
                 </div>
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-500">Tiket</span>

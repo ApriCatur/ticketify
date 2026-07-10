@@ -33,7 +33,7 @@ class EventStatisticController extends Controller
             $query->where('status', $activeFilter);
         }
 
-        $events = $query->orderByDesc('date')->get();
+        $events = $query->orderByDesc('date_start')->get();
 
         return view('Admin.EventStatistic', compact('events', 'activeFilter', 'search'));
     }

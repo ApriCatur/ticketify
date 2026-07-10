@@ -36,7 +36,6 @@ use App\Http\Controllers\PaymentController;
 
 
 /*
-|--------------------------------------------------------------------------
 | 1. GUEST / BELUM LOGIN
 |--------------------------------------------------------------------------
 */
@@ -51,10 +50,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::prefix('guest')->group(function () {
     Route::get('/event', [GuestEventController::class, 'index'])->name('guest.event');
     Route::get('/event/{id}', [GuestEventController::class, 'show'])->name('guest.event.detail');
-    Route::get('/myticket', function () { return view('Guest.MyTicket'); })->name('guest.myticket');
-    Route::get('/about', function () { return view('Guest.About'); })->name('guest.about');
-    Route::get('/settings', function () { return view('Guest.Settings'); })->name('guest.settings');
-    Route::get('/buatevent', function () { return view('Guest.BuatEvent'); })->name('guest.buatevent');
     Route::get('/detail', function () { return view('Guest.Detail'); })->name('guest.detail');
 
 
@@ -91,9 +86,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware([RoleMiddleware::class . ':panitia'])->prefix('panitia')->group(function () {
     Route::get('/event', [PanitiaEventController::class, 'index'])->name('panitia.event');
     // FORM CREATE EVENT
-    Route::get('/create', function () {
-        return view('panitia.create');
-    })->name('panitia.create');
+    Route::get('/create', function () {return view('panitia.create');})->name('panitia.create');
     // SIMPAN EVENT
     Route::post('/store', [PanitiaEventController::class, 'store'])->name('panitia.store');
     // MY EVENT

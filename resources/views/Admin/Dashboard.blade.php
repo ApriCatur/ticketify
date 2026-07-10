@@ -137,7 +137,7 @@
                         <div class="w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></div>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-semibold text-gray-900 truncate">{{ $e->name }}</p>
-                            <p class="text-[10px] text-gray-500">{{ $e->date ? \Carbon\Carbon::parse($e->date)->format('d M Y') : 'TBA' }}</p>
+                            <p class="text-[10px] text-gray-500">{{ $e->date_start ? $e->date_range : 'TBA' }}</p>
                         </div>
                         <span class="text-[9px] font-black px-2 py-0.5 rounded bg-green-50 text-green-600 uppercase">Published</span>
                     </div>

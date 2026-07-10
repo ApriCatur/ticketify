@@ -19,7 +19,7 @@ class StatisticController extends Controller
             ->where('status', 'published')
             ->with(['tickets' => fn($q) => $q->whereNull('order_id')])
             ->withCount(['tickets as tickets_sold' => fn($q) => $q->whereNotNull('order_id')])
-            ->orderByDesc('date')
+            ->orderByDesc('date_start')
             ->get();
 
         return view('Panitia.Statistic', compact('events'));

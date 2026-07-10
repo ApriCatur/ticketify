@@ -113,9 +113,9 @@
 
                 <x-event-card
                     image="{{ $event->banner ? asset('images/events/' . $event->banner) : asset('images/kmipn.jpeg') }}"
-                    day="{{ \Illuminate\Support\Carbon::parse($event->date)->format('d') }}"
-                    month="{{ \Illuminate\Support\Carbon::parse($event->date)->format('M') }}"
-                    year="{{ \Illuminate\Support\Carbon::parse($event->date)->format('Y') }}"
+                    day="{{ \Illuminate\Support\Carbon::parse($event->date_start)->format('d') }}"
+                    month="{{ \Illuminate\Support\Carbon::parse($event->date_start)->format('M') }}"
+                    year="{{ \Illuminate\Support\Carbon::parse($event->date_start)->format('Y') }}"
                     category="{{ $event->category?->name }}"
                     title="{{ $event->name }}"
                     location="{{ $event->location }}"

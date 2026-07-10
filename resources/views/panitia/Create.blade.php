@@ -144,10 +144,14 @@
                         </div>
 
 
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
                             <div class="space-y-2">
-                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal</label>
-                                <input type="date" name="date" value="{{ old('date') }}" min="{{ date('Y-m-d') }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2 text-xs text-gray-900 focus:border-blue-500 outline-none transition-all" required>
+                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal Mulai</label>
+                                <input type="date" name="date_start" value="{{ old('date_start') }}" min="{{ date('Y-m-d') }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2 text-xs text-gray-900 focus:border-blue-500 outline-none transition-all" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal Selesai <span class="text-gray-400 font-normal"></span></label>
+                                <input type="date" name="date_end" value="{{ old('date_end') }}" min="{{ date('Y-m-d') }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2 text-xs text-gray-900 focus:border-blue-500 outline-none transition-all">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Waktu Mulai</label>

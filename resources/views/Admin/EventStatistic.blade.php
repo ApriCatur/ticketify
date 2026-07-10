@@ -67,7 +67,7 @@
                         </div>
                         <h3 class="text-base font-black tracking-tight text-gray-900 truncate">{{ $item->name }}</h3>
                         <p class="text-xs text-gray-500 mt-0.5">
-                            <i class="fa-solid fa-calendar mr-1.5"></i>{{ \Carbon\Carbon::parse($item->date)->format('d M Y') }}, {{ substr($item->time_start, 0, 5) }} - {{ substr($item->time_end, 0, 5) }} WIB
+                            <i class="fa-solid fa-calendar mr-1.5"></i>{{ $item->date_range }}, {{ substr($item->time_start, 0, 5) }} - {{ substr($item->time_end, 0, 5) }} WIB
                         </p>
                     </div>
 

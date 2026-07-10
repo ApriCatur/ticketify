@@ -21,7 +21,8 @@ class EventService
                 'name' => $request->name,
                 'category_id' => $request->category_id,
                 'location' => $request->location,
-                'date' => $request->date,
+                'date_start' => $request->date_start,
+                'date_end' => $request->date_end,
                 'time_start' => $request->time_start,
                 'time_end' => $request->time_end,
                 'description' => $request->description,
@@ -50,7 +51,8 @@ class EventService
                 : $event->organiser_photo;
 
             $isCriticalChanged = $event->name !== $request->name
-                || $event->date !== $request->date
+                || $event->date_start !== $request->date_start
+                || $event->date_end !== $request->date_end
                 || $event->time_start !== $request->time_start
                 || $event->time_end !== $request->time_end
                 || $event->location !== $request->location;
@@ -59,7 +61,8 @@ class EventService
                 'name' => $request->name,
                 'category_id' => $request->category_id,
                 'location' => $request->location,
-                'date' => $request->date,
+                'date_start' => $request->date_start,
+                'date_end' => $request->date_end,
                 'time_start' => $request->time_start,
                 'time_end' => $request->time_end,
                 'description' => $request->description,

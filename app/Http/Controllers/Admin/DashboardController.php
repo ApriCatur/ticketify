@@ -44,7 +44,7 @@ class DashboardController extends Controller
 
         // Get recent published events
         $recentPublishedEvents = Event::where('status', 'published')
-            ->orderBy('date', 'desc')
+            ->orderBy('date_start', 'desc')
             ->take(5)
             ->get();
 

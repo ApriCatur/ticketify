@@ -14,19 +14,17 @@ class SettingsController extends Controller
 {
     public function index()
     {
-        /** @var \App\Models\User $user */
         $user = Auth::user();
         return view('Admin.Settings', compact('user'));
     }
 
     public function updateProfile(Request $request)
     {
-        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->getKey(), 'nim')],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->getKey())],
             'phone_number' => ['nullable', 'string', 'max:15'],
             'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
@@ -56,14 +54,13 @@ class SettingsController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
-        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         if (!Hash::check($request->current_password, $user->password)) {
             return redirect()->back()->withErrors(['current_password' => 'Password lama yang kamu masukkan salah.']);
         }
 
-        $user->password = $request->password;
+        $user->password = Hash::make($request->password);
         $user->save();
 
         return redirect()->route('admin.Settings')->with('success', 'Password berhasil diubah!');

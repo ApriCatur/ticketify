@@ -22,7 +22,7 @@
                     </tr>
                     <tr>
                         <td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Tanggal</td>
-                        <td style="padding: 6px 0; font-weight: bold;">{{ \Carbon\Carbon::parse($event->date)->format('d F Y') }}</td>
+                        <td style="padding: 6px 0; font-weight: bold;">{{ $event->date_range }}</td>
                     </tr>
                     <tr>
                         <td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Lokasi</td>

@@ -28,7 +28,8 @@ class PendingEventController extends Controller
             return redirect()->back()->with('error', 'Hanya event dengan status pending yang bisa disetujui.');
         }
 
-        if ($event->date < Carbon::today()->format('Y-m-d')) {
+        $eventEndDate = $event->date_end ?? $event->date_start;
+        if ($eventEndDate < Carbon::today()->format('Y-m-d')) {
             return redirect()->back()->with('error', 'Tidak bisa menyetujui event yang tanggalnya sudah lewat.');
         }
 

@@ -46,7 +46,7 @@
                             <div class="min-w-0">
                                 <h3 class="text-sm font-black text-gray-900 truncate uppercase tracking-tight">{{ $event->name }}</h3>
                                 <p class="text-[10px] text-gray-500 mt-1 flex items-center gap-2 uppercase font-bold">
-                                    <i class="fa-solid fa-calendar text-blue-500"></i> {{ \Illuminate\Support\Carbon::parse($event->date)->format('d F Y') }}
+                                    <i class="fa-solid fa-calendar text-blue-500"></i> {{ $event->date_range }}
                                 </p>
                             </div>
                         </div>

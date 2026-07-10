@@ -149,10 +149,14 @@ x-data='{
                              <input type="text" name="location" value="{{ old('location', $event->location) }}" placeholder="Masukkan lokasi event (contoh: Batam, Kepulauan Riau)" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 outline-none transition-all" required>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
                             <div class="space-y-2">
-                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal</label>
-                                <input type="date" name="date" value="{{ old('date', $event->date) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 outline-none transition-all" required>
+                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal Mulai</label>
+                                <input type="date" name="date_start" value="{{ old('date_start', $event->date_start) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 outline-none transition-all" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal Selesai <span class="text-gray-400 font-normal">(opsional)</span></label>
+                                <input type="date" name="date_end" value="{{ old('date_end', $event->date_end) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 outline-none transition-all">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Waktu Mulai</label>

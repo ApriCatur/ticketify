@@ -20,7 +20,6 @@ class AttendanceController extends Controller
 
     public function index()
     {
-        /** @var \App\Models\User $panitia */
         $panitia = Auth::user();
         $userEvents = $panitia->events()->where('status', 'published')->get() ?? collect();
 
@@ -59,7 +58,6 @@ class AttendanceController extends Controller
 
     public function getStatistics(Request $request)
     {
-        /** @var \App\Models\User $panitia */
         $panitia = Auth::user();
         $eventId = $request->query('event_id');
         $panitia->events()->findOrFail($eventId);
@@ -71,9 +69,7 @@ class AttendanceController extends Controller
 
     public function showAttendees($id)
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $event = $user->events()->findOrFail($id);
+        $event = Auth::user()->events()->findOrFail($id);
 
         $attendees = Ticket::where('event_id', $id)
             ->whereNotNull('order_id')
@@ -86,9 +82,7 @@ class AttendanceController extends Controller
 
     public function exportAttendees($id)
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $event = $user->events()->findOrFail($id);
+        $event = Auth::user()->events()->findOrFail($id);
 
         $attendees = Ticket::where('event_id', $id)
             ->whereNotNull('order_id')

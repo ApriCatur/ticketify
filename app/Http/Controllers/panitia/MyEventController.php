@@ -21,7 +21,7 @@ class MyEventController extends Controller
             ->withCount(['tickets as tickets_sold' => function ($q) {
                 $q->whereNotNull('order_id');
             }])
-            ->orderByDesc('date')
+            ->orderByDesc('date_start')
             ->get();
 
         return view('Panitia.MyEvent', compact('events'));

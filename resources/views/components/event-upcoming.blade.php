@@ -14,7 +14,7 @@
         @if($events && $events->count() > 0)
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 @foreach($events as $upEvent)
-                    @php $eventDate = \Carbon\Carbon::parse($upEvent->date); @endphp
+                    @php $eventDate = \Carbon\Carbon::parse($upEvent->date_start); @endphp
 
                     <div class="relative flex gap-4 items-start bg-white border border-gray-200 p-4 rounded-2xl shadow-sm hover:border-blue-300 hover:shadow-md transition-all duration-300">
                         <div class="relative z-10 flex-shrink-0 w-14 pt-1">

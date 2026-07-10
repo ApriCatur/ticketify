@@ -73,7 +73,7 @@
                 </h3>
                 <p class="text-xs text-gray-500 flex items-center gap-2">
                     <i class="fa-solid fa-calendar-day text-blue-500"></i>
-                    {{ \Carbon\Carbon::parse($item->date)->format('d F Y') }}, {{ substr($item->time_start, 0, 5) }} - {{ substr($item->time_end, 0, 5) }} WIB
+                    {{ $item->date_range }}, {{ substr($item->time_start, 0, 5) }} - {{ substr($item->time_end, 0, 5) }} WIB
                 </p>
             </div>
 

@@ -19,7 +19,8 @@ class StoreEventRequest extends FormRequest
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'location' => 'required|string',
-            'date' => $this->isMethod('POST') ? 'required|date|after_or_equal:today' : 'required|date',
+            'date_start' => $this->isMethod('POST') ? 'required|date|after_or_equal:today' : 'required|date',
+            'date_end' => 'nullable|date|after_or_equal:date_start',
             'time_start' => 'required|date_format:H:i',
             'time_end' => [
                 'required',
@@ -45,7 +46,8 @@ class StoreEventRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'date.after_or_equal' => 'Tanggal event tidak boleh di masa lalu. Pilih hari ini atau tanggal yang akan datang.',
+            'date_start.after_or_equal' => 'Tanggal mulai event tidak boleh di masa lalu. Pilih hari ini atau tanggal yang akan datang.',
+            'date_end.after_or_equal' => 'Tanggal selesai harus setelah atau sama dengan tanggal mulai.',
         ];
     }
 }

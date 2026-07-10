@@ -70,7 +70,7 @@
                             <div class="flex-1">
                                 <span class="inline-block px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-tight border {{ $badgeBg }}">{{ $ticket->status }}</span>
                                 <h3 class="text-lg font-black tracking-tight mt-1 text-gray-900">{{ $ticket->event->name ?? 'Event Tidak Ditemukan' }}</h3>
-                                <p class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-calendar mr-2"></i>{{ $ticket->event->date ? \Carbon\Carbon::parse($ticket->event->date)->format('d M Y') : 'TBA' }}</p>
+                                <p class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-calendar mr-2"></i>{{ $ticket->event->date_start ? $ticket->event->date_range : 'TBA' }}</p>
                             </div>
 
                             <div class="flex-1">

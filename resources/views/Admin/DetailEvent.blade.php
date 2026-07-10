@@ -69,7 +69,7 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
             <div>
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Tanggal</p>
-                <p class="text-gray-900 font-bold mt-1">{{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</p>
+                <p class="text-gray-900 font-bold mt-1">{{ $event->date_range }}</p>
             </div>
             <div>
                 <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Waktu</p>

@@ -104,9 +104,9 @@
                 <x-event-card
                     href="{{ route('guest.event.detail', $event->id) }}"
                     :image="asset('images/events/' . $event->banner)"
-                    :day="\Carbon\Carbon::parse($event->date)->format('d')"
-                    :month="\Carbon\Carbon::parse($event->date)->translatedFormat('M')"
-                    :year="\Carbon\Carbon::parse($event->date)->format('Y')"
+                    :day="\Carbon\Carbon::parse($event->date_start)->format('d')"
+                    :month="\Carbon\Carbon::parse($event->date_start)->translatedFormat('M')"
+                    :year="\Carbon\Carbon::parse($event->date_start)->format('Y')"
                     :title="$event->name"
                     :location="$event->location"
                     :startTime="\Carbon\Carbon::parse($event->time_start)->format('H:i')"

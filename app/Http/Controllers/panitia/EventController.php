@@ -20,15 +20,27 @@ class EventController extends Controller
     {
         $categories = Category::all();
 
+        $today = Carbon::today();
+
         $publicEvents = Event::with('tickets', 'category')
             ->where('status', 'published')
-            ->whereDate('date', '>=', Carbon::today())
+            ->where(function ($q) use ($today) {
+                $q->whereDate('date_end', '>=', $today)
+                  ->orWhere(function ($q) use ($today) {
+                      $q->whereNull('date_end')->whereDate('date_start', '>=', $today);
+                  });
+            })
             ->latest()
             ->get();
 
         $upcomingEvents = Event::where('status', 'published')
-            ->whereDate('date', '>=', Carbon::today())
-            ->orderBy('date')
+            ->where(function ($q) use ($today) {
+                $q->whereDate('date_end', '>=', $today)
+                  ->orWhere(function ($q) use ($today) {
+                      $q->whereNull('date_end')->whereDate('date_start', '>=', $today);
+                  });
+            })
+            ->orderBy('date_start')
             ->take(4)
             ->get();
 

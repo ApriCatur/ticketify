@@ -30,7 +30,7 @@ class SettingsController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->getKey() . ',nim'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->getKey()],
             'phone_number' => ['nullable', 'string', 'max:15'],
             'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
@@ -72,8 +72,9 @@ class SettingsController extends Controller
             return back()->withErrors(['old_password' => 'Password lama yang kamu masukkan salah.']);
         }
 
-        $user->password = $request->password;
-        $user->save();
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
 
         return redirect()->route('pembeli.settings')->with('success', 'Password akun berhasil diganti.');
     }

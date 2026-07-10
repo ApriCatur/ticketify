@@ -21,9 +21,9 @@
         @endphp
         <x-event-card
             :image="$event->banner ? asset('images/events/' . $event->banner) : asset('images/events/banner_1779635248.jpg')"
-            :day="\Carbon\Carbon::parse($event->date)->format('d')"
-            :month="\Carbon\Carbon::parse($event->date)->translatedFormat('M')"
-            :year="\Carbon\Carbon::parse($event->date)->format('Y')"
+            :day="\Carbon\Carbon::parse($event->date_start)->format('d')"
+            :month="\Carbon\Carbon::parse($event->date_start)->translatedFormat('M')"
+            :year="\Carbon\Carbon::parse($event->date_start)->format('Y')"
             :category="$event->category?->name"
             :title="$event->name"
             :location="$event->location"
@@ -36,7 +36,7 @@
                 data-id="{{ $event->id }}"
                 data-banner="{{ $event->banner }}"
                 data-name="{{ $event->name }}"
-                data-date="{{ $event->date }}"
+                data-date="{{ $event->date_start }}"
                 data-time="{{ $event->time_start }}"
                 data-location="{{ $event->location }}"
                 data-category="{{ $event->category?->name }}"

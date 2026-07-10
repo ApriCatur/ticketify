@@ -16,14 +16,10 @@ class Event extends Model
         'name',
         'category_id',
         'location',
-        'social_link',
-        'date',
+        'date_start',
+        'date_end',
         'time_start',
         'time_end',
-        'ticket_type',
-        'ticket_types',
-        'price',
-        'stock',
         'description',
         'terms',
         'organiser_description',
@@ -63,8 +59,7 @@ class Event extends Model
             return $this->status;
         }
 
-        // Cek apakah event sudah selesai (date + time_end sudah lewat)
-        $eventEnd = Carbon::parse($this->date . ' ' . $this->time_end);
+        $eventEnd = Carbon::parse(($this->date_end ?? $this->date_start) . ' ' . $this->time_end);
         if ($eventEnd < Carbon::now()) {
             return 'completed';
         }
@@ -72,6 +67,14 @@ class Event extends Model
         return $this->status;
     }
 
+
+    public function getDateRangeAttribute()
+    {
+        if ($this->date_end && $this->date_end !== $this->date_start) {
+            return Carbon::parse($this->date_start)->format('d F Y') . ' - ' . Carbon::parse($this->date_end)->format('d F Y');
+        }
+        return Carbon::parse($this->date_start)->format('d F Y');
+    }
 
     // Relasi ke Category
     public function category()
@@ -91,9 +94,14 @@ class Event extends Model
         $q->where('category_id', $category_id);
     });
 
-    // Filter Tanggal
     $query->when($filters['date'] ?? null, function ($q, $date) {
-        $q->whereDate('date', $date);
+        $q->where(function ($q) use ($date) {
+            $q->whereDate('date_start', '<=', $date)
+              ->where(function ($q) use ($date) {
+                  $q->whereDate('date_end', '>=', $date)
+                    ->orWhereNull('date_end');
+              });
+        });
     });
 }
 

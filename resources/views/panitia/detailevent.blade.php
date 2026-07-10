@@ -90,7 +90,7 @@
 
                     <p class="text-sm font-bold text-gray-400">
                         <i class="fa-solid fa-calendar-days mr-2 text-blue-500"></i>
-                        {{ \Carbon\Carbon::parse($event->date)->format('d F Y') }},
+                        {{ $event->date_range }},
                         {{ substr($event->time_start, 0, 5) }} WIB
                     </p>
                 </div>

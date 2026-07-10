@@ -56,7 +56,7 @@
                 <div class="grid grid-cols-2 gap-y-6 mb-8">
                     <div>
                         <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">Date</p>
-                        <p class="text-sm font-bold text-gray-900 uppercase italic">{{ $ticket->event->date ? \Carbon\Carbon::parse($ticket->event->date)->format('d F Y') : 'TBA' }}</p>
+                        <p class="text-sm font-bold text-gray-900 uppercase italic">{{ $ticket->event->date_start ? $ticket->event->date_range : 'TBA' }}</p>
                     </div>
                     <div class="text-right">
                         <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">Time</p>

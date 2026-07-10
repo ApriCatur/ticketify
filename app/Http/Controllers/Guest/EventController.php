@@ -15,7 +15,13 @@ class EventController extends Controller // Pastikan class dibuka di sini
         $today = Carbon::today();
 
         // 1. Query untuk event utama (dengan filter)
-        $query = Event::with('tickets')->where('status', 'published')->whereDate('date', '>=', $today);
+        $query = Event::with('tickets')->where('status', 'published')
+            ->where(function ($q) use ($today) {
+                $q->whereDate('date_end', '>=', $today)
+                  ->orWhere(function ($q) use ($today) {
+                      $q->whereNull('date_end')->whereDate('date_start', '>=', $today);
+                  });
+            });
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
@@ -26,18 +32,35 @@ class EventController extends Controller // Pastikan class dibuka di sini
         }
 
         if ($request->filled('date')) {
-            $query->whereDate('date', $request->date);
+            $query->where(function ($q) use ($request) {
+                $q->whereDate('date_start', '<=', $request->date)
+                  ->where(function ($q) use ($request) {
+                      $q->whereDate('date_end', '>=', $request->date)
+                        ->orWhereNull('date_end');
+                  });
+            });
         }
 
         $publicEvents = $query->latest()->get();
 
         // 2. Query untuk carousel
-        $events = Event::with('tickets')->where('status', 'published')->whereDate('date', '>=', $today)->latest()->take(5)->get();
+        $events = Event::with('tickets')->where('status', 'published')
+            ->where(function ($q) use ($today) {
+                $q->whereDate('date_end', '>=', $today)
+                  ->orWhere(function ($q) use ($today) {
+                      $q->whereNull('date_end')->whereDate('date_start', '>=', $today);
+                  });
+            })->latest()->take(5)->get();
 
         // 3. Query untuk sidebar
         $upcomingEvents = Event::with('tickets')->where('status', 'published')
-            ->whereDate('date', '>=', $today)
-            ->orderBy('date', 'asc')
+            ->where(function ($q) use ($today) {
+                $q->whereDate('date_end', '>=', $today)
+                  ->orWhere(function ($q) use ($today) {
+                      $q->whereNull('date_end')->whereDate('date_start', '>=', $today);
+                  });
+            })
+            ->orderBy('date_start', 'asc')
             ->take(4)
             ->get();
 
