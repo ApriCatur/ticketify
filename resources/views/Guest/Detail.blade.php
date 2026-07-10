@@ -70,16 +70,11 @@
                 </div>
 
                 <div class="space-y-4">
-                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 flex items-center gap-3">
-                        <i class="fa-solid fa-qrcode text-blue-600"></i>
-                        @if ($event->social_link)
-                            <a href="{{ $event->social_link }}" target="_blank" rel="noopener"
-                               class="text-sm font-bold text-blue-600 hover:text-blue-700 truncate">
-                               Open Event Social Media
-                            </a>
-                        @else
-                            <span class="text-sm font-bold text-gray-400">Social media not available</span>
-                        @endif
+                    <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100">
+                        <h4 class="text-blue-600 font-bold text-sm mb-2">
+                            <i class="fa-solid fa-calendar-days mr-2"></i>Tanggal Event
+                        </h4>
+                        <p class="text-xs text-gray-700 font-bold">{{ $event->date_range }}, {{ substr($event->time_start, 0, 5) }} - {{ substr($event->time_end, 0, 5) }} WIB</p>
                     </div>
 
                     <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100">
@@ -89,11 +84,7 @@
                         <p class="text-xs text-gray-700 font-bold leading-relaxed">{{ $event->location }}</p>
                     </div>
 
-                    <p class="text-sm font-bold text-gray-500">
-                        <i class="fa-solid fa-calendar-days mr-2 text-blue-600"></i>
-                        {{ $event->date_range }},
-                        {{ substr($event->time_start, 0, 5) }} WIB
-                    </p>
+
                 </div>
             </div>
 
