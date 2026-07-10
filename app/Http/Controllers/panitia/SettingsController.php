@@ -34,8 +34,8 @@ class SettingsController extends Controller
         // 1. Validasi Input Data
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'nim' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($user->getKey())],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->getKey())],
+            'nim' => ['required', 'string', 'max:50', Rule::unique('users')->ignore($user->getKey(), $user->getKeyName())],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->getKey(), $user->getKeyName())],
             'phone_number' => ['nullable', 'string', 'max:15'],
             'nomor_rekening' => ['required', 'string', 'max:50'],
             'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],

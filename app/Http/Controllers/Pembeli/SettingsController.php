@@ -30,7 +30,7 @@ class SettingsController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->getKey()],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->getKey() . ',nim'],
             'phone_number' => ['nullable', 'string', 'max:15'],
             'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);

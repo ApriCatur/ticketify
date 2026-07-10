@@ -47,7 +47,7 @@ class ManageUserController extends Controller
     {
         $request->validate([
             'name'         => 'nullable|string|max:255',
-            'nim'          => 'nullable|string|max:255|unique:users,nim,' . $user->getKey(),
+            'nim'          => 'nullable|string|max:255|unique:users,nim,' . $user->getKey() . ',nim',
             'phone_number' => 'nullable|string|max:20',
             'role'         => 'nullable|in:pembeli,panitia,admin',
             'password'     => 'nullable|string|min:8',
