@@ -147,11 +147,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal Mulai</label>
-                                <input type="date" name="date_start" value="{{ old('date_start') }}" min="{{ date('Y-m-d') }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2 text-xs text-gray-900 focus:border-blue-500 outline-none transition-all" required>
+                                <input type="date" name="date_start" id="date_start" value="{{ old('date_start') }}" min="{{ date('Y-m-d') }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2 text-xs text-gray-900 focus:border-blue-500 outline-none transition-all" required>
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal Selesai <span class="text-gray-400 font-normal"></span></label>
-                                <input type="date" name="date_end" value="{{ old('date_end') }}" min="{{ date('Y-m-d') }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2 text-xs text-gray-900 focus:border-blue-500 outline-none transition-all">
+                                <input type="date" name="date_end" id="date_end" value="{{ old('date_end') }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-2 text-xs text-gray-900 focus:border-blue-500 outline-none transition-all">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Waktu Mulai</label>
@@ -274,12 +274,14 @@
             if (form) {
                 const fieldLabels = {
                     'name': 'Nama Event', 'category_id': 'Kategori Event', 'location': 'Lokasi',
-                    'date': 'Tanggal', 'time_start': 'Waktu Mulai', 'time_end': 'Waktu Selesai',
+                    'date_start': 'Tanggal Mulai', 'date_end': 'Tanggal Selesai',
+                    'time_start': 'Waktu Mulai', 'time_end': 'Waktu Selesai',
                     'description': 'Deskripsi', 'terms': 'Syarat & Ketentuan',
                 };
                 const fieldTabMap = {
                     'name': 'ticket', 'category_id': 'ticket', 'location': 'ticket',
-                    'date': 'ticket', 'time_start': 'ticket', 'time_end': 'ticket',
+                    'date_start': 'ticket', 'date_end': 'ticket',
+                    'time_start': 'ticket', 'time_end': 'ticket',
                     'description': 'detail', 'terms': 'detail',
                 };
 
@@ -336,6 +338,20 @@
                     }
                     return true;
                 });
+
+                const dateStart = document.getElementById('date_start');
+                const dateEnd = document.getElementById('date_end');
+                if (dateStart && dateEnd) {
+                    if (dateStart.value) {
+                        dateEnd.min = dateStart.value;
+                    }
+                    dateStart.addEventListener('change', function() {
+                        dateEnd.min = this.value;
+                        if (dateEnd.value && dateEnd.value < this.value) {
+                            dateEnd.value = this.value;
+                        }
+                    });
+                }
             }
         });
     </script>

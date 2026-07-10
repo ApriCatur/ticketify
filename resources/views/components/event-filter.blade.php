@@ -17,7 +17,7 @@
         <div class="flex-1 relative">
             <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
             <input type="text" name="search" value="{{ request('search') }}"
-                   placeholder="Cari event, kategori, atau lokasi..."
+                   placeholder="Search events, categories..."
                    class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all">
         </div>
 
@@ -43,7 +43,7 @@
 
         <button type="submit"
                 class="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300 shadow-lg shadow-blue-500/10 active:scale-[0.97] whitespace-nowrap">
-            <i class="fa-solid fa-magnifying-glass mr-1.5"></i> Cari
+            <i class="fa-solid fa-magnifying-glass mr-1.5"></i> Search
         </button>
     </form>
 </div>

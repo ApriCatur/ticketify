@@ -28,7 +28,7 @@
                     <button @click="catOpen = !catOpen" @click.outside="catOpen = false"
                             class="flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors px-3 py-2 rounded-lg hover:bg-gray-50">
                         <i class="fa-regular fa-rectangle-list"></i>
-                        <span>Kategori</span>
+                        <span>Categories</span>
                         <i class="fa-solid fa-chevron-down text-[10px] transition-transform" :class="catOpen && 'rotate-180'"></i>
                     </button>
                     <div x-show="catOpen" x-cloak
@@ -47,7 +47,7 @@
                 <form action="{{ route('guest.event') }}" method="GET" class="hidden md:flex flex-1 max-w-lg relative">
                     <i class="fa-solid fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
                     <input type="text" name="search" value="{{ request('search') }}"
-                           placeholder="Cari event, kategori, atau lokasi..."
+                           placeholder="Search events, categories..."
                            class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all">
                 </form>
 
@@ -62,7 +62,7 @@
                         Login
                     </a>
                     <a href="{{ route('register') }}" class="px-5 py-2.5 text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all duration-200 shadow-sm shadow-blue-600/20 active:scale-[0.97] whitespace-nowrap">
-                        Daftar
+                        Register
                     </a>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                 <form action="{{ route('guest.event') }}" method="GET" class="relative">
                     <i class="fa-solid fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
                     <input type="text" name="search" value="{{ request('search') }}"
-                           placeholder="Cari event..."
+                           placeholder="Search events, categories..."
                            class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all">
                 </form>
             </div>
@@ -87,7 +87,7 @@
     {{-- EVENT GRID --}}
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-gray-900">Event Seru Untukmu</h2>
+            <h2 class="text-2xl font-bold text-gray-900">Discover your next experience.</h2>
             @if(request('search') || request('category_id'))
                 <a href="{{ route('guest.event') }}" class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
                     <i class="fa-solid fa-arrow-left mr-1"></i> Semua Event

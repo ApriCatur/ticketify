@@ -90,7 +90,7 @@
 
         <button type="submit"
                 class="w-full lg:w-auto px-8 py-3.5 bg-white text-black rounded-xl font-bold hover:bg-blue-500 hover:text-white transition-all active:scale-95 shadow-lg">
-            Cari Event
+            Search Events
         </button>
     </div>
 </form>

@@ -152,11 +152,11 @@ x-data='{
                         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal Mulai</label>
-                                <input type="date" name="date_start" value="{{ old('date_start', $event->date_start) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 outline-none transition-all" required>
+                                <input type="date" name="date_start" id="date_start" value="{{ old('date_start', $event->date_start) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 outline-none transition-all" required>
                             </div>
                             <div class="space-y-2">
-                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal Selesai <span class="text-gray-400 font-normal">(opsional)</span></label>
-                                <input type="date" name="date_end" value="{{ old('date_end', $event->date_end) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 outline-none transition-all">
+                                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tanggal Selesai <span class="text-gray-400 font-normal"></span></label>
+                                <input type="date" name="date_end" id="date_end" value="{{ old('date_end', $event->date_end) }}" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 focus:border-blue-500 outline-none transition-all">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Waktu Mulai</label>
@@ -265,6 +265,23 @@ x-data='{
         </form>
     </main>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateStart = document.getElementById('date_start');
+            const dateEnd = document.getElementById('date_end');
+            if (dateStart && dateEnd) {
+                if (dateStart.value) {
+                    dateEnd.min = dateStart.value;
+                }
+                dateStart.addEventListener('change', function() {
+                    dateEnd.min = this.value;
+                    if (dateEnd.value && dateEnd.value < this.value) {
+                        dateEnd.value = this.value;
+                    }
+                });
+            }
+        });
+    </script>
 
 </body>
 </html>
